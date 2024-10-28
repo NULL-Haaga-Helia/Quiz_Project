@@ -1,6 +1,6 @@
 # Quizzer
 
-What’s the project about?
-How to use the project?
-How to develop the project?
-Who are the project contributors?
+What be the purpose of this undertaking?
+How might one make use of this endeavor?
+In what manner may one further develop this project?
+Who be the contributors to this venture?
