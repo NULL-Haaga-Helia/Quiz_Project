@@ -20,3 +20,7 @@ The application is accessible through any browser and provides an interactive le
 - [Vili Konttinen](https://github.com/ViliKon)
 - [Nguyen Toan](https://github.com/tnguyen3537)
 - [Emilio Lehto Neira](https://github.com/emiliolehto)
+
+
+## Product backlog 
+https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
