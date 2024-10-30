@@ -1,10 +1,10 @@
-package com.example.demo;
+package com.quizzerbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class QuizzerbackendApplicationTests {
 
 	@Test
 	void contextLoads() {
