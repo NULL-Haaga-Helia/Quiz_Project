@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quizlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{../css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Question</h1>
+    <table class="table table-striped">
+		<tr>
+		    <th>Name</th>
+		
+		</tr>  
+    	<tr th:each = "question : ${question}">
+    		<td th:text="${question.name}"></td>
+    	</tr>
+     </table>
+	 <a href="/addquestion">Add question</a> 
+</body>
+</html>
