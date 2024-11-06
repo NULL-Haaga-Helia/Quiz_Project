@@ -19,6 +19,9 @@ public class Question {
     private Long id;
     private String questionDescription;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    private List<Quiz> quizs;
+
     public Question() {
 
     }
