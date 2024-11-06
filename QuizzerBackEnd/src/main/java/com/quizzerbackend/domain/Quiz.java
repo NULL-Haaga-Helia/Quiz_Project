@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 
 @Entity
@@ -17,16 +19,21 @@ public class Quiz {
     private String addedOn;
     private boolean isPublished;
 
+    @ManyToOne
+    @JoinColumn(name= "difficultyId")
+    private Difficulty difficulty;
+
 
     public Quiz() {
 	}
 
-    public Quiz(String name, String description, String addedOn, boolean isPublished) {
+    public Quiz(String name, String description, String addedOn, boolean isPublished, Difficulty difficulty) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.addedOn = addedOn;
         this.isPublished = isPublished;
+        this.difficulty = difficulty;
 	}
 
 
@@ -64,6 +71,14 @@ public class Quiz {
     }
     public void setPublished(boolean isPublished) {
         this.isPublished = isPublished;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
 }

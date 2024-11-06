@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Quiz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <div class="container">
+        <h1>Add Quiz</h1>
+        <form th:object="${quiz}" th:action="@{/save}" method="post">
+    
+            <label for="name">Quiz name</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control"/>
+            <div style="clear: both; display: black; height: 10px;"></div>
+
+           
+              <label for="description">Description</label>
+            <input type="text" id="description" th:field="*{description}" class="form-control"/>
+            <div style="clear: both; display: black; height: 10px;"></div>  
+
+
+            <!--<label for="difficultyList">Difficulty</label> 
+            <select id="difficultyList" th:field="*{difficulty}" class="form-control">
+                <option th:each="difficulty : ${difficulty}" th:value="${difficulty.difficultyId}" th:text="${difficulty.level}"></option>
+            </select> -->
+            
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/'">Cancel</button>
+
+        </form>
+    </div>
+</body>
+</html>
