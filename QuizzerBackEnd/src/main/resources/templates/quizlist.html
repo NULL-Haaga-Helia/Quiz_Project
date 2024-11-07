@@ -1,27 +1,81 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Quizlist</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{../css/bootstrap.min.css}" />
-</head>
-<body>
-	<h1>The list</h1>
-    <table class="table table-striped">
-		<tr>
-		    <th>Name</th>
-		    <th>Descriptions</th>
-            <th>Added on</th>
-            <th>Is Published</th>
-		</tr>  
-    	<tr th:each = "quiz : ${quizzes}">
-    		<td th:text="${quiz.name}"></td>
-    		<td th:text="${quiz.description}"></td>  	
-            <td th:text="${quiz.addedOn}"></td>  		
-            <td th:text="${quiz.isPublished}"></td>  
-    	</tr>
-     </table>
-	 <a href="/addquiz" class="btn btn-primary">Add Quiz</a>
+	<head>
+		<title>Quizlist</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="css/bootstrap.min.css"
+			th:href="@{../css/bootstrap.min.css}"
+		/>
+		<style>
+			.padding {
+				margin-left: 1cm;
+				margin-right: 1cm;
+			}
+			.margin-bottom {
+				margin-bottom: 15px;
+			}
+			.margin-top {
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 class="padding margin-bottom margin-top">Quizzes</h1>
 
-</body>
+		<table class="table table-striped padding">
+			<tr>
+				<th>Name</th>
+				<th>Descriptions</th>
+				<th>Published</th>
+				<th>Added on</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="quiz : ${quizzes}">
+				<td th:text="${quiz.name}"></td>
+				<td th:text="${quiz.description}"></td>
+				<td>
+					<span th:if="${quiz.isPublished}" class="badge bg-primary"
+						>Published</span
+					>
+					<span th:if="${!quiz.isPublished}" class="badge bg-secondary"
+						>Not published</span
+					>
+				</td>
+				<!--<td th:text="${quiz.isPublished}"></td>-->
+				<td th:text="${quiz.addedOn}"></td>
+
+				<td>
+					<a th:href="@{/questionlist}">See questions</a>
+				</td>
+
+				<!--NOTE: KEEP THIS FOR ASSOCIATING A QUESTION WITH A SPECIFIC QUIZ-->
+				<!--
+				<td>
+					<a th:href="@{/questionlist/{id}(id=${quiz.id})}">See questions</a>
+				</td>
+			     -->
+				<td>
+					<a
+						th:href="@{/editquiz/{id}(id=${quiz.id})}"
+						class="btn btn-secondary btn-sm"
+						>Edit</a
+					>
+				</td>
+				<td>
+					<a
+						th:href="@{/deletequiz/{id}(id=${quiz.id})}"
+						class="btn btn-danger btn-sm"
+						>Delete</a
+					>
+				</td>
+			</tr>
+		</table>
+
+		<a href="/addquiz" class="btn btn-primary padding">Add a quiz</a>
+	</body>
 </html>

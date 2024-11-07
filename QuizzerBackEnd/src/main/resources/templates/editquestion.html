@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Studentlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="css/bootstrap.min.css"
+        th:href="@{../css/bootstrap.min.css}"
+    />
+    <style>
+        .padding {
+            margin-left: 1cm;
+            margin-right: 1cm;
+        }
+        .margin-bottom {
+            margin-bottom: 15px; 
+        }
+        .margin-top {
+            margin-top: 15px; 
+        }
+    </style>
+</head>
+<body>
+    <h1 class="px-3 margin-top padding">Edit question content</h1>
+    <div class="px-3">
+        <form th:object="${question}" th:action="@{../savequestion}" action="#" method="post">
+            <input type="hidden" id="id" th:field="*{questionId}" />
+
+            <!-- Question Text Input -->
+            <div class="form-group mb-3 margin-top padding">
+                <label for="questiontxt" class="margin-bottom">Question text</label>
+                <input type="text" class="form-control" id="questiontxt" placeholder="Enter question text" th:field="*{questionText}" />
+            </div>
+            <div style="clear: both; display: block; height: 10px;"></div>
+
+            <!-- Difficulty Radio Buttons -->
+            <label class="padding">Difficulty</label>
+            <div class="input-group mb-3 padding margin-top">
+                <div class="input-group-prepend">
+                    <label>
+                        <input type="radio" th:field="*{difficulty}" value="Easy" checked="checked" />
+                        Easy
+                    </label>
+                    <div style="clear: both; display: block; height: 10px;"></div>
+                    <label>
+                        <input type="radio" th:field="*{difficulty}" value="Normal" />
+                        Normal
+                    </label>
+                    <div style="clear: both; display: block; height: 10px;"></div>
+                    <label>
+                        <input type="radio" th:field="*{difficulty}" value="Difficult" />
+                        Difficult
+                    </label>
+                </div>
+            </div>
+
+            <div style="clear: both; display: block; height: 10px;"></div>
+
+            <input type="submit" class="btn btn-primary padding" value="Save"></input>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,23 +1,58 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Add Question</title>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <div class="container">
-        <h1>Add Question</h1>
-        <form th:object="${question}" th:action="@{/save}" method="post">
-   
-   
-            <label for="questionDescreption">Description</label>
-            <input type="text" id="questionDescreption" th:field="*{questionDescreption}" class="form-control"/>
-   
-           
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='/'">Cancel</button>
- 
-        </form>
-    </div>
-</body>
+	<head>
+		<title>Add a question</title>
+		<meta charset="UTF-8" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Add Question</h1>
+			<form th:object="${question}" th:action="@{/savequestion}" method="post">
+				<!-- Question Text Input -->
+				<label for="questionText">Description</label>
+				<div style="clear: both; display: block; height: 10px"></div>
+				<input
+					type="text"
+					id="questionText"
+					th:field="*{questionText}"
+					class="form-control"
+				/>
+
+				<div style="clear: both; display: block; height: 10px"></div>
+
+				<!-- Difficulty Radio Buttons -->
+				<label>Difficulty</label>
+				<div>
+					<label>
+						<input
+							type="radio"
+							th:field="*{difficulty}"
+							value="Easy"
+							checked="checked"
+						/>
+						Easy
+					</label>
+					<label>
+						<input type="radio" th:field="*{difficulty}" value="Normal" />
+						Normal
+					</label>
+					<label>
+						<input type="radio" th:field="*{difficulty}" value="Difficult" />
+						Difficult
+					</label>
+				</div>
+
+                <div style="clear: both; display: block; height: 10px"></div>
+
+                <!-- Submit and Cancel Buttons -->
+                <input type="submit" value="Save"></input>
+
+                <a href="/questionlist" class="btn btn-primary">Cancel</a>
+                <!--OR-->
+                <!--<a href="/quizlist" class="btn btn-primary">Cancel</a>-->
+
+				
+			</form>
+		</div>
+	</body>
 </html>

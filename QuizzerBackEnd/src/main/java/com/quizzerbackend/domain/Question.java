@@ -2,40 +2,72 @@ package com.quizzerbackend.domain;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 
 @Entity
-@Table(name = "QUESTION")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long questionId;
+    private String questionText;
+    private String difficulty;
 
-    private Long id;
-    private String questionDescription;
+   
+    @ManyToOne
+    @JoinColumn(name = "id")  //Quiz's id field
+    private Quiz quiz;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
-    private List<Quiz> quizs;
 
-    public Question() {
+    public Question() {}
+
+    public Question(String questionText, String difficulty, Quiz quiz) {
+		super();
+		this.questionText= questionText;
+		this.difficulty = difficulty;
+        this.quiz = quiz;
+	}
+
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    @Override
+    public String toString() {
+        if (this.quiz != null)
+            return "Question [id=" + questionId + ", questionText=" + questionText + ", difficulty=" + difficulty + ", quiz=" + this.getQuiz() + "]";
+        else
+            return "Question [id=" + questionId + ", questionText=" + questionText + ", difficulty=" + difficulty + ", quiz=" + quiz + "]";
 
     }
 
-    public Question(String questionDescription) {
-        super();
-        this.questionDescription = questionDescription;
-    }
 
-    public String getQuestionDescreption() {
-        return questionDescription;
-    }
-
-    public void setQuestionDescreption(String questionDescription) {
-        this.questionDescription = questionDescription;
-    }
 }

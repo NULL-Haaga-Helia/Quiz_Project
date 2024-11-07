@@ -1,39 +1,36 @@
 package com.quizzerbackend.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 
 @Entity
 public class Quiz {
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
     private String name;
     private String description;
     private String addedOn;
     private boolean isPublished;
 
-    @ManyToOne
-    @JoinColumn(name= "difficultyId")
-    private Difficulty difficulty;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
+    private List<Question> questions;
+    
+    
 
 
     public Quiz() {
 	}
-
-    public Quiz(String name, String description, String addedOn, boolean isPublished, Difficulty difficulty) {
+  
+   
+    public Quiz(String name, String description, String addedOn, boolean isPublished) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.addedOn = addedOn;
         this.isPublished = isPublished;
-        this.difficulty = difficulty;
 	}
 
 
@@ -65,20 +62,35 @@ public class Quiz {
         this.addedOn = addedOn;
     }
 
-
-    public boolean isPublished() {
+    public boolean getIsPublished() {
         return isPublished;
     }
-    public void setPublished(boolean isPublished) {
+
+    public void setIsPublished(boolean isPublished) {
         this.isPublished = isPublished;
     }
 
-    public Difficulty getDifficulty() {
-        return difficulty;
+
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
+
+    
+
+    @Override
+    public String toString() {
+        return "Quiz [id=" + id + ", name=" + name + ", description=" + description + ", addedOn=" + addedOn
+                + ", isPublished=" + isPublished + "]";
+    }
+
+  
+  
+   
+    
 
 }
