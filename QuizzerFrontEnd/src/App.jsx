@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+//import reactLogo from "./assets/react.svg";
+//import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+	//Link to JSON data
+	//http://localhost:8080/api/quizzes
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	//States:
+	const [quizList, setQuizList] = useState([]);
+
+	//Functions:
+	useEffect(() => {
+		fetchQuizzes();
+	}, []);
+
+	const fetchQuizzes = () => {
+		fetch("http://localhost:8080/api/quizzes", {
+			headers: {
+				Authorization:
+					"Basic " + btoa("user:52232272-04a5-4ed4-9990-761d4f045507"),
+				//To get the data  ->
+				//"username:password" where x is your specific password in backend terminal, username is user
+			},
+		})
+			.then((response) => {
+				if (!response.ok)
+					throw new Error("Something went wrong: " + response.statusText);
+				return response.json();
+			})
+			.then((responseData) => {
+				console.log("Fetched quizzes:", responseData);
+				setQuizList(responseData);
+				console.log("Updated state:", quizList);
+			})
+			.catch((err) => console.error("Fetch error:", err));
+	};
+
+	//Rendering:
+	return (
+		<>
+			<h3>Quizlist</h3>
+			<table>
+				<tbody>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Published</th>
+						<th>Added on</th>
+					</tr>
+					{quizList.map((quiz) => (
+						<tr key={quiz.id}>
+							<td>{quiz.name}</td>
+							<td>{quiz.description}</td>
+							<td>{quiz.addedOn}</td>
+							<td>{quiz.isPublished ? "Yes" : "No"}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</>
+	);
 }
 
-export default App
+export default App;
