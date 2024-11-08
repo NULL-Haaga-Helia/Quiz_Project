@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Quiz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="css/bootstrap.min.css"
+        th:href="@{../css/bootstrap.min.css}"
+    />
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 2cm auto;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Quiz</h1>
+        <div class="form-container">
+            <form th:object="${quiz}" th:action="@{/savequiz}" method="post">
+                <!-- Hidden Id Field -->
+                <input type="hidden" th:field="*{id}" />
+
+                <!-- Name Field -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter quiz name" />
+                </div>
+
+                <!-- Description Field -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Enter quiz description" />
+                </div>
+
+                <!-- Published Checkbox -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" id="isPublished" th:field="*{isPublished}" class="form-check-input" />
+                    <label for="isPublished" class="form-check-label">Published</label>
+                </div>
+
+                <!-- Buttons -->
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary w-50">Save</button>
+                    <a href="/quizlist" class="btn btn-secondary w-50">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

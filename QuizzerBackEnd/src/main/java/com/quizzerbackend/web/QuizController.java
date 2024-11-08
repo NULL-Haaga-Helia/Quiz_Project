@@ -108,6 +108,14 @@ public class QuizController {
     	return "editquestion";
     }  
 
+
+    @RequestMapping(value = "/editquiz/{id}", method = RequestMethod.GET)
+    public String editQuiz(@PathVariable("id") Long quizId, Model model) {
+    	model.addAttribute("quiz", quizRepository.findById(quizId));
+    	return "editquiz";
+    }   
+
+
     //ANSWER METHODS//
     //>>TBA
    
