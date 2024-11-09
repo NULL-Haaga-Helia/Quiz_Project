@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Quizlist</title>
+		<title>Questionlist</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link
 			type="text/css"
@@ -27,17 +27,15 @@
 	</head>
 	<body>
 		<h1 class="padding margin-bottom margin-top">
-			Questions for: --Insert Quiz Name --
+			Questions for: <span th:text="${quiz.name}"></span>
 		</h1>
-
-		
-		<!--DON'T REMOVE, NEED TO ASSOCIATE QUESTION LIST WITH SPECIFIC QUIZ-->
-		<!--@{/questionlist/{id}(id=${quiz.id})}-->
 
 		<table class="table table-striped padding">
 			<tr>
 				<th>Question text</th>
 				<th>Difficulty</th>
+				<th></th>
+				<th></th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -46,25 +44,25 @@
 				<td th:text="${question.questionText}"></td>
 				<td th:text="${question.difficulty}"></td>
 				<td>
-					<a
-						th:href="@{/editquestion/{id}(id=${question.questionId})}"
-						class="btn btn-secondary btn-sm"
-						>Edit</a
-					>
+					<td>
+						<a th:href="@{/editquestion/{quizId}/{questionId}(quizId=${quiz.id}, questionId=${question.questionId})}" class="btn btn-secondary btn-sm">Edit</a>
+					</td>	
 				</td>
 				<td>
-					<a
-						th:href="@{/deletequestion/{id}(id=${question.questionId})}"
-						class="btn btn-danger btn-sm"
-						>Delete</a
-					>
+
+					<td>
+						<a th:href="@{/deletequestion/{id}(id=${question.questionId})}" class="btn btn-danger btn-sm">Delete</a>
+					</td>
+
 				</td>
 			</tr>
 		</table>
+		
+		<a th:href="@{/addquestion/{quizId}(quizId=${quiz.id})}" class="btn btn-primary margin-left">
+			Add a question
+		</a>
 
-		<a href="/addquestion" class="btn btn-primary margin-left"
-			>Add a question</a
-		>
+
 		<a href="/quizlist" class="btn btn-secondary">Back to quizzes</a>
 	</body>
 </html>

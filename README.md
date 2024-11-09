@@ -24,7 +24,3 @@ The application is accessible through any browser and provides an interactive le
 ## Product backlog
 
 https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
-
-## Exercise 16.6 (To be removed later)
-
-> Local edit by Roda

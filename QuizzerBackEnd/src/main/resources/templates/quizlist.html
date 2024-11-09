@@ -46,19 +46,10 @@
 						>Not published</span
 					>
 				</td>
-				<!--<td th:text="${quiz.isPublished}"></td>-->
 				<td th:text="${quiz.addedOn}"></td>
-
 				<td>
-					<a th:href="@{/questionlist}">See questions</a>
+					<a th:href="@{/questionlist/{id}(id=${quiz.id})}">See Questions</a>
 				</td>
-
-				<!--NOTE: KEEP THIS FOR ASSOCIATING A QUESTION WITH A SPECIFIC QUIZ-->
-				<!--
-				<td>
-					<a th:href="@{/questionlist/{id}(id=${quiz.id})}">See questions</a>
-				</td>
-			     -->
 				<td>
 					<a
 						th:href="@{/editquiz/{id}(id=${quiz.id})}"

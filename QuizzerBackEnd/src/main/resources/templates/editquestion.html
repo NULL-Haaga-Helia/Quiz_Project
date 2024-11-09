@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Studentlist</title>
+    <title>Edit question</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link
         type="text/css"
@@ -25,12 +25,16 @@
 <body>
     <h1 class="px-3 margin-top padding">Edit question content</h1>
     <div class="px-3">
-        <form th:object="${question}" th:action="@{../savequestion}" action="#" method="post">
+        <form th:object="${question}" th:action="@{/saveeditedquestion}" method="post">   
+            <!-- Hidden inputs for quizId & questionId-->
+            <input type="hidden" name="quizId" th:value="${quiz.id}" />
             <input type="hidden" id="id" th:field="*{questionId}" />
+
 
             <!-- Question Text Input -->
             <div class="form-group mb-3 margin-top padding">
                 <label for="questiontxt" class="margin-bottom">Question text</label>
+                <div style="clear: both; display: block; height: 10px;"></div>
                 <input type="text" class="form-control" id="questiontxt" placeholder="Enter question text" th:field="*{questionText}" />
             </div>
             <div style="clear: both; display: block; height: 10px;"></div>
@@ -59,6 +63,7 @@
             <div style="clear: both; display: block; height: 10px;"></div>
 
             <input type="submit" class="btn btn-primary padding" value="Save"></input>
+            <a href="javascript:history.back()" class="btn btn-secondary padding">Cancel</a>
         </form>
     </div>
 </body>

@@ -8,6 +8,10 @@
 		<div class="container">
 			<h1>Add Question</h1>
 			<form th:object="${question}" th:action="@{/savequestion}" method="post">
+				<!-- Hidden input for quizId -->
+				<input type="hidden" name="quizId" th:value="${quiz.id}" />
+				
+
 				<!-- Question Text Input -->
 				<label for="questionText">Description</label>
 				<div style="clear: both; display: block; height: 10px"></div>
@@ -47,10 +51,7 @@
                 <!-- Submit and Cancel Buttons -->
                 <input type="submit" value="Save"></input>
 
-                <a href="/questionlist" class="btn btn-primary">Cancel</a>
-                <!--OR-->
-                <!--<a href="/quizlist" class="btn btn-primary">Cancel</a>-->
-
+				<a th:href="@{/questionlist/{quizId}(quizId=${quiz.id})}" class="btn btn-primary">Cancel</a>
 				
 			</form>
 		</div>
