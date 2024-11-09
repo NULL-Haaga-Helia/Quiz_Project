@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.quizzerbackend.domain.Answer;
+import com.quizzerbackend.domain.AnswerRepository;
 import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
@@ -23,6 +25,9 @@ public class QuizController {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
 
     //QUIZ METHODS//
@@ -147,8 +152,16 @@ public class QuizController {
         return "redirect:/questionlist/" + quizId;  
     }
 
+    @RequestMapping(value = "/answerlist/{questionId}", method = RequestMethod.GET)
+    public String viewAnswerOptions(@PathVariable("questionId") Long questionId, Model model) {
+    Question question = questionRepository.findById(questionId).orElse(null);
+    List<Answer> answerOptions = answerRepository.findByQuestionQuestionId(questionId);
+    model.addAttribute("question", question);
+    model.addAttribute("answerOptions", answerOptions);
+    return "answerlist";
+
 
     //ANSWER METHODS//
     //>>TBA
    
-}
+}}

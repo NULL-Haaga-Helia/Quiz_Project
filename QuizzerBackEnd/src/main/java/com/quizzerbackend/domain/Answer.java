@@ -18,11 +18,11 @@ public class Answer {
 
     public Answer() {}
 
-    public Answer(boolean isCorrect, Question question, String text) {
+    public Answer(boolean isCorrect, String text, Question question) {
         super();
         this.isCorrect= isCorrect;
-        this.question = question;
         this.text = text;
+        this.question = question;
     }
 
     public Long getAnswerId() {

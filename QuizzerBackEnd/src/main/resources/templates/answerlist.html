@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Answer Options</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{../css/bootstrap.min.css}" />
+    <style>
+        .container {
+            padding: 1cm;
+        }
+        .badge-correct {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-incorrect {
+            background-color: #dc3545;
+            color: white;
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Answer options of "<span th:text="${question.questionText}"></span>"</h1>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Answer option text</th>
+                    <th>Correctness</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="option : ${answerOptions}">
+                    <td th:text="${option.text}"></td>
+                    <td>
+                        <span
+                            th:classappend="${option.isCorrect} ? 'badge badge-correct' : 'badge badge-incorrect'"
+                            th:text="${option.isCorrect ? 'Correct' : 'Not correct'}"
+                        ></span>
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
+
+        <div class="button-group">
+            <a th:href="@{/questionlist/{quizId}(quizId=${question.quiz.id})}" class="btn btn-secondary">Back to questions</a>
+        </div>
+    </div>
+</body>
+</html>
