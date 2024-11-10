@@ -1,6 +1,8 @@
 package com.quizzerbackend.web;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,11 @@ public class QuizController {
     // Save a quiz
     @RequestMapping(value = "/savequiz", method = RequestMethod.POST)
     public String save(Quiz quiz) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String currentDate = LocalDate.now().format(formatter);
+
+        quiz.setAddedOn(currentDate);
+        
         quizRepository.save(quiz);
         
         return "redirect:/quizlist";
