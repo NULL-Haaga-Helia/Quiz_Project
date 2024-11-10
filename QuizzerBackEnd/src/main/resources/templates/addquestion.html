@@ -3,30 +3,55 @@
 	<head>
 		<title>Add a question</title>
 		<meta charset="UTF-8" />
+		<link
+        type="text/css"
+        rel="stylesheet"
+        href="css/bootstrap.min.css"
+        th:href="@{../css/bootstrap.min.css}"
+    />
+	<style>
+        .padding {
+            margin-left: 1cm;
+            margin-right: 1cm;
+        }
+        .margin-bottom {
+            margin-bottom: 15px; 
+        }
+        .margin-top {
+            margin-top: 15px; 
+        }
+    </style>
 	</head>
 	<body>
 		<div class="container">
-			<h1>Add Question</h1>
+			<h1 class="margin-top margin-bottom">Add a question to quiz: "<span th:text="${quiz.name}"></span>"</h1>
 			<form th:object="${question}" th:action="@{/savequestion}" method="post">
+				<div class="form-group">
 				<!-- Hidden input for quizId -->
 				<input type="hidden" name="quizId" th:value="${quiz.id}" />
 				
 
 				<!-- Question Text Input -->
-				<label for="questionText">Description</label>
+				<label for="questionText"><strong>Question text</strong></label>
 				<div style="clear: both; display: block; height: 10px"></div>
 				<input
 					type="text"
 					id="questionText"
 					th:field="*{questionText}"
-					class="form-control"
+					class="form-control margin-bottom"
+					placeholder="Enter question text"
 				/>
+
+				
 
 				<div style="clear: both; display: block; height: 10px"></div>
 
 				<!-- Difficulty Radio Buttons -->
-				<label>Difficulty</label>
-				<div>
+				<label class="margin-bottom"><strong>Difficulty</strong></label>
+				
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						
 					<label>
 						<input
 							type="radio"
@@ -36,22 +61,26 @@
 						/>
 						Easy
 					</label>
+					<div style="clear: both; display: block; height: 10px;"></div>
 					<label>
 						<input type="radio" th:field="*{difficulty}" value="Normal" />
 						Normal
 					</label>
+					<div style="clear: both; display: block; height: 10px;"></div>
 					<label>
 						<input type="radio" th:field="*{difficulty}" value="Difficult" />
 						Difficult
 					</label>
 				</div>
+			</div>
+		      
 
                 <div style="clear: both; display: block; height: 10px"></div>
-
+			</div>
                 <!-- Submit and Cancel Buttons -->
-                <input type="submit" value="Save"></input>
+                <input type="submit" class="btn btn-primary" value="Save"></input>
 
-				<a th:href="@{/questionlist/{quizId}(quizId=${quiz.id})}" class="btn btn-primary">Cancel</a>
+				<a th:href="@{/questionlist/{quizId}(quizId=${quiz.id})}" class="btn btn-secondary">Cancel</a>
 				
 			</form>
 		</div>

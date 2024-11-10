@@ -25,46 +25,50 @@
 	<body>
 		<h1 class="padding margin-bottom margin-top">Quizzes</h1>
 
-		<table class="table table-striped padding">
-			<tr>
-				<th>Name</th>
-				<th>Descriptions</th>
-				<th>Published</th>
-				<th>Added on</th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-			<tr th:each="quiz : ${quizzes}">
-				<td th:text="${quiz.name}"></td>
-				<td th:text="${quiz.description}"></td>
-				<td>
-					<span th:if="${quiz.isPublished}" class="badge bg-primary"
-						>Published</span
-					>
-					<span th:if="${!quiz.isPublished}" class="badge bg-secondary"
-						>Not published</span
-					>
-				</td>
-				<td th:text="${quiz.addedOn}"></td>
-				<td>
-					<a th:href="@{/questionlist/{id}(id=${quiz.id})}">See Questions</a>
-				</td>
-				<td>
-					<a
-						th:href="@{/editquiz/{id}(id=${quiz.id})}"
-						class="btn btn-secondary btn-sm"
-						>Edit</a
-					>
-				</td>
-				<td>
-					<a
-						th:href="@{/deletequiz/{id}(id=${quiz.id})}"
-						class="btn btn-danger btn-sm"
-						>Delete</a
-					>
-				</td>
-			</tr>
+		<table class="table padding">
+			<thead class="thead-light">
+				<tr>
+					<th>Name</th>
+					<th>Descriptions</th>
+					<th>Published</th>
+					<th>Added on</th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="quiz : ${quizzes}">
+					<td th:text="${quiz.name}"></td>
+					<td th:text="${quiz.description}"></td>
+					<td>
+						<span th:if="${quiz.isPublished}" class="badge bg-primary"
+							>Published</span
+						>
+						<span th:if="${!quiz.isPublished}" class="badge bg-secondary"
+							>Not published</span
+						>
+					</td>
+					<td th:text="${quiz.addedOn}"></td>
+					<td>
+						<a th:href="@{/questionlist/{id}(id=${quiz.id})}">See Questions</a>
+					</td>
+					<td>
+						<a
+							th:href="@{/editquiz/{id}(id=${quiz.id})}"
+							class="btn btn-secondary btn-sm"
+							>Edit</a
+						>
+					</td>
+					<td>
+						<a
+							th:href="@{/deletequiz/{id}(id=${quiz.id})}"
+							class="btn btn-danger btn-sm"
+							>Delete</a
+						>
+					</td>
+				</tr>
+			</tbody>
 		</table>
 
 		<a href="/addquiz" class="btn btn-primary padding">Add a quiz</a>

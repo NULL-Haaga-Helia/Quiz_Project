@@ -3,29 +3,58 @@
 	<head>
 		<title>Add Quiz</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link
+        type="text/css"
+        rel="stylesheet"
+        href="css/bootstrap.min.css"
+        th:href="@{../css/bootstrap.min.css}"
+    />
+	<style>
+        .padding {
+            margin-left: 1cm;
+            margin-right: 1cm;
+        }
+        .margin-bottom {
+            margin-bottom: 15px; 
+        }
+        .margin-top {
+            margin-top: 15px; 
+        }
+    </style>
 	</head>
 	<body>
 		<div class="container">
-			<h1>Add a quiz</h1>
+			<h1 class="margin-top margin-bottom">Add a quiz</h1>
 			<form th:object="${quiz}" th:action="@{/savequiz}" method="post">
 				<!-- Name Field -->
 				<label for="name">Name</label>
+				<div style="clear: both; display: block; height: 10px"></div>
 				<input type="text" id="name" th:field="*{name}" class="form-control" />
 
 				<div style="clear: both; display: block; height: 10px"></div>
 
 				<!-- Description Field -->
 				<label for="description">Description</label>
+				<div style="clear: both; display: block; height: 10px"></div>
+				<!--
 				<input
 					type="text"
 					id="description"
 					th:field="*{description}"
 					class="form-control"
 				/>
+				-->
+				<textarea 
+					class="form-control margin-bottom" 
+					id="description" 
+					th:field="*{description}"
+					rows="3">
+				</textarea>
+					
 				<div style="clear: both; display: block; height: 10px"></div>
 
 				<!-- Radio Button (True / False) -->
-				<div class="form-check">
+				<div class="form-check margin-bottom">
 					<input
 						type="checkbox"
 						id="isPublished"
@@ -40,10 +69,12 @@
 				<!--<input type="hidden" th:field="*{addedOn}" th:value="${#dates.format(#dates.createNow(), 'dd.MM.yyyy')}" />-->
                 <!--<input type="hidden" th:field="*{addedOn}" th:value="${#calendars.format(#calendars.createNow(), 'dd.MM.yyyy')}" />-->
 
-				<!-- Submit and Cancel Buttons -->
-                <input type="submit" value="Save"></input>
+				<div style="clear: both; display: block; height: 10px"></div>
 
-                <a href="/quizlist" class="btn btn-primary">Cancel</a>
+				<!-- Submit and Cancel Buttons -->
+                <input type="submit" class="btn btn-primary" value="Save"></input>
+
+                <a href="/quizlist" class="btn btn-secondary">Cancel</a>
                 
 
 			</form>
