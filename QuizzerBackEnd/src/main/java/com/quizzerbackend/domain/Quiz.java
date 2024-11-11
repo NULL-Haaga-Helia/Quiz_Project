@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Quiz {
@@ -15,11 +17,10 @@ public class Quiz {
     private String addedOn;
     private boolean isPublished;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
     private List<Question> questions;
     
-    
-
 
     public Quiz() {
 	}

@@ -12,11 +12,16 @@ public class Answer {
 
    
     @ManyToOne
-    @JoinColumn(name = "question_id")  
+    @JoinColumn(name = "questionId")  
     private Question question;
 
 
     public Answer() {}
+
+    public Answer(Question question) {
+        super();
+        this.question = question;
+    }
 
     public Answer(boolean isCorrect, String text, Question question) {
         super();
