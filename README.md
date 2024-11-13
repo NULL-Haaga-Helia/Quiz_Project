@@ -38,3 +38,7 @@ Java version can be found in the pom.xml file in the java.version property.
 ## Product backlog
 
 https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
+
+## Web service URL
+
+https://quiz-project-h7mc.onrender.com/

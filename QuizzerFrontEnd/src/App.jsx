@@ -46,8 +46,8 @@ function App() {
 					<tr>
 						<th>Name</th>
 						<th>Description</th>
-						<th>Published</th>
 						<th>Added on</th>
+						<th>Published</th>
 					</tr>
 					{quizList.map((quiz) => (
 						<tr key={quiz.id}>
