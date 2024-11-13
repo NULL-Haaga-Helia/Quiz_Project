@@ -32,7 +32,7 @@ public class QuizzerbackendApplication {
 			if (quizzes.isEmpty()) {
 				log.info("save a couple of quizzes");
 
-				quizRepository.save(new Quiz("Biology", "Learn fundamental concepts in biology", "12.12.2024", false));
+				quizRepository.save(new Quiz("Biology", "Learn fundamental concepts in biology", "12.12.2024", true));
 				quizRepository.save(new Quiz("History", "Learn significant events, figures, and empires that have shaped world history.", "13.12.2024", false));	
 				quizRepository.save(new Quiz("Literature", "Learn about famous authors, classic literature, and iconic literary characters.", "14.12.2023", false));
 

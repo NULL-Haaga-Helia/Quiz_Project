@@ -60,4 +60,11 @@ public class QuizRepositoryTest {
 		List<Quiz> newQuizzes = quizRepository.findByName("Biology");
 	 	assertThat(newQuizzes).hasSize(0);
      } 
+
+     @Test
+     public void findByNameShouldReturnPublishedQuiz() {
+         List<Quiz> quizzes = quizRepository.findByIsPublished(true);
+         assertThat(quizzes).hasSize(1);
+         assertThat(quizzes.get(0).getName()).isEqualTo("Biology");
+     }
 }
