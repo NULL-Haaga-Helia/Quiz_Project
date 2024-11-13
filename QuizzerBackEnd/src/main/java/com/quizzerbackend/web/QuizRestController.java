@@ -31,7 +31,7 @@ public class QuizRestController {
     //REST method to list all quizzes:
     @RequestMapping(value="/quizzes", method = RequestMethod.GET)
     public @ResponseBody List<Quiz> quizListRest() {	
-        return (List<Quiz>) quizRepository.findAll();
+        return quizRepository.findAll();
     } 
    
 //The method above should work for now.
