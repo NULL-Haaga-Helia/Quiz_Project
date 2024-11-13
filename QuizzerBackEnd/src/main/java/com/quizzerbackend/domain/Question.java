@@ -5,6 +5,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 
 @Entity
@@ -12,7 +14,11 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long questionId;
+
+    @NotBlank(message = "Question text cannot be empty")
     private String questionText;
+
+    @NotBlank(message = "Difficulty must be selected")
     private String difficulty;
 
    

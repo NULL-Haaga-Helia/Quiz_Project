@@ -41,6 +41,7 @@
                     <label for="questiontxt"><strong>Question text</strong></label>
                     <div style="clear: both; display: block; height: 10px;"></div>
                     <input type="text" id="questiontxt" th:field="*{questionText}" class="form-control margin-bottom"/>
+                    <p th:if="${#fields.hasErrors('questionText')}" th:errors="*{questionText}" class="error-message">Question text cannot be empty</p>
                 </div>
                 
                 <div style="clear: both; display: block; height: 10px;"></div>
@@ -68,6 +69,7 @@
                         </label>
                     </div>
                 </div>
+                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}" class="error-message">Difficulty must be selected</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
             </div> 

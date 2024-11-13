@@ -1,6 +1,9 @@
 package com.quizzerbackend.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 
 import java.util.List;
 
@@ -12,8 +15,13 @@ public class Quiz {
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NotBlank(message = "Quiz name cannot be empty")
     private String name;
+
+    @NotBlank(message = "Quiz description cannot be empty")
     private String description;
+
     private String addedOn;
     private boolean isPublished;
 

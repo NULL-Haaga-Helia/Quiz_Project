@@ -17,6 +17,9 @@
         .margin-top {
             margin-top: 15px; 
         }
+		.error-message {
+            color: red;
+        }
     </style>
 	</head>
 	<body>
@@ -27,30 +30,24 @@
 				<label for="name">Name</label>
 				<div style="clear: both; display: block; height: 10px"></div>
 				<input type="text" id="name" th:field="*{name}" class="form-control" />
+				<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message" >Quiz name is required</p>
 
 				<div style="clear: both; display: block; height: 10px"></div>
 
 				<!-- Description Field -->
 				<label for="description">Description</label>
 				<div style="clear: both; display: block; height: 10px"></div>
-				<!--
-				<input
-					type="text"
-					id="description"
-					th:field="*{description}"
-					class="form-control"
-				/>
-				-->
+				
 				<textarea 
 					class="form-control margin-bottom" 
 					id="description" 
 					th:field="*{description}"
 					rows="3">
 				</textarea>
+				<p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message">Description is required</p>
 					
 				<div style="clear: both; display: block; height: 10px"></div>
 
-				<!-- Radio Button (True / False) -->
 				<div class="form-check margin-bottom">
 					<input
 						type="checkbox"
@@ -60,11 +57,6 @@
 					/>
 					<label for="isPublished" class="form-check-label">Published</label>
 				</div>
-
-                <!--NOTE, This doesn't work at the moment-->
-				<!-- Hidden Field for addedOn (Current Date in dd.mm.yyyy Format)-->  
-				<!--<input type="hidden" th:field="*{addedOn}" th:value="${#dates.format(#dates.createNow(), 'dd.MM.yyyy')}" />-->
-                <!--<input type="hidden" th:field="*{addedOn}" th:value="${#calendars.format(#calendars.createNow(), 'dd.MM.yyyy')}" />-->
 
 				<div style="clear: both; display: block; height: 10px"></div>
 

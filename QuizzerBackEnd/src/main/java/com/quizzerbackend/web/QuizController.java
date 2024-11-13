@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,8 @@ import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class QuizController {
@@ -49,10 +52,13 @@ public class QuizController {
 
     // Save a quiz
     @RequestMapping(value = "/savequiz", method = RequestMethod.POST)
-    public String save(Quiz quiz) {
+    public String save(@Valid Quiz quiz, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "addquiz"; 
+        }
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String currentDate = LocalDate.now().format(formatter);
-
         quiz.setAddedOn(currentDate);
 
         quizRepository.save(quiz);
@@ -104,7 +110,11 @@ public class QuizController {
 
     // Save a question (after adding it)
     @RequestMapping(value = "/savequestion", method = RequestMethod.POST)
-    public String save(Question question, @RequestParam("quizId") Long quizId) {
+    public String saveAddedQuestion(@Valid Question question, @RequestParam("quizId") Long quizId, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "addquestion"; 
+        }
+
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid quiz ID"));
 
@@ -144,7 +154,11 @@ public class QuizController {
 
     // Save edited question:
     @RequestMapping(value = "/saveeditedquestion", method = RequestMethod.POST)
-    public String saveEditedQuestion(Question question, @RequestParam("quizId") Long quizId) {
+    public String saveEditedQuestion(@Valid Question question, @RequestParam("quizId") Long quizId, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "editquiz"; 
+        }
+
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid quiz ID"));
 
@@ -155,6 +169,9 @@ public class QuizController {
         return "redirect:/questionlist/" + quizId;
     }
 
+
+    // ANSWER METHODS//
+    //List all answers (to a specific question)
     @RequestMapping(value = "/answerlist/{questionId}", method = RequestMethod.GET)
     public String viewAnswerOptions(@PathVariable("questionId") Long questionId, Model model) {
         Question question = questionRepository.findById(questionId).orElse(null);
@@ -163,8 +180,6 @@ public class QuizController {
         model.addAttribute("answerOptions", answerOptions);
         return "answerlist";
     }
-
-    // ANSWER METHODS//
 
     // Add an answer to a specific question
     @RequestMapping(value = "/addanswer/{questionId}", method = RequestMethod.GET)
@@ -178,10 +193,13 @@ public class QuizController {
         return "addanswer";
     }
 
-    
     // Save answer to a specific question
     @RequestMapping(value = "/saveanswer", method = RequestMethod.POST)
-    public String saveAnswer(Answer answer) {
+    public String saveAnswer(@Valid Answer answer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "addanswer"; 
+        }
+
         Long questionId = answer.getQuestion().getQuestionId();
         answerRepository.save(answer);
         return "redirect:/answerlist/" + questionId ;

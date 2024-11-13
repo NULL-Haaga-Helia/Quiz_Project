@@ -42,6 +42,7 @@
 					class="form-control margin-bottom"
 					placeholder="Enter answer text"
 				/>
+				<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="error-message">Answer text is required</p>
 
 				<div style="clear: both; display: block; height: 10px"></div>
 

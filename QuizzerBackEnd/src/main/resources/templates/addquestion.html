@@ -16,6 +16,9 @@
         .margin-top {
             margin-top: 15px; 
         }
+		.error-message {
+            color: red;
+        }
     </style>
 	</head>
 	<body>
@@ -37,8 +40,7 @@
 					class="form-control margin-bottom"
 					placeholder="Enter question text"
 				/>
-
-				
+				<p th:if="${#fields.hasErrors('questionText')}" th:errors="*{questionText}" class="error-message">Question text cannot be empty</p>
 
 				<div style="clear: both; display: block; height: 10px"></div>
 
@@ -54,22 +56,24 @@
 							th:field="*{difficulty}"
 							value="Easy"
 							checked="checked"
+							
 						/>
 						Easy
 					</label>
 					<div style="clear: both; display: block; height: 10px;"></div>
 					<label>
-						<input type="radio" th:field="*{difficulty}" value="Normal" />
+						<input type="radio" th:field="*{difficulty}" value="Normal"/>
 						Normal
 					</label>
 					<div style="clear: both; display: block; height: 10px;"></div>
 					<label>
-						<input type="radio" th:field="*{difficulty}" value="Difficult" />
+						<input type="radio" th:field="*{difficulty}" value="Difficult"/>
 						Difficult
 					</label>
 				</div>
 			</div>
-		      
+			<p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}" class="error-message">Difficulty must be selected</p>
+			
 
                 <div style="clear: both; display: block; height: 10px"></div>
 			</div>
