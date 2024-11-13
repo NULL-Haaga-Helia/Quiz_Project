@@ -3,7 +3,6 @@ package com.quizzerbackend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
 import com.quizzerbackend.domain.QuizRepository;
-import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 
