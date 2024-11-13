@@ -24,10 +24,10 @@ public class QuizRestController {
     private QuizRepository quizRepository;
 
     //REST method to list all quizzes:
-    @RequestMapping(value="/quizzes", method = RequestMethod.GET)
-    public @ResponseBody List<Quiz> quizListRest() {	
-        return quizRepository.findAll();    /*CHANGE TO FIND ONLY PUBLISHED */
-    } 
+    // @RequestMapping(value="/quizzes", method = RequestMethod.GET)
+    // public @ResponseBody List<Quiz> quizListRest() {	
+    //     return quizRepository.findAll();    /*CHANGE TO FIND ONLY PUBLISHED */
+    // } 
    
 //The method above should work for now.
 
@@ -40,14 +40,8 @@ public @ResponseBody List<Quiz> quizListRest() {
 }
 */
 
-//Gives error: "Cannot convert from Iterable<Quiz> to List<Quiz>"
-/* 
-   @GetMapping("/quizzes")
-   public List<Quiz> getAllQuizzes() {
-    return quizRepository.findAll();
-   }
-*/
-
-
-
+@RequestMapping(value="/quizzes", method = RequestMethod.GET)
+public @ResponseBody List<Quiz> quizListRest() {
+    return quizRepository.findByIsPublished(true);
+}
 }
