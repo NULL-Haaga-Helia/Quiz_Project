@@ -26,8 +26,8 @@
 			<h1 class="margin-top margin-bottom">Add a question to quiz: "<span th:text="${quiz.name}"></span>"</h1>
 			<form th:object="${question}" th:action="@{/savequestion}" method="post">
 				<div class="form-group">
-				<!-- Hidden input for quizId -->
-				<input type="hidden" name="quizId" th:value="${quiz.id}" />
+				<!-- Hidden input for quiz -->
+				<input type="hidden" name="quiz" th:field="*{quiz}" />
 				
 
 				<!-- Question Text Input -->

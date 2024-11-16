@@ -27,7 +27,7 @@
 			<form th:object="${answer}" th:action="@{/saveanswer}" method="post">
 
 				<div class="form-group">
-				<!-- Hidden input for questionId -->
+				<!-- Hidden input for question -->
 				<input type="hidden" name="question" th:field="*{question}" />
 				
 

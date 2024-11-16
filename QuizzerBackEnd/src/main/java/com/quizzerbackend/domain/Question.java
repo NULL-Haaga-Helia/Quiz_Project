@@ -33,6 +33,11 @@ public class Question {
 
     public Question() {}
 
+    public Question(Quiz quiz) {
+        super();
+        this.quiz = quiz;
+    }
+
     public Question(String questionText, String difficulty, Quiz quiz) {
 		super();
 		this.questionText= questionText;

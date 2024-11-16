@@ -12,7 +12,7 @@ public class Answer {
 
     private boolean isCorrect;
 
-    @NotBlank(message = "Question text cannot be empty")
+    @NotBlank(message = "Answer text cannot be empty")
     private String text;
 
    
