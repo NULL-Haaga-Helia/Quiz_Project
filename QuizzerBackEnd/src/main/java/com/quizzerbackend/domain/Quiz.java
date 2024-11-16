@@ -2,7 +2,6 @@ package com.quizzerbackend.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 
 import java.util.List;
