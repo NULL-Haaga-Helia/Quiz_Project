@@ -21,7 +21,7 @@ public class Question {
 
    
     @ManyToOne
-    @JoinColumn(name = "id")  //Quiz's id field
+    @JoinColumn(name = "id")  
     private Quiz quiz;
 
     @JsonIgnore

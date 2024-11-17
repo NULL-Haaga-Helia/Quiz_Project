@@ -86,7 +86,7 @@ public class QuizController {
     }
 
     // QUESTION METHODS//
-    // List all questions (to a specific quiz)
+    // List all questions (for a specific quiz)
     @RequestMapping("/questionlist/{id}")
     public String showQuestionsForQuiz(@PathVariable("id") Long quizId, Model model) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new IllegalArgumentException("Invalid quiz ID"));
@@ -99,7 +99,7 @@ public class QuizController {
         return "questionlist";
     }
 
-    // Add a question (to a specific quiz)
+    // Add a question 
     @RequestMapping(value = "/addquestion/{quizId}", method = RequestMethod.GET)
     public String addQuestion(@PathVariable("quizId") Long quizId, Model model) {
         Quiz quiz = quizRepository.findById(quizId)
@@ -111,7 +111,7 @@ public class QuizController {
         return "addquestion";
     }
 
-    // Save a question (after adding it)
+    // Save a question 
     @RequestMapping(value = "/savequestion", method = RequestMethod.POST)
     public String saveAddedQuestion(@Valid Question question, BindingResult bindingResult, Model model) {
         Quiz quiz = question.getQuiz();
@@ -156,26 +156,8 @@ public class QuizController {
         return "editquestion";
     }
 
-    // Save edited question:
-    // @RequestMapping(value = "/saveeditedquestion", method = RequestMethod.POST)
-    // public String saveEditedQuestion(@Valid Question question, @RequestParam("quizId") Long quizId,
-    //         BindingResult bindingResult) {
-    //     if (bindingResult.hasErrors()) {
-    //         return "editquiz";
-    //     }
-
-    //     Quiz quiz = quizRepository.findById(quizId)
-    //             .orElseThrow(() -> new IllegalArgumentException("Invalid quiz ID"));
-
-    //     question.setQuiz(quiz);
-
-    //     questionRepository.save(question);
-
-    //     return "redirect:/questionlist/" + quizId;
-    // }
-
     // ANSWER METHODS//
-    // List all answers (to a specific question)
+    // List all answers (for a specific question)
     @RequestMapping(value = "/answerlist/{questionId}", method = RequestMethod.GET)
     public String viewAnswerOptions(@PathVariable("questionId") Long questionId, Model model) {
         Question question = questionRepository.findById(questionId).orElse(null);
@@ -185,7 +167,7 @@ public class QuizController {
         return "answerlist";
     }
 
-    // Add an answer to a specific question
+    // Add an answer 
     @RequestMapping(value = "/addanswer/{questionId}", method = RequestMethod.GET)
     public String addAnswer(@PathVariable("questionId") Long questionId, Model model) {
 
@@ -198,7 +180,7 @@ public class QuizController {
         return "addanswer";
     }
 
-    // Save answer to a specific question
+    // Save answer 
     @RequestMapping(value = "/saveanswer", method = RequestMethod.POST)
     public String saveAnswer(@Valid Answer answer, BindingResult bindingResult, Model model) {
         Question question = answer.getQuestion();
