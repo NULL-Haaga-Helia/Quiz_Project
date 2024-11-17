@@ -1,19 +1,17 @@
 import { useState } from "react";
+import {Button,Dialog,DialogTitle,DialogContent,DialogActions,TextField,} from "@mui/material";
+import axios from "axios";
 
 
 
-export default function Addquestion(){
+export default function Addquestion({ onQuestionAdded}){
 
     const[open, setOpen] = useState(false);
 
-    const[quiz, setQuiz] = useState({
-
-        name: '',
-        description: '',
-        published: '',
-        addedOn: '',
-
-
+    const[question, setQuestion] = useState({
+        questionText: '',
+        difficulty: '',
+        quizId: quizId,
     });
 
     const handleClickOpne = () => {
@@ -26,84 +24,68 @@ export default function Addquestion(){
     }
 
     const handleInputChange = (e) => {
-        setQuiz({...quiz, [e.target.name]: e.target.value})
+        setQuestion({...question, [e.target.name]: e.target.value})
     }    
 
-    const addQuiz = () => {
-        props.saveQuiz(quiz);
+    const addQuestion = () => {
+        props.saveQuestion(question);
         handleClose();
 
     }
 
+    const saveQuestion = async () => {
+        try{
+            const response = await axios.post("http://localhost:8080/addquestion", question);
+            console.log("Question save:", response.data);
+            onQuestionAdded(response.data);
+            handleClose();
+        } catch(error){
+            console.log("Error saving question:", error);
+            
+        }
+    };
 
-    return(
+    return (
         <div>
-
-            <Button onClick={handleClickOpne}>
-                Add Quiz
-            </Button>
-
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-
-
-            <DialogTitle id="form-dialog-title">
-                New Quiz
-            </DialogTitle>
-
-                <DialogContent>
-
-                    <Textfield 
-                        autoFocus
-                        margin="dense"
-                        name="name"
-                        value={quiz.name}
-                        onChange={e => handleInputChange(e)}
-                        label="Name"
-                        fullWidth
-                    />
-
-                    <Textfield 
-                        margin="dense"
-                        name="description"
-                        value={quiz.description}
-                        onChange={e => handleInputChange(e)}
-                        label="Description"
-                        fullWidth
-                    />
-
-                    <Textfield
-                        margin="dense"
-                        name="published"
-                        value={quiz.published}
-                        onChange={e => handleInputChange(e)}
-                        label ="Published"
-                        fullWidth
-                    />
-
-                    <Textfield
-                        margin="dense"
-                        name="addedOn"
-                        value={quiz.addedOn}
-                        onChange={e => handleInputChange(e)}
-                        label="Added on"
-                        fullWidth
-                    />
-
-                </DialogContent>
-
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>
+            Add Question
+          </Button>
+    
+          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">New Question</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                name="questionText"
+                value={question.questionText}
+                onChange={handleInputChange}
+                label="Question Text"
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                name="difficulty"
+                value={question.difficulty}
+                onChange={handleInputChange}
+                label="Difficulty"
+                select
+                fullWidth
+              >
+                <MenuItem value="Easy">Easy</MenuItem>
+                <MenuItem value="Medium">Medium</MenuItem>
+                <MenuItem value="Hard">Hard</MenuItem>
+              </TextField>
+            </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-                </Button>
-
-                <Button onClick={addQuiz} color="primary">
-                    Save
-                </Button>
-
+              <Button onClick={handleClose} color="secondary">
+                Cancel
+              </Button>
+              <Button onClick={saveQuestion} color="primary">
+                Save
+              </Button>
             </DialogActions>
-            </Dialog>
-
+          </Dialog>
         </div>
-    )
-  
-}
+      );
+    }
