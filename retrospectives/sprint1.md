@@ -1,6 +1,6 @@
 # Sprint 1 Retrospective
 
-[Retrospective board](https://edu.flinga.fi/s/<BOARD_ID>)
+[Retrospective board](https://edu.flinga.fi/s/FBUVVUV)
 
 Successes:
 
