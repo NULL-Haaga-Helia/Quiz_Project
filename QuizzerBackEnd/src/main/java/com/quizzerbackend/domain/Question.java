@@ -5,19 +5,23 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long questionId;
+
+    @NotBlank(message = "Question text cannot be empty")
     private String questionText;
+
+    @NotBlank(message = "Difficulty must be selected")
     private String difficulty;
 
    
     @ManyToOne
-    @JoinColumn(name = "id")  //Quiz's id field
+    @JoinColumn(name = "id")  
     private Quiz quiz;
 
     @JsonIgnore
@@ -26,6 +30,11 @@ public class Question {
 
 
     public Question() {}
+
+    public Question(Quiz quiz) {
+        super();
+        this.quiz = quiz;
+    }
 
     public Question(String questionText, String difficulty, Quiz quiz) {
 		super();

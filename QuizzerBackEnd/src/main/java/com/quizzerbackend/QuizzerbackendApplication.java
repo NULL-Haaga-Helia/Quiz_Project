@@ -3,7 +3,6 @@ package com.quizzerbackend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
 import com.quizzerbackend.domain.QuizRepository;
-import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 
@@ -34,7 +32,7 @@ public class QuizzerbackendApplication {
 			if (quizzes.isEmpty()) {
 				log.info("save a couple of quizzes");
 
-				quizRepository.save(new Quiz("Biology", "Learn fundamental concepts in biology", "12.12.2024", false));
+				quizRepository.save(new Quiz("Biology", "Learn fundamental concepts in biology", "12.12.2024", true));
 				quizRepository.save(new Quiz("History", "Learn significant events, figures, and empires that have shaped world history.", "13.12.2024", false));	
 				quizRepository.save(new Quiz("Literature", "Learn about famous authors, classic literature, and iconic literary characters.", "14.12.2023", false));
 

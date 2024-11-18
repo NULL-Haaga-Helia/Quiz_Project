@@ -2,11 +2,10 @@ package com.quizzerbackend.domain;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
-import com.quizzerbackend.domain.Quiz;
-import com.quizzerbackend.domain.QuizRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QuestionRepository extends CrudRepository<Question, Long> {
+
+public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findByQuestionText(String questionText);
     List<Question> findByDifficulty(String difficulty);
