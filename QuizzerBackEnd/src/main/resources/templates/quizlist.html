@@ -26,6 +26,7 @@
 				<tr>
 					<th>Name</th>
 					<th>Descriptions</th>
+					<th>Category</th>
 					<th>Published</th>
 					<th>Added on</th>
 					<th></th>
@@ -37,6 +38,7 @@
 				<tr th:each="quiz : ${quizzes}">
 					<td th:text="${quiz.name}"></td>
 					<td th:text="${quiz.description}"></td>
+					<td th:text="${quiz.quizCategory.getName()}"></td>
 					<td>
 						<span th:if="${quiz.isPublished}" class="badge bg-primary"
 							>Published</span
@@ -68,5 +70,6 @@
 		</table>
 
 		<a href="/addquiz" class="btn btn-primary padding">Add a quiz</a>
+		<a href="/addquiz" class="btn btn-secondary">See Categories</a>
 	</body>
 </html>

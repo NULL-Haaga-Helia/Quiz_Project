@@ -27,18 +27,24 @@ public class Quiz {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
     private List<Question> questions;
+
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private QuizCategory quizCategory;
     
 
     public Quiz() {
 	}
   
    
-    public Quiz(String name, String description, String addedOn, boolean isPublished) {
+    public Quiz(String name, String description, String addedOn, boolean isPublished, QuizCategory quizCategory) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.addedOn = addedOn;
         this.isPublished = isPublished;
+        this.quizCategory = quizCategory;
 	}
 
 
@@ -87,13 +93,26 @@ public class Quiz {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
-
     
+    public QuizCategory getQuizCategory() {
+        return quizCategory;
+    }
+
+    public void setQuizCategory(QuizCategory quizCategory) {
+        this.quizCategory = quizCategory;
+    }
+
 
     @Override
     public String toString() {
-        return "Quiz [id=" + id + ", name=" + name + ", description=" + description + ", addedOn=" + addedOn
+
+        if(this.quizCategory != null){
+            return "Quiz [id=" + id + ", name=" + name + ", description=" + description + ", addedOn=" + addedOn
+                + ", isPublished=" + isPublished + ", quizCategory=" + quizCategory.getName() + "]";
+        }else {
+            return "Quiz [id=" + id + ", name=" + name + ", description=" + description + ", addedOn=" + addedOn
                 + ", isPublished=" + isPublished + "]";
+        }
     }
 
   
