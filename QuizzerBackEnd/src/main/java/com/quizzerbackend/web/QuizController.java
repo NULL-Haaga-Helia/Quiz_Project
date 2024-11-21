@@ -18,6 +18,8 @@ import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
+import com.quizzerbackend.domain.QuizCategory;
+import com.quizzerbackend.domain.QuizCategoryRepository;
 
 import jakarta.validation.Valid;
 
@@ -33,6 +35,9 @@ public class QuizController {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private QuizCategoryRepository quizCategoryRepository;
+
     // QUIZ METHODS//
     // List all quizzes
     @RequestMapping(value = { "/", "/quizlist" })
@@ -45,6 +50,7 @@ public class QuizController {
     @RequestMapping(value = "/addquiz")
     public String addQuiz(Model model) {
         model.addAttribute("quiz", new Quiz());
+        model.addAttribute("quizCategories", quizCategoryRepository.findAll());
 
         return "addquiz";
     }
@@ -82,6 +88,7 @@ public class QuizController {
     @RequestMapping(value = "/editquiz/{id}", method = RequestMethod.GET)
     public String editQuiz(@PathVariable("id") Long quizId, Model model) {
         model.addAttribute("quiz", quizRepository.findById(quizId));
+        model.addAttribute("quizCategories", quizCategoryRepository.findAll());
         return "editquiz";
     }
 
@@ -225,5 +232,53 @@ public class QuizController {
 
         return "editanswer";
     }
+
+    // QUIZ CATEGORY METHODS//
+    // List all quiz categories
+    @RequestMapping(value = "/quizcategorylist")
+    public String quizCategoryList(Model model) {
+        model.addAttribute("quizCategories", quizCategoryRepository.findAll());
+        return "quizcategorylist";
+    }
+
+    // Add a quiz category
+    @RequestMapping(value = "/addquizcategory")
+    public String addQuizCategory(Model model) {
+        model.addAttribute("quizCategory", new QuizCategory());
+        return "addquizcategory";
+    }
+
+    // Delete a quiz category
+    @RequestMapping(value = "/deletequizcategory/{id}", method
+            = RequestMethod.GET)
+    public String deleteQuizCategory(@PathVariable("id") Long id, Model model) {
+        quizCategoryRepository.deleteById(id);
+        return "redirect:../quizcategorylist";
+    }
+
+    // Edit a quiz category
+    @RequestMapping(value = "/editquizcategory/{id}", method = RequestMethod.GET)
+    public String editQuizCategory(@PathVariable("id") Long quizCategoryId, Model model) {
+        model.addAttribute("quizCategory", quizCategoryRepository.findById(quizCategoryId));
+        return "editquizcategory";
+    }
+
+
+    // Save a quiz category
+    @RequestMapping(value = "/savequizcategory", method = RequestMethod.POST)
+    public String saveQuizCategory(@Valid QuizCategory quizCategory, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            if (quizCategory.getId() != null) {
+                return "editquizcategory";
+            } else {
+                return "addquizcategory";
+            }
+        }
+
+        quizCategoryRepository.save(quizCategory);
+
+        return "redirect:/quizcategorylist";
+    }
+
 
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,6 +18,8 @@ public class QuizCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
+
+    @NotBlank(message = "Name cannot be empty")
     private String name;
     private String description;
 
