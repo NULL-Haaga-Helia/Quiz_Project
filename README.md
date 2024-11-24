@@ -13,7 +13,7 @@ The application is accessible through any browser and provides an interactive le
 
 ## Data model
 
-The data is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:
+The data model is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:
 
 ### Entities and attributes
 
@@ -64,8 +64,11 @@ The data is designed to support the management of quizzes, their associated cate
   - `userId` (int)
 - **Purpose:** Tracks the user's selected answer options for questions in a quiz.
 
+---
+
 ### ERD
 
+```mermaid
 erDiagram
 Category {
 int categoryId PK
@@ -92,10 +95,11 @@ userAnswer {
 int userId
 }
 
-    Category ||--o{ Quiz : "has"
-    Quiz ||--o{ Question : "contains"
-    Question ||--o{ Answer : "has"
-    Answer ||--o{ userAnswer : "selected by"
+    Category ||--|{ Quiz : "has"
+    Quiz ||--|{ Question : "contains"
+    Question ||--|{ Answer : "has"
+    Answer ||--|{ userAnswer : "selected by"
+```
 
 ## Developer guide
 
