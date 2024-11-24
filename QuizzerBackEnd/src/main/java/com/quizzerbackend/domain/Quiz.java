@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -26,6 +27,7 @@ public class Quiz {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
+    @JsonManagedReference 
     private List<Question> questions;
 
 
