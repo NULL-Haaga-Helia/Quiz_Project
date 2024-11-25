@@ -15,7 +15,7 @@ export function getAllQuizzes() {
 
 //Note, following fetches still need to be tested.
 
-// Fetch quiz by ID (no questions included?)
+// Fetch quiz by ID (no questions included?)   // "/quizzes/{id}"
 // Endpoint: /quizzes/{quizId} ?
 export function getQuizById(quizId) {
 	return fetch(`${BACKEND_URL}/api/quizzes/${quizId}`)
@@ -27,7 +27,7 @@ export function getQuizById(quizId) {
 		.catch((err) => console.error("Error fetching quiz by ID:", err));
 }
 
-// Fetch all questions for a specific quiz
+// Fetch all questions for a specific quiz    //"/quizzes/{quizId}/questions"
 // Endpoint: /quizzes/{quizId}/questions  ?
 export function getQuizQuestions(quizId) {
 	return fetch(`${BACKEND_URL}/api/quizzes/${quizId}/questions`)

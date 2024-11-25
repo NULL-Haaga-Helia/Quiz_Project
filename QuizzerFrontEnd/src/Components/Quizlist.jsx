@@ -33,14 +33,27 @@ function QuizList() {
 		//Probably redundant, optionally show an error msg in the UI.
 	};
 
+	const handleQuizNameClick = (quizId) => {
+		console.log("Navigating to QuizQuestions with quiz ID:", quizId);
+		navigate("/quizquestions", { state: { quizId } });
+	};
+
+	const handleQuizResultsClick = (quizId) => {
+		console.log("Navigating to QuizResults with quiz ID:", quizId);
+		navigate("/quizresults", { state: { quizId } });
+	};
+
+	/*
 	const handleQuizNameClick = (quiz) => {
-		console.log("Navigating with quiz:", quiz);
-		navigate("/quizquestions", { state: { quiz } }); // Passing quiz object as a prop to the other component
+		console.log("Navigating to QuizQuestions with quiz ID:", quiz.id);
+		navigate("/quizquestions", { state: { quizId: quiz.id } });
 	};
 
 	const handleQuizResultsClick = (quiz) => {
-		navigate("/quizresults", { state: { quiz } }); // Passing quiz object as a prop to the other component
+		console.log("Navigating to QuizResults with quiz ID:", quiz.id);
+		navigate("/quizresults", { state: { quizId: quiz.id } });
 	};
+	*/
 
 	//Rendering:
 	return (
@@ -82,7 +95,7 @@ function QuizList() {
 									component="th"
 									scope="row"
 									style={{ cursor: "pointer", color: "#1976d2" }}
-									onClick={() => handleQuizNameClick(quiz)}
+									onClick={() => handleQuizNameClick(quiz.id)} //handleQuizNameClick(quiz)
 								>
 									{quiz.name}
 								</TableCell>
@@ -93,7 +106,7 @@ function QuizList() {
 									component="th"
 									scope="row"
 									style={{ cursor: "pointer", color: "#1976d2" }}
-									onClick={() => handleQuizResultsClick(quiz)}
+									onClick={() => handleQuizResultsClick(quiz.id)} //handleQuizResultsClick(quiz)
 									align="left"
 								>
 									See results
