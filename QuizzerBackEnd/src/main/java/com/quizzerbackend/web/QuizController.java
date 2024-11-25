@@ -279,6 +279,4 @@ public class QuizController {
 
         return "redirect:/quizcategorylist";
     }
-
-
 }
