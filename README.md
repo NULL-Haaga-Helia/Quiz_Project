@@ -114,6 +114,12 @@ Follow the steps below to intialize the back end application:
 Java version 17
 Java version can be found in the pom.xml file in the java.version property.
 
+##  REST API documentation URL 
+
+http://localhost:8080/v3/api-docs 
+
+NOTE: need to run the application on your device before you can access the REST API documentation 
+
 ## Team members
 
 - [Alisa Dunaeva](https://github.com/dunaevaalisa)
@@ -126,11 +132,8 @@ Java version can be found in the pom.xml file in the java.version property.
 
 https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 
-## Test
-
-dev branch test -Roda
-Testing Toan
-
 ## Web service URL
 
 https://quiz-project-h7mc.onrender.com/
+
+
