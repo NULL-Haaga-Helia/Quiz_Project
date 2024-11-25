@@ -19,6 +19,8 @@ import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
+
+import java.util.Collections;
 import java.util.List;
 
 
@@ -57,8 +59,7 @@ public class QuizRestController {
         List<Question> questions = questionRepository.findByQuizId(quizId);
         
         if (questions == null || questions.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No questions found for quiz with id: " + quizId);
+            return ResponseEntity.ok(Collections.emptyList());
         }
 
         return ResponseEntity.ok(questions);
@@ -108,4 +109,3 @@ public class QuizRestController {
        }
 
 }
-
