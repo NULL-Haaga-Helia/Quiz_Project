@@ -65,17 +65,31 @@ function QuizQuestions() {
 		return (
 			<Box sx={{ width: "100%", marginTop: 8, padding: 2 }}>
 				{/* Quiz Name */}
-				<Typography variant="h4" gutterBottom>
+				<Typography
+					variant="h4"
+					gutterBottom
+					sx={{ textAlign: "left", marginBottom: 2 }}
+				>
 					{quiz.name}
 				</Typography>
 
 				{/* Quiz Description */}
-				<Typography variant="body1" color="textSecondary" gutterBottom>
+				<Typography
+					variant="body1"
+					color="textSecondary"
+					gutterBottom
+					sx={{ textAlign: "left", marginBottom: 2 }}
+				>
 					{quiz.description}
 				</Typography>
 
 				{/* Additional Details */}
-				<Typography variant="body2" color="textSecondary" gutterBottom>
+				<Typography
+					variant="body2"
+					color="textSecondary"
+					gutterBottom
+					sx={{ textAlign: "left", marginBottom: 2 }}
+				>
 					Added on: {quiz.addedOn} | Questions: {questions.length} | Category:{" "}
 					{quiz.quizCategory.name}
 				</Typography>
@@ -86,7 +100,7 @@ function QuizQuestions() {
 						<ListItem
 							key={question.questionId}
 							component={Paper}
-							elevation={1}
+							elevation={3}
 							sx={{ marginBottom: 2, padding: 2 }}
 						>
 							<ListItemText
@@ -94,14 +108,10 @@ function QuizQuestions() {
 									<Typography variant="h6">{question.questionText}</Typography>
 								}
 								secondary={
-									<>
-										<Typography variant="body2" color="textSecondary">
-											Question {index + 1} of {questions.length}
-										</Typography>
-										<Typography variant="body2" color="textSecondary">
-											Difficulty: {question.difficulty}
-										</Typography>
-									</>
+									<Typography variant="body2" color="textSecondary">
+										Question {index + 1} of {questions.length} | Difficulty:{" "}
+										{question.difficulty}
+									</Typography>
 								}
 							/>
 						</ListItem>
