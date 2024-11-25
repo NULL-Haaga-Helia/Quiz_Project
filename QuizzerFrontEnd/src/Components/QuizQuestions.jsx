@@ -95,28 +95,41 @@ function QuizQuestions() {
 				</Typography>
 
 				{/* Questions List */}
-				<List sx={{ marginTop: 2 }}>
-					{questions.map((question, index) => (
-						<ListItem
-							key={question.questionId}
-							component={Paper}
-							elevation={3}
-							sx={{ marginBottom: 2, padding: 2 }}
-						>
-							<ListItemText
-								primary={
-									<Typography variant="h6">{question.questionText}</Typography>
-								}
-								secondary={
-									<Typography variant="body2" color="textSecondary">
-										Question {index + 1} of {questions.length} | Difficulty:{" "}
-										{question.difficulty}
-									</Typography>
-								}
-							/>
-						</ListItem>
-					))}
-				</List>
+				{questions.length === 0 ? (
+					<Typography
+						variant="body1"
+						color="textSecondary"
+						gutterBottom
+						sx={{ textAlign: "center", marginTop: 2 }}
+					>
+						No questions available for this quiz.
+					</Typography>
+				) : (
+					<List sx={{ marginTop: 2 }}>
+						{questions.map((question, index) => (
+							<ListItem
+								key={question.questionId}
+								component={Paper}
+								elevation={3}
+								sx={{ marginBottom: 2, padding: 2 }}
+							>
+								<ListItemText
+									primary={
+										<Typography variant="h6">
+											{question.questionText}
+										</Typography>
+									}
+									secondary={
+										<Typography variant="body2" color="textSecondary">
+											Question {index + 1} of {questions.length} | Difficulty:{" "}
+											{question.difficulty}
+										</Typography>
+									}
+								/>
+							</ListItem>
+						))}
+					</List>
+				)}
 			</Box>
 		);
 	}
