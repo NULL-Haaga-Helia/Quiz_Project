@@ -11,6 +11,96 @@ Quizzer is a web application designed to help teachers (at Haaga Helia) create a
 The project includes two main web-based dashboards: a teacher dashboard for quiz creation and management, and a student dashboard for quiz-taking and reviews.
 The application is accessible through any browser and provides an interactive learning experience for students.
 
+## Data model
+
+The data model is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:
+
+### Entities and attributes
+
+#### Category
+
+- **Attributes:**
+  - `categoryId` (int, primary key)
+  - `name` (string)
+  - `description` (string)
+- **Purpose:** Represents a grouping or classification for quizzes.
+
+---
+
+#### Quiz
+
+- **Attributes:**
+  - `id` (int, primary key)
+  - `name` (string)
+  - `isPublished` (string)
+  - `addedOn` (string)
+- **Purpose:** Represents a collection of questions that belong to a specific category.
+
+---
+
+#### Question
+
+- **Attributes:**
+  - `questionId` (int, primary key)
+  - `questionText` (string)
+  - `difficulty` (string)
+- **Purpose:** Represents an individual question in a quiz.
+
+---
+
+#### Answer
+
+- **Attributes:**
+  - `answerId` (int, primary key)
+  - `isCorrect` (boolean)
+  - `text` (string)
+- **Purpose:** Represents the possible answer options for a question and indicates whether an answer is correct or incorrect.
+
+---
+
+#### userAnswer
+
+- **Attributes:**
+  - `userId` (int)
+- **Purpose:** Tracks the user's selected answer options for questions in a quiz.
+
+---
+
+### ERD
+
+```mermaid
+erDiagram
+Category {
+int categoryId PK
+string name
+string description
+}
+Quiz {
+int id PK
+string name
+string isPublished
+string addedOn
+}
+Question {
+int questionId PK
+string questionText
+string difficulty
+}
+Answer {
+int answerId PK
+boolean isCorrect
+string text
+}
+userAnswer {
+int userId
+}
+
+    Category ||--|{ Quiz : "has"
+    Quiz ||--|{ Question : "contains"
+    Question ||--|{ Answer : "has"
+    Answer ||--|{ userAnswer : "selected by"
+```
+
 ## Developer guide
 
 Follow the steps below to intialize the back end application:
