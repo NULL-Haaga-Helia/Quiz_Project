@@ -182,8 +182,7 @@ public class QuizRestController {
     public ResponseEntity<?> getAllCategories() {
         List<QuizCategory> categories = quizCategoryRepository.findAll();
         if (categories.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No categories found");
+            return ResponseEntity.ok(Collections.emptyList());
         }
         return ResponseEntity.ok(categories);
     }
@@ -220,8 +219,7 @@ public class QuizRestController {
         }
         List<Quiz> quizzes = quizRepository.findByQuizCategoryIdAndIsPublished(categoryId, true);
         if (quizzes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No published quizzes found for the provided category id");
+            return ResponseEntity.ok(Collections.emptyList());
         }
         return ResponseEntity.ok(quizzes);
     }
