@@ -10,8 +10,8 @@ function QuizQuestions() {
 	const [quiz, setQuiz] = useState(null);
 	const [questions, setQuestions] = useState([]);
 	const location = useLocation();
-	//const { quizId } = location.state;
-	const quizId = location.state?.quizId;
+	const { quizId } = location.state;
+	//const quizId = location.state?.quizId;
 
 	// Tests with whole obj state.
 	//const { quiz } = location.state;

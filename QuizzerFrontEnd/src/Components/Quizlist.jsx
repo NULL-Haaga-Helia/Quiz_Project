@@ -33,18 +33,17 @@ function QuizList() {
 		//Probably redundant, optionally show an error msg in the UI.
 	};
 
-	/*
 	const handleQuizNameClick = (quizId) => {
 		console.log("Navigating to QuizQuestions with quiz ID:", quizId);
 		navigate("/quizquestions", { state: { quizId } });
 	};
-	
+
 	const handleQuizResultsClick = (quizId) => {
 		console.log("Navigating to QuizResults with quiz ID:", quizId);
 		navigate("/quizresults", { state: { quizId } });
 	};
-	*/
 
+	/*
 	const handleQuizNameClick = (quiz) => {
 		console.log("Navigating to QuizQuestions with quiz ID:", quiz.id);
 		navigate("/quizquestions", { state: { quizId: quiz.id } });
@@ -54,6 +53,7 @@ function QuizList() {
 		console.log("Navigating to QuizResults with quiz ID:", quiz.id);
 		navigate("/quizresults", { state: { quizId: quiz.id } });
 	};
+	*/
 
 	//Rendering:
 	return (
