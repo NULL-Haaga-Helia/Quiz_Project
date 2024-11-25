@@ -92,7 +92,7 @@ boolean isCorrect
 string text
 }
 userAnswer {
-int userAnswerId
+int userAnswerId PK
 }
 
     Category ||--|{ Quiz : "has"
