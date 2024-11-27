@@ -22,6 +22,8 @@ import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
 import com.quizzerbackend.domain.QuizRepository;
+import com.quizzerbackend.domain.UserAnswer;
+import com.quizzerbackend.domain.UserAnswerRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,8 +49,12 @@ public class QuizRestController {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
+
      @Autowired
     private QuizCategoryRepository quizCategoryRepository;
+
 
        //Endpoint for getting all published quizzes
     @Operation(
@@ -108,7 +114,8 @@ public class QuizRestController {
     }
 
 
-    //Endpoint for creating the answer by quiz id and question id
+//Endpoint for creating the answer by quiz id and question id
+
     @Operation(
         summary = "Post answer by question id and quiz id",
         description = "Creates an answer for the question and quiz with the provided ids"
@@ -140,11 +147,9 @@ public class QuizRestController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Answer submitted successfully");
-    }
-    
+    }    
 
        //Endpoint for getting the answers by quiz id and question id
-
        @Operation(
         summary = "Get answers by quiz id and question id",
         description = "Returns the list of answers for the quiz and question with the provided id"
@@ -170,7 +175,6 @@ public class QuizRestController {
         
        }
 
-
        // Exercise 15 REST API endpoint for getting all categories
 
        @Operation(
@@ -182,7 +186,8 @@ public class QuizRestController {
     public ResponseEntity<?> getAllCategories() {
         List<QuizCategory> categories = quizCategoryRepository.findAll();
         if (categories.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No categories found");
         }
         return ResponseEntity.ok(categories);
     }
@@ -219,7 +224,8 @@ public class QuizRestController {
         }
         List<Quiz> quizzes = quizRepository.findByQuizCategoryIdAndIsPublished(categoryId, true);
         if (quizzes.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No published quizzes found for the provided category id");
         }
         return ResponseEntity.ok(quizzes);
     }
