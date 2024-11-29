@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { getQuizById, getQuizQuestions } from "../services/api";
+import { getAnswerOptions, getQuizById, getQuizQuestions } from "../services/api";
 
 import Typography from "@mui/material/Typography";
-import { Box, List, ListItem, ListItemText, Paper } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Paper, Radio, RadioGroup, FormControlLabel, Button } from "@mui/material";
 
 function QuizQuestions() {
 	//States:
@@ -11,6 +11,11 @@ function QuizQuestions() {
 	const [questions, setQuestions] = useState([]);
 	const location = useLocation();
 	const { quizId } = location.state;
+	const [answers, setAnswers] = useState([]);
+	const [selectedAnswers, setSelectedAnswers] = useState({});
+	const [submitted, setSubmitted] = useState(false);
+
+
 	//const quizId = location.state?.quizId;
 
 	// Tests with whole obj state.
@@ -23,6 +28,7 @@ function QuizQuestions() {
 		if (quizId) {
 			fetchQuiz();
 			fetchQuizQuestions();
+			fetchQuestionAnswers();
 		}
 	}, []); //or  [quizId] to run when quizId changes?
 
@@ -45,6 +51,30 @@ function QuizQuestions() {
 			.catch((err) => console.error("Failed to fetch questions:", err));
 		//Probably redundant, optionally show an error msg in the UI.
 	};
+
+
+	const fetchQuestionAnswers = () => {
+		getAnswerOptions(quizId)
+			.then((responseData) => {
+				console.log("Fetched answers:", responseData);
+				setAnswers(responseData);
+			})
+			.catch((err) => console.error("Failed to fetch answers:", err));
+	};
+
+	const handleAnswerChange = (questionId, answerId) => {
+		setSelectedAnswers((prev) => ({
+			...prev,
+			[questionId]: answerId, // Update selected answer for the specific question
+		}));
+	};
+
+	const handleSubmit = () => {
+		console.log("Selected answers:", selectedAnswers);
+		setSubmitted(true); // Optional: Set feedback state
+	};
+
+
 
 	// Rendering:
 	if (!quizId) {
@@ -123,8 +153,44 @@ function QuizQuestions() {
 										<Typography variant="body2" color="textSecondary">
 											Question {index + 1} of {questions.length} | Difficulty:{" "}
 											{question.difficulty}
+
+											<RadioGroup
+												value={selectedAnswers[question.questionId] || ""}
+												onChange={(e) =>
+													handleAnswerChange(question.questionId, parseInt(e.target.value))
+												}
+											>
+												{answers
+													.filter((answer) => answer.question.questionId === question.questionId)
+													.map((answer) => (
+														<FormControlLabel
+															key={answer.answerId}
+															value={answer.answerId}
+															control={<Radio />}
+															label={answer.text}
+														/>
+													))}
+											</RadioGroup>
+											
+											
+
+											<button
+												onClick={handleSubmit}
+												style={{
+													paddingTop:"10px",
+													border:"none",
+													background: "white",
+													color: "blue",
+													fontSize:"13px",
+													cursor:"pointer"
+												}}
+											>
+												SUBMIT YOUR ANSWER
+											</button>
+
 										</Typography>
 									}
+
 								/>
 							</ListItem>
 						))}

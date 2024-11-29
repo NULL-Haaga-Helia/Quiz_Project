@@ -38,3 +38,14 @@ export function getQuizQuestions(quizId) {
 		})
 		.catch((err) => console.error("Error fetching quiz questions:", err));
 }
+
+// Fetch answer options
+ export function getAnswerOptions(quizId) {
+	return fetch(`${BACKEND_URL}/api/quizzes/${quizId}/answers`)
+	.then((response) => {
+		if(!response.ok)
+			throw new Error("Something went wrong: " + response.statusText);
+		return response.json();
+	})
+	.catch((err) => console.error("Error fetching answers:", err));
+ }
