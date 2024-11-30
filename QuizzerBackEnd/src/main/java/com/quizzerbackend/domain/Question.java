@@ -30,7 +30,6 @@ public class Question {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
     private List<Answer> answers;
 
-
     public Question() {}
 
     public Question(Quiz quiz) {

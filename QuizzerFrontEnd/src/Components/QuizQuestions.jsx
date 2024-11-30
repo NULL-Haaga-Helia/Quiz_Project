@@ -1,82 +1,75 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { getAnswerOptions, getQuizById, getQuizQuestions } from "../services/api";
-
+import { getAnswerOptions, getQuizById, getQuizQuestions, submitAnswer } from "../services/api";
 import Typography from "@mui/material/Typography";
-import { Box, List, ListItem, ListItemText, Paper, Radio, RadioGroup, FormControlLabel, Button } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Paper, Radio, RadioGroup, FormControlLabel, Button, Snackbar } from "@mui/material";
 
 function QuizQuestions() {
-	//States:
+	// States:
 	const [quiz, setQuiz] = useState(null);
 	const [questions, setQuestions] = useState([]);
 	const location = useLocation();
 	const { quizId } = location.state;
 	const [answers, setAnswers] = useState([]);
 	const [selectedAnswers, setSelectedAnswers] = useState({});
-	const [submitted, setSubmitted] = useState(false);
+	const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
-
-	//const quizId = location.state?.quizId;
-
-	// Tests with whole obj state.
-	//const { quiz } = location.state;
-	//const { state } = useLocation();
-	//const quiz = state?.quiz;
-
-	//Functions:
+	// Functions:
 	useEffect(() => {
 		if (quizId) {
 			fetchQuiz();
 			fetchQuizQuestions();
 			fetchQuestionAnswers();
 		}
-	}, []); //or  [quizId] to run when quizId changes?
+	}, [quizId]);
 
 	const fetchQuiz = () => {
 		getQuizById(quizId)
-			.then((responseData) => {
-				console.log("Fetched quiz:", responseData);
-				setQuiz(responseData);
-			})
+			.then((responseData) => setQuiz(responseData))
 			.catch((err) => console.error("Failed to fetch quiz:", err));
-		//Probably redundant, optionally show an error msg in the UI.
 	};
 
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
-			.then((responseData) => {
-				console.log("Fetched questions:", responseData);
-				setQuestions(responseData);
-			})
+			.then((responseData) => setQuestions(responseData))
 			.catch((err) => console.error("Failed to fetch questions:", err));
-		//Probably redundant, optionally show an error msg in the UI.
 	};
-
 
 	const fetchQuestionAnswers = () => {
 		getAnswerOptions(quizId)
-			.then((responseData) => {
-				console.log("Fetched answers:", responseData);
-				setAnswers(responseData);
-			})
+			.then((responseData) => setAnswers(responseData))
 			.catch((err) => console.error("Failed to fetch answers:", err));
 	};
+
+	const handleSubmit = async (questionId) => {
+		const selectedAnswerId = selectedAnswers[questionId];
+		if (!selectedAnswerId) {
+			alert("Please select an answer before submitting.");
+			return;
+		}
+
+		try {
+			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
+			// Assuming response contains feedback information
+			setSnackbar({ open: true, message: response.message || "Answer submitted successfully!" });
+		} catch (error) {
+			// Log the error for debugging purposes
+			console.error("Error submitting answer:", error);
+			setSnackbar({ open: true, message: "Error submitting answer. Please try again." });
+		}
+	};
+
 
 	const handleAnswerChange = (questionId, answerId) => {
 		setSelectedAnswers((prev) => ({
 			...prev,
-			[questionId]: answerId, // Update selected answer for the specific question
+			[questionId]: answerId,
 		}));
 	};
 
-	const handleSubmit = () => {
-		console.log("Selected answers:", selectedAnswers);
-		setSubmitted(true); // Optional: Set feedback state
-	};
 
+	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
-
-	// Rendering:
 	if (!quizId) {
 		console.warn("Quiz ID is unavailable");
 		return (
@@ -85,120 +78,96 @@ function QuizQuestions() {
 			</Box>
 		);
 	}
+
 	if (!quiz) {
 		return (
 			<Box sx={{ width: "100%", marginTop: 8 }}>
 				<Typography variant="h5">Loading quiz ...</Typography>
 			</Box>
 		);
-	} else {
-		return (
-			<Box sx={{ width: "100%", marginTop: 8, padding: 2 }}>
-				{/* Quiz Name */}
-				<Typography
-					variant="h4"
-					gutterBottom
-					sx={{ textAlign: "left", marginBottom: 2 }}
-				>
-					{quiz.name}
-				</Typography>
-
-				{/* Quiz Description */}
-				<Typography
-					variant="body1"
-					color="textSecondary"
-					gutterBottom
-					sx={{ textAlign: "left", marginBottom: 2 }}
-				>
-					{quiz.description}
-				</Typography>
-
-				{/* Additional Details */}
-				<Typography
-					variant="body2"
-					color="textSecondary"
-					gutterBottom
-					sx={{ textAlign: "left", marginBottom: 2 }}
-				>
-					Added on: {quiz.addedOn} | Questions: {questions.length} | Category:{" "}
-					{quiz.quizCategory.name}
-				</Typography>
-
-				{/* Questions List */}
-				{questions.length === 0 ? (
-					<Typography
-						variant="body1"
-						color="textSecondary"
-						gutterBottom
-						sx={{ textAlign: "center", marginTop: 2 }}
-					>
-						No questions available for this quiz.
-					</Typography>
-				) : (
-					<List sx={{ marginTop: 2 }}>
-						{questions.map((question, index) => (
-							<ListItem
-								key={question.questionId}
-								component={Paper}
-								elevation={3}
-								sx={{ marginBottom: 2, padding: 2 }}
-							>
-								<ListItemText
-									primary={
-										<Typography variant="h6">
-											{question.questionText}
-										</Typography>
-									}
-									secondary={
-										<Typography variant="body2" color="textSecondary">
-											Question {index + 1} of {questions.length} | Difficulty:{" "}
-											{question.difficulty}
-
-											<RadioGroup
-												value={selectedAnswers[question.questionId] || ""}
-												onChange={(e) =>
-													handleAnswerChange(question.questionId, parseInt(e.target.value))
-												}
-											>
-												{answers
-													.filter((answer) => answer.question.questionId === question.questionId)
-													.map((answer) => (
-														<FormControlLabel
-															key={answer.answerId}
-															value={answer.answerId}
-															control={<Radio />}
-															label={answer.text}
-														/>
-													))}
-											</RadioGroup>
-											
-											
-
-											<button
-												onClick={handleSubmit}
-												style={{
-													paddingTop:"10px",
-													border:"none",
-													background: "white",
-													color: "blue",
-													fontSize:"13px",
-													cursor:"pointer"
-												}}
-											>
-												SUBMIT YOUR ANSWER
-											</button>
-
-										</Typography>
-									}
-
-								/>
-							</ListItem>
-						))}
-					</List>
-				)}
-			</Box>
-		);
 	}
+
+	return (
+		<Box sx={{ width: "100%", marginTop: 8, padding: 2 }}>
+			{/* Quiz Name */}
+			<Typography variant="h4" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+				{quiz.name}
+			</Typography>
+
+			{/* Quiz Description */}
+			<Typography variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+				{quiz.description}
+			</Typography>
+
+			{/* Additional Details */}
+			<Typography variant="body2" color="textSecondary" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+				Added on: {quiz.addedOn} | Questions: {questions.length} | Category: {quiz.quizCategory.name}
+			</Typography>
+
+			{/* Questions List */}
+			{questions.length === 0 ? (
+				<Typography variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: "center", marginTop: 2 }}>
+					No questions available for this quiz.
+				</Typography>
+			) : (
+				<List sx={{ marginTop: 2 }}>
+					{questions.map((question, index) => (
+						<ListItem key={question.questionId} component={Paper} elevation={3} sx={{ marginBottom: 2, padding: 2 }}>
+							<ListItemText
+								primary={<Typography variant="h6">{question.questionText}</Typography>}
+								secondary={
+									<>
+										<Typography variant="body2" color="textSecondary">
+											Question {index + 1} of {questions.length} | Difficulty: {question.difficulty}
+										</Typography>
+
+										<RadioGroup
+											value={selectedAnswers[question.questionId] || ""}
+											onChange={(e) =>
+												handleAnswerChange(question.questionId, parseInt(e.target.value))
+											}
+										>
+											{answers
+												.filter((answer) => answer.question.questionId === question.questionId)
+												.map((answer) => (
+													<FormControlLabel
+														key={answer.answerId}
+														value={answer.answerId}
+														control={<Radio />}
+														label={answer.text}
+													/>
+												))}
+										</RadioGroup>
+
+										<Button
+											onClick={() => handleSubmit(question.questionId)}
+											style={{
+												paddingTop: "10px",
+												border: "none",
+												background: "white",
+												color: "blue",
+												fontSize: "13px",
+												cursor: "pointer"
+											}}
+										>
+											SUBMIT YOUR ANSWER
+										</Button>
+
+										<Snackbar
+											open={snackbar.open}
+											autoHideDuration={3000}
+											onClose={handleCloseSnackbar}
+											message={snackbar.message}
+										/>
+									</>
+								}
+							/>
+						</ListItem>
+					))}
+				</List>
+			)}
+		</Box>
+	);
 }
 
 export default QuizQuestions;
