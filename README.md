@@ -161,7 +161,7 @@ int answerId FK
 
 #### Frontend
 
-- Node.js: Version 18 or later (required to run the Vite development server and manage dependencies).You can check your Node.js version with the command: node -v
+- Node.js: Version 18 or later (required to run the Vite development server and manage dependencies).You can check your Node.js version with the command: `node -v`
 - npm: Comes bundled with Node.js (used to install project dependencies and run the application).
 
 ## REST API documentation URL
