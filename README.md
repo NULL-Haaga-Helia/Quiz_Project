@@ -146,6 +146,12 @@ int answerId FK
 - Start the application by running the `./mvnw spring-boot:run` command
 - Once the Spring Boot app is initialized, visit <http://localhost:8080> in a web browser to add, edit, and delete quizzes, questions, and answers.
 
+2. Technologies used:
+
+- Programming Language: Java
+- Frameworks: Spring Boot, MVC (Model-View-Controller)
+- Major Libraries: Thymeleaf, Maven, Bootstrap, H2
+
 ### Database
 
 - Development Environment: H2 Database
