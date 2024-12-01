@@ -1,10 +1,5 @@
 # Quizzer
 
-What be the purpose of this undertaking?
-How might one make use of this endeavor?
-In what manner may one further develop this project?
-Who be the contributors to this venture?
-
 ## Description of the project
 
 Quizzer is a web application designed to help teachers (at Haaga Helia) create and manage quizzes to support student learning.
@@ -77,7 +72,7 @@ The data model is designed to support the management of quizzes, their associate
 
 - **Attributes:**
   - `userAnswerId` (int, primary key)
-  - `abswerId` (int, foreign key)
+  - `answerId` (int, foreign key)
 - **Purpose:** Tracks the user's selected answer options for questions in a quiz.
 
 ---
@@ -173,7 +168,7 @@ int answerId FK
 
 http://localhost:8080/v3/api-docs
 
-NOTE: need to run the application on your device before you can access the REST API documentation
+NOTE: You're required to run the application on your device before you can access the REST API documentation
 
 ## Team members
 
