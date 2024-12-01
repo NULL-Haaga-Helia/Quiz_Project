@@ -82,7 +82,7 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 //Handling getting quizzes by category
 export function getQuizzesByCategory(categoryId) {
 	return fetch(
-		`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/category/${categoryId}`)
+		`${import.meta.env.VITE_BACKEND_URL}/api/categories/${categoryId}/quizzes`)
 	  .then((response) => {
 		if (!response.ok)
 		  throw new Error("Something went wrong: " + response.statusText);
