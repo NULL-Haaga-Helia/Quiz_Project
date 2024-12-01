@@ -1,5 +1,3 @@
-//Old, use VITE_BACKEND_URL instead not this -> (const BACKEND_URL = "http://localhost:8080");
-
 //Fetch all (published) quizzes
 export function getAllQuizzes() {
 	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes`)
@@ -11,10 +9,7 @@ export function getAllQuizzes() {
 		.catch((err) => console.error("Error fetching all quizzes:", err));
 }
 
-//Note, following fetches still need to be tested.
-
-// Fetch quiz by ID (no questions included?)   // "/quizzes/{id}"
-// Endpoint: /quizzes/{quizId} ?
+// Fetch quiz by ID
 export function getQuizById(quizId) {
 	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}`)
 		.then((response) => {
@@ -25,8 +20,7 @@ export function getQuizById(quizId) {
 		.catch((err) => console.error("Error fetching quiz by ID:", err));
 }
 
-// Fetch all questions for a specific quiz    //"/quizzes/{quizId}/questions"
-// Endpoint: /quizzes/{quizId}/questions  ?
+// Fetch all questions for a specific quiz
 export function getQuizQuestions(quizId) {
 	return fetch(
 		`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/questions`

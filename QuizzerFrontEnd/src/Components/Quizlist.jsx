@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { getAllQuizzes } from "../services/api";
-//import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Table from "@mui/material/Table";
@@ -30,7 +29,6 @@ function QuizList() {
 				setQuizList(responseData);
 			})
 			.catch((err) => console.error("Failed to fetch quizzes:", err));
-		//Probably redundant, optionally show an error msg in the UI.
 	};
 
 	const handleQuizNameClick = (quizId) => {
@@ -42,18 +40,6 @@ function QuizList() {
 		console.log("Navigating to QuizResults with quiz ID:", quizId);
 		navigate("/quizresults", { state: { quizId } });
 	};
-
-	/*
-	const handleQuizNameClick = (quiz) => {
-		console.log("Navigating to QuizQuestions with quiz ID:", quiz.id);
-		navigate("/quizquestions", { state: { quizId: quiz.id } });
-	};
-
-	const handleQuizResultsClick = (quiz) => {
-		console.log("Navigating to QuizResults with quiz ID:", quiz.id);
-		navigate("/quizresults", { state: { quizId: quiz.id } });
-	};
-	*/
 
 	//Rendering:
 	return (
@@ -95,7 +81,7 @@ function QuizList() {
 									component="th"
 									scope="row"
 									style={{ cursor: "pointer", color: "#1976d2" }}
-									onClick={() => handleQuizNameClick(quiz.id)} //handleQuizNameClick(quiz)
+									onClick={() => handleQuizNameClick(quiz.id)}
 								>
 									{quiz.name}
 								</TableCell>
@@ -106,7 +92,7 @@ function QuizList() {
 									component="th"
 									scope="row"
 									style={{ cursor: "pointer", color: "#1976d2" }}
-									onClick={() => handleQuizResultsClick(quiz.id)} //handleQuizResultsClick(quiz)
+									onClick={() => handleQuizResultsClick(quiz.id)}
 									align="left"
 								>
 									See results

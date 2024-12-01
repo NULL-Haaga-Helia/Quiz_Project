@@ -1,8 +1,25 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { getAnswerOptions, getQuizById, getQuizQuestions, submitAnswer } from "../services/api";
+import {
+	getAnswerOptions,
+	getQuizById,
+	getQuizQuestions,
+	submitAnswer,
+} from "../services/api";
 import Typography from "@mui/material/Typography";
-import { Box, List, ListItem, ListItemText, Paper, Radio, RadioGroup, FormControlLabel, Button, Snackbar } from "@mui/material";
+import {
+	Box,
+	List,
+	ListItem,
+	ListItemText,
+	Paper,
+	Radio,
+	RadioGroup,
+	FormControlLabel,
+	Button,
+	Snackbar,
+	CircularProgress,
+} from "@mui/material";
 
 function QuizQuestions() {
 	// States:
@@ -51,14 +68,19 @@ function QuizQuestions() {
 		try {
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
 			// Assuming response contains feedback information
-			setSnackbar({ open: true, message: response.message || "Answer submitted successfully!" });
+			setSnackbar({
+				open: true,
+				message: response.message || "Answer submitted successfully!",
+			});
 		} catch (error) {
 			// Log the error for debugging purposes
 			console.error("Error submitting answer:", error);
-			setSnackbar({ open: true, message: "Error submitting answer. Please try again." });
+			setSnackbar({
+				open: true,
+				message: "Error submitting answer. Please try again.",
+			});
 		}
 	};
-
 
 	const handleAnswerChange = (questionId, answerId) => {
 		setSelectedAnswers((prev) => ({
@@ -66,7 +88,6 @@ function QuizQuestions() {
 			[questionId]: answerId,
 		}));
 	};
-
 
 	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
@@ -81,8 +102,16 @@ function QuizQuestions() {
 
 	if (!quiz) {
 		return (
-			<Box sx={{ width: "100%", marginTop: 8 }}>
-				<Typography variant="h5">Loading quiz ...</Typography>
+			<Box
+				sx={{
+					width: "100%",
+					marginTop: 8,
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<CircularProgress />
 			</Box>
 		);
 	}
@@ -90,45 +119,79 @@ function QuizQuestions() {
 	return (
 		<Box sx={{ width: "100%", marginTop: 8, padding: 2 }}>
 			{/* Quiz Name */}
-			<Typography variant="h4" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+			<Typography
+				variant="h4"
+				gutterBottom
+				sx={{ textAlign: "left", marginBottom: 2 }}
+			>
 				{quiz.name}
 			</Typography>
 
 			{/* Quiz Description */}
-			<Typography variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+			<Typography
+				variant="body1"
+				color="textSecondary"
+				gutterBottom
+				sx={{ textAlign: "left", marginBottom: 2 }}
+			>
 				{quiz.description}
 			</Typography>
 
 			{/* Additional Details */}
-			<Typography variant="body2" color="textSecondary" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
-				Added on: {quiz.addedOn} | Questions: {questions.length} | Category: {quiz.quizCategory.name}
+			<Typography
+				variant="body2"
+				color="textSecondary"
+				gutterBottom
+				sx={{ textAlign: "left", marginBottom: 2 }}
+			>
+				Added on: {quiz.addedOn} | Questions: {questions.length} | Category:{" "}
+				{quiz.quizCategory.name}
 			</Typography>
 
 			{/* Questions List */}
 			{questions.length === 0 ? (
-				<Typography variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: "center", marginTop: 2 }}>
+				<Typography
+					variant="body1"
+					color="textSecondary"
+					gutterBottom
+					sx={{ textAlign: "center", marginTop: 2 }}
+				>
 					No questions available for this quiz.
 				</Typography>
 			) : (
 				<List sx={{ marginTop: 2 }}>
 					{questions.map((question, index) => (
-						<ListItem key={question.questionId} component={Paper} elevation={3} sx={{ marginBottom: 2, padding: 2 }}>
+						<ListItem
+							key={question.questionId}
+							component={Paper}
+							elevation={3}
+							sx={{ marginBottom: 2, padding: 2 }}
+						>
 							<ListItemText
-								primary={<Typography variant="h6">{question.questionText}</Typography>}
+								primary={
+									<Typography variant="h6">{question.questionText}</Typography>
+								}
 								secondary={
 									<>
 										<Typography variant="body2" color="textSecondary">
-											Question {index + 1} of {questions.length} | Difficulty: {question.difficulty}
+											Question {index + 1} of {questions.length} | Difficulty:{" "}
+											{question.difficulty}
 										</Typography>
 
 										<RadioGroup
 											value={selectedAnswers[question.questionId] || ""}
 											onChange={(e) =>
-												handleAnswerChange(question.questionId, parseInt(e.target.value))
+												handleAnswerChange(
+													question.questionId,
+													parseInt(e.target.value)
+												)
 											}
 										>
 											{answers
-												.filter((answer) => answer.question.questionId === question.questionId)
+												.filter(
+													(answer) =>
+														answer.question.questionId === question.questionId
+												)
 												.map((answer) => (
 													<FormControlLabel
 														key={answer.answerId}
@@ -147,7 +210,7 @@ function QuizQuestions() {
 												background: "white",
 												color: "blue",
 												fontSize: "13px",
-												cursor: "pointer"
+												cursor: "pointer",
 											}}
 										>
 											SUBMIT YOUR ANSWER
