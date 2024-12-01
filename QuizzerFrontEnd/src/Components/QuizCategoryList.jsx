@@ -27,11 +27,17 @@ function QuizzesByCategory() {
   const fetchQuizzes = (categoryId) => {
     getQuizzesByCategory(categoryId)
       .then((responseData) => {
-        console.log("Fetched quizzes:", responseData);
-        setQuizList(responseData);
+        if (responseData.error) {
+          console.error("Error fetching quizzes:", responseData.error);
+          setQuizList([]);
+        } else {
+          console.log("Fetched quizzes:", responseData);
+          setQuizList(responseData);
+        }
       })
       .catch((err) => console.error("Error fetching quizzes:", err));
   };
+  
 
   return (
     <Box sx={{ width: "100%", marginTop: 8 }}>

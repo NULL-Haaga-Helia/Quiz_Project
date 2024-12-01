@@ -283,11 +283,4 @@ public class QuizController {
         return "redirect:/quizcategorylist";
     }
 
-    @RequestMapping(value = "/quizzesbycategory/{categoryId}", method = RequestMethod.GET)
-    public String getQuizzesByCategory(@PathVariable("categoryId") Long categoryId, Model model) {
-    List<Quiz> quizzes = quizRepository.findByQuizCategoryId(categoryId);
-    model.addAttribute("quizzes", quizzes);
-    return "quizzesbycategory";
-}
-
 }

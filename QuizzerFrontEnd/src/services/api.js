@@ -79,17 +79,31 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 	}
 
 };
+
+
 //Handling getting quizzes by category
 export function getQuizzesByCategory(categoryId) {
 	return fetch(
-		`${import.meta.env.VITE_BACKEND_URL}/api/categories/${categoryId}/quizzes`)
+	  `${import.meta.env.VITE_BACKEND_URL}/api/categories/${categoryId}/quizzes`
+	)
 	  .then((response) => {
-		if (!response.ok)
-		  throw new Error("Something went wrong: " + response.statusText);
+		if (!response.ok) {
+		  if (response.status === 404) {
+			console.error(`Category ${categoryId} not found`);
+			return { error: "Category not found" };
+		  } else {
+			console.error(`Error fetching quizzes for category ${categoryId}: ${response.statusText}`);
+			return { error: "Something went wrong: " + response.statusText };
+		  }
+		}
 		return response.json();
 	  })
-	  .catch((err) => console.error("Error fetching quizzes by category:", err));
+	  .catch((err) => {
+		console.error(`Error fetching quizzes for category ${categoryId}: ${err.message}`);
+		return { error: "An error occurred while fetching quizzes" };
+	  });
   }
+  
 
   //handles getting all categories
   export function getAllCategories() {
