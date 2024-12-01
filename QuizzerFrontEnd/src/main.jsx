@@ -7,11 +7,11 @@ import App from "./App.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import QuizList from "./components/QuizList";
-import CategoryList from "./components/CategoryList";
-import QuizQuestions from "./components/QuizQuestions";
-import QuizResults from "./components/QuizResults";
-import Error from "./components/Error";
+import QuizList from "./Components/Quizlist.jsx";
+import CategoryList from "./Components/CategoryList.jsx";
+import QuizQuestions from "./Components/QuizQuestions.jsx";
+import QuizResults from "./Components/QuizResults.jsx";
+import Error from "./Components/Error.jsx";
 
 const router = createBrowserRouter([
 	{
