@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 
+
 function Header() {
 	return (
 		<AppBar>
@@ -11,16 +12,17 @@ function Header() {
 				<Typography variant="h6" sx={{ marginRight: 4 }}>
 					Quizzer
 				</Typography>
+
 				<Box sx={{ display: "flex", gap: 2 }}>
+
 					<Link to="/" style={{ color: "white", textDecoration: "none" }}>
 						Quizzes
 					</Link>
-					<Link
-						to="/categorylist"
-						style={{ color: "white", textDecoration: "none" }}
-					>
+
+					<Link to="/CategoryList" style={{ color: "white", textDecoration: "none" }}>
 						Categories
 					</Link>
+
 				</Box>
 			</Toolbar>
 		</AppBar>

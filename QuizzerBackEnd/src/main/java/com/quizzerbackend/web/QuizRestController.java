@@ -40,6 +40,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @Tag(name = "Message", description = "Operations for accessing and managing quizzes")
 public class QuizRestController {
+
     @Autowired
     private QuizRepository quizRepository;
     
@@ -240,4 +241,7 @@ public ResponseEntity<?> submitAnswer(@PathVariable Long quizId,
         }
         return ResponseEntity.ok(quizzes);
     }
+
+
+
 }
