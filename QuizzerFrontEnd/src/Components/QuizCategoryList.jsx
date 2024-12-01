@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,13 +11,13 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { getQuizzesByCategory } from "../services/api";
 
-
 function QuizzesByCategory() {
   // States
   const [quizList, setQuizList] = useState([]);
   const location = useLocation(); 
   const category = location.state?.quizCategory;
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (category?.id) {
       fetchQuizzes(category.id);
@@ -37,7 +37,16 @@ function QuizzesByCategory() {
       })
       .catch((err) => console.error("Error fetching quizzes:", err));
   };
+
+  const handleQuizNameClick = (quiz) => {
+		console.log("Navigating to QuizQuestions with quiz ID:", quiz.id);
+		navigate("/quizquestions", { state: { quizId: quiz.id } });
+	};
   
+  const handleQuizResultsClick = (quiz) => {
+		console.log("Navigating to QuizResults with quiz ID:", quiz.id);
+		navigate("/quizresults", { state: { quizId: quiz.id } });
+	};
 
   return (
     <Box sx={{ width: "100%", marginTop: 8 }}>
