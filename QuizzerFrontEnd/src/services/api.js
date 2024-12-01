@@ -77,4 +77,29 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 		console.error("Error submitting answer:", error);
 		return "Error submitting answer.";
 	}
+
 };
+//Handling getting quizzes by category
+export function getQuizzesByCategory(categoryId) {
+	return fetch(
+		`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/category/${categoryId}`)
+	  .then((response) => {
+		if (!response.ok)
+		  throw new Error("Something went wrong: " + response.statusText);
+		return response.json();
+	  })
+	  .catch((err) => console.error("Error fetching quizzes by category:", err));
+  }
+
+  //handles getting all categories
+  export function getAllCategories() {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/categories`
+	)
+	  .then((response) => {
+		if (!response.ok) {
+		  throw new Error("Something went wrong: " + response.statusText);
+		}
+		return response.json();
+	  })
+	  .catch((err) => console.error("Error fetching all categories:", err));
+  }
