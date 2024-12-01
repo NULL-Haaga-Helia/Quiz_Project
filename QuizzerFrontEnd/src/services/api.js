@@ -57,10 +57,11 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 		const response = await fetch(
 			`${
 				import.meta.env.VITE_BACKEND_URL
-			}/api/quizzes/${quizId}/questions/${questionId}/answer/{answerId}`, //Maybe make this "answerS ".../answers/{answerId}"  instead, in backend as well.
+			}/api/quizzes/${quizId}/questions/${questionId}/answers/{answerId}`, //Maybe make this "answerS ".../answers/{answerId}"  instead, in backend as well.
 			{
 				method: "POST",
 				headers: {
+					Accept: "application/json",
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(answerDTO),

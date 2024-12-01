@@ -18,6 +18,8 @@ function QuizResults() {
 	const { quizId } = location.state;
 	const [questions, setQuestions] = useState([]);
 	const [totalAnswers, setTotalAnswers] = useState();
+	const [ correctAnswers, setCorrectAnswers ] = useState();
+	const [ wrongAnswers, setWrongAnswers ] = useState();
 
 	useEffect(() => {
 		if (quizId) {

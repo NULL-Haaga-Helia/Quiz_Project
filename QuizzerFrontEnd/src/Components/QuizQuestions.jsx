@@ -67,13 +67,13 @@ function QuizQuestions() {
 
 		try {
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
-			// Assuming response contains feedback information
+			
 			setSnackbar({
 				open: true,
 				message: response.message || "Answer submitted successfully!",
 			});
 		} catch (error) {
-			// Log the error for debugging purposes
+			
 			console.error("Error submitting answer:", error);
 			setSnackbar({
 				open: true,
