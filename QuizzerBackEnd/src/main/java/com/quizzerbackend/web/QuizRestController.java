@@ -114,40 +114,51 @@ public class QuizRestController {
     }
 
 
-//Endpoint for creating the answer by quiz id and question id
+//Endpoint for creating the UserAnswer by quiz id and question id
 
-    @Operation(
-        summary = "Post answer by question id and quiz id",
-        description = "Creates an answer for the question and quiz with the provided ids"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successful operation"),
-        @ApiResponse(responseCode = "404", description = "Answer with the provided id does not exist for the quiz with the provided id"),
-        @ApiResponse(responseCode = "400", description = "POST request is not valid"),
-    })
+@Operation(
+    summary = "Post answer by question id and quiz id",
+    description = "Creates an answer for the question and quiz with the provided ids"
+)
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "201", description = "Successful operation"),
+    @ApiResponse(responseCode = "404", description = "Answer with the provided id does not exist for the quiz with the provided id"),
+    @ApiResponse(responseCode = "400", description = "POST request is not valid")
+})
+@RequestMapping(value = "/quizzes/{quizId}/questions/{questionId}/answer/{answerId}", method = RequestMethod.POST)
+public ResponseEntity<?> submitAnswer(@PathVariable Long quizId,
+                                      @PathVariable Long questionId,
+                                      @PathVariable Long answerId,
+                                      @RequestBody AnswerDTO answerDTO) {
 
-    @RequestMapping(value = "/quizzes/{quizId}/questions/{questionId}/answer", method = RequestMethod.POST)
-    public ResponseEntity<?> submitAnswer(@PathVariable Long quizId,
-                                          @PathVariable Long questionId,
-                                          @RequestBody AnswerDTO answerDTO) {
+    Quiz quiz = quizRepository.findById(quizId)
+            .orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
+    if (!quiz.getIsPublished()) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("Quiz is not published");
+    }
 
-        Quiz quiz = quizRepository.findById(quizId)
-                .orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
-        if (!quiz.getIsPublished()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Quiz is not published");
-        }
+
+    Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new IllegalArgumentException("Question with the provided id does not exist"));
+
+
+    Answer answer = answerRepository.findById(answerId)
+            .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
+
+    if (answer.getQuestion() == null || !answer.getQuestion().getQuestionId().equals(questionId)) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("The selected answer does not belong to the specified question");
+    }
+
+    UserAnswer userAnswer = new UserAnswer(answer, question);
+    userAnswerRepository.save(userAnswer);
     
-        Answer answer = answerRepository.findById(answerDTO.getAnswerId())
-                .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
-    
-        if (answer.getQuestion() == null || !answer.getQuestion().getQuestionId().equals(questionId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("The selected answer does not belong to the specified question");
-        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Answer submitted successfully");
-    }    
+    AnswerDTO savedAnswerDTO = new AnswerDTO(userAnswer);
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedAnswerDTO);
+}
+
 
        //Endpoint for getting the answers by quiz id and question id
        @Operation(
