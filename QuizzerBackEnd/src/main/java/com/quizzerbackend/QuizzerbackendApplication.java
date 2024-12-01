@@ -20,6 +20,7 @@ import com.quizzerbackend.domain.QuizCategoryRepository;
 
 
 
+
 @SpringBootApplication
 public class QuizzerbackendApplication {
 	

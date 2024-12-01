@@ -18,7 +18,8 @@ function QuizResults() {
 	const { quizId } = location.state;
 	const [questions, setQuestions] = useState([]);
 	const [totalAnswers, setTotalAnswers] = useState();
-	
+	const [ correctAnswers, setCorrectAnswers ] = useState();
+	const [ wrongAnswers, setWrongAnswers ] = useState();
 
 	useEffect(() => {
 		if (quizId) {
@@ -34,7 +35,6 @@ function QuizResults() {
 				console.error("Failed to fetch quiz:", err);
 				setQuiz(null);
 			});
-
 	};
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
@@ -45,16 +45,29 @@ function QuizResults() {
 	return (
 		<Box sx={{ width: "100%", marginTop: 8 }}>
 			{!quiz ? (
-				<Typography variant="h5" color="textSecondary" sx={{ textAlign: "center" }}>
+				<Typography
+					variant="h5"
+					color="textSecondary"
+					sx={{ textAlign: "center" }}
+				>
 					Error: Unable to fetch quiz results.
 				</Typography>
 			) : (
 				<>
-					<Typography variant="h4" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+					<Typography
+						variant="h4"
+						gutterBottom
+						sx={{ textAlign: "left", marginBottom: 2 }}
+					>
 						Results of "{quiz.name}"
 					</Typography>
 
-					<Typography variant="body1" color="textSecondary" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+					<Typography
+						variant="body1"
+						color="textSecondary"
+						gutterBottom
+						sx={{ textAlign: "left", marginBottom: 2 }}
+					>
 						answers to questions
 					</Typography>
 					<TableContainer component={Paper}>
@@ -87,12 +100,8 @@ function QuizResults() {
 										key={question.id}
 										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 									>
-										<TableCell align="left">
-											{question.questionText}
-										</TableCell>
-										<TableCell align="left">
-											{question.difficulty}
-										</TableCell>
+										<TableCell align="left">{question.questionText}</TableCell>
+										<TableCell align="left">{question.difficulty}</TableCell>
 										<TableCell align="left">total answers</TableCell>
 										<TableCell align="left">correct %</TableCell>
 										<TableCell align="left">correct</TableCell>
@@ -106,7 +115,6 @@ function QuizResults() {
 			)}
 		</Box>
 	);
-
 }
 
 export default QuizResults;

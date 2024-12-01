@@ -1,5 +1,3 @@
-//Old, use VITE_BACKEND_URL instead not this -> (const BACKEND_URL = "http://localhost:8080");
-
 //Fetch all (published) quizzes
 export function getAllQuizzes() {
 	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes`)
@@ -11,10 +9,7 @@ export function getAllQuizzes() {
 		.catch((err) => console.error("Error fetching all quizzes:", err));
 }
 
-//Note, following fetches still need to be tested.
-
-// Fetch quiz by ID (no questions included?)   // "/quizzes/{id}"
-// Endpoint: /quizzes/{quizId} ?
+// Fetch quiz by ID
 export function getQuizById(quizId) {
 	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}`)
 		.then((response) => {
@@ -25,8 +20,7 @@ export function getQuizById(quizId) {
 		.catch((err) => console.error("Error fetching quiz by ID:", err));
 }
 
-// Fetch all questions for a specific quiz    //"/quizzes/{quizId}/questions"
-// Endpoint: /quizzes/{quizId}/questions  ?
+// Fetch all questions for a specific quiz
 export function getQuizQuestions(quizId) {
 	return fetch(
 		`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/questions`
@@ -63,10 +57,11 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 		const response = await fetch(
 			`${
 				import.meta.env.VITE_BACKEND_URL
-			}/api/quizzes/${quizId}/questions/${questionId}/answer`,
+			}/api/quizzes/${quizId}/questions/${questionId}/answers/{answerId}`, //Maybe make this "answerS ".../answers/{answerId}"  instead, in backend as well.
 			{
 				method: "POST",
 				headers: {
+					Accept: "application/json",
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(answerDTO),
@@ -83,4 +78,43 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 		console.error("Error submitting answer:", error);
 		return "Error submitting answer.";
 	}
+
 };
+
+
+//Handling getting quizzes by category
+export function getQuizzesByCategory(categoryId) {
+	return fetch(
+	  `${import.meta.env.VITE_BACKEND_URL}/api/categories/${categoryId}/quizzes`
+	)
+	  .then((response) => {
+		if (!response.ok) {
+		  if (response.status === 404) {
+			console.error(`Category ${categoryId} not found`);
+			return { error: "Category not found" };
+		  } else {
+			console.error(`Error fetching quizzes for category ${categoryId}: ${response.statusText}`);
+			return { error: "Something went wrong: " + response.statusText };
+		  }
+		}
+		return response.json();
+	  })
+	  .catch((err) => {
+		console.error(`Error fetching quizzes for category ${categoryId}: ${err.message}`);
+		return { error: "An error occurred while fetching quizzes" };
+	  });
+  }
+  
+
+  //handles getting all categories
+  export function getAllCategories() {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/categories`
+	)
+	  .then((response) => {
+		if (!response.ok) {
+		  throw new Error("Something went wrong: " + response.statusText);
+		}
+		return response.json();
+	  })
+	  .catch((err) => console.error("Error fetching all categories:", err));
+  }
