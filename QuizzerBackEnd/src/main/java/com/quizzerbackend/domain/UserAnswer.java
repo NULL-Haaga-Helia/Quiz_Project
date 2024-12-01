@@ -1,5 +1,7 @@
 package com.quizzerbackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +21,7 @@ public class UserAnswer {
     private Answer answer; 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "question_id", nullable = false)
     private Question question; 
 

@@ -3,9 +3,11 @@ package com.quizzerbackend.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +31,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 import java.util.Collections;
 import java.util.List;
@@ -115,76 +119,84 @@ public class QuizRestController {
 
 
 //Endpoint for creating the UserAnswer by quiz id and question id
+    @Operation(
+        summary = "Submit an answer option for a specific question in a quiz",
+        description = "Creates a new user answer entity using the provided data"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "User answer successfully created"),
+        @ApiResponse(responseCode = "404", description = "Answer, question, or quiz with the provided id does not exist"),
+        @ApiResponse(responseCode = "400", description = "Invalid request body or missing required fields"),
+        @ApiResponse(responseCode = "403", description = "Quiz is not published")
+    })
+    @PostMapping("/quizzes/{quizId}/questions/{questionId}/answers/{answerId}/userAnswers")
+    public ResponseEntity<?> submitAnswer(@PathVariable Long quizId,
+                                          @PathVariable Long questionId,
+                                          @PathVariable Long answerId,
+                                          @RequestBody @Valid AnswerDTO AnswerDTO, 
+                                           BindingResult bindingResult) {
 
-@Operation(
-    summary = "Post answer by question id and quiz id",
-    description = "Creates an answer for the question and quiz with the provided ids"
-)
-@ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "Successful operation"),
-    @ApiResponse(responseCode = "404", description = "Answer with the provided id does not exist for the quiz with the provided id"),
-    @ApiResponse(responseCode = "400", description = "POST request is not valid")
-})
-@RequestMapping(value = "/quizzes/{quizId}/questions/{questionId}/answer/{answerId}", method = RequestMethod.POST)
-public ResponseEntity<?> submitAnswer(@PathVariable Long quizId,
-                                      @PathVariable Long questionId,
-                                      @PathVariable Long answerId,
-                                      @RequestBody AnswerDTO answerDTO) {
+        if (bindingResult.hasErrors()) {
+        StringBuilder errorMessage = new StringBuilder("Invalid request body: ");
+        bindingResult.getAllErrors().forEach(error -> {
+            errorMessage.append(error.getDefaultMessage()).append("; ");
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
+    }
 
-    Quiz quiz = quizRepository.findById(quizId)
-            .orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
-    if (!quiz.getIsPublished()) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body("Quiz is not published");
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
+
+        if (!quiz.getIsPublished()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Quiz is not published");
+        }
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("Question with the provided id does not exist"));
+
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
+
+        if (!answer.getQuestion().getQuestionId().equals(questionId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("The selected answer does not belong to the specified question");
+        }
+
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setUserAnswerId(AnswerDTO.getUserAnswerId());
+        userAnswer.setAnswer(answer);
+        userAnswer.setQuestion(question);
+
+        userAnswerRepository.save(userAnswer);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Answer is successfully submitted");
     }
 
 
-    Question question = questionRepository.findById(questionId)
-            .orElseThrow(() -> new IllegalArgumentException("Question with the provided id does not exist"));
-
-
-    Answer answer = answerRepository.findById(answerId)
-            .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
-
-    if (answer.getQuestion() == null || !answer.getQuestion().getQuestionId().equals(questionId)) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("The selected answer does not belong to the specified question");
-    }
-
-    UserAnswer userAnswer = new UserAnswer(answer, question);
-    userAnswerRepository.save(userAnswer);
-    
-
-    AnswerDTO savedAnswerDTO = new AnswerDTO(userAnswer);
-    return ResponseEntity.status(HttpStatus.CREATED).body(savedAnswerDTO);
-}
 
 
        //Endpoint for getting the answers by quiz id and question id
        @Operation(
-        summary = "Get answers by quiz id and question id",
-        description = "Returns the list of answers for the quiz and question with the provided id"
+    summary = "Get all user answers for a specific quiz",
+    description = "Fetches all user answers submitted for the quiz"
     )
-        @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "404", description = "No answers for the quiz with the porvided id")
-        })
 
-       @GetMapping("/quizzes/{quizId}/answers")
-       public ResponseEntity<?> getAnswersByQuizId(@PathVariable Long quizId) {
-           if (!quizRepository.existsById(quizId)) {
-               return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                       .body("Quiz with the provided id does not exist");
-           }
-           List<Answer> answers = answerRepository.findByQuestionQuizId(quizId);
-   
-           if (answers.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
-           }
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "List of user answers successfully retrieved"),
+        @ApiResponse(responseCode = "404", description = "Quiz with the provided id does not exist")
+    })
+    @GetMapping("/quizzes/{quizId}/userAnswers")
+    public ResponseEntity<List<UserAnswer>> getAllAnswersForQuiz(@PathVariable Long quizId) {
+    // Quiz quiz = quizRepository.findById(quizId)
+            //.orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
 
-           return ResponseEntity.ok(answers);
-        
-       }
+    List<UserAnswer> userAnswers = userAnswerRepository.findByQuestionQuizId(quizId);
+
+    return ResponseEntity.ok(userAnswers);
+}
+
+
 
        // Exercise 15 REST API endpoint for getting all categories
 
