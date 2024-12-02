@@ -45,6 +45,18 @@
 					rows="3">
 				</textarea>
 				<p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message">Description is required</p>
+
+				 <!-- Category Field -->
+				 <div class="mb-3">
+					<label for="title" class="form-label">Category</label>
+					<select id="quizCategory" th:field="*{quizCategory}" class="form-control">
+					  <option
+						th:each="quizCategory: ${quizCategories}"
+						th:value="${quizCategory.getId()}"
+						th:text="${quizCategory.getName()}"
+					  ></option>
+					</select>
+				</div>
 					
 				<div style="clear: both; display: block; height: 10px"></div>
 
