@@ -168,7 +168,7 @@ public class QuizRestController {
 
         userAnswerRepository.save(userAnswer);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Answer is successfully submitted");
+        return ResponseEntity.status(HttpStatus.CREATED).body(userAnswer);
     }
 
 

@@ -51,7 +51,7 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 	try {
 		const answerDTO = {
 			answerId: answerId,
-			questionId: questionId,
+			//questionId: questionId,
 		};
 
 		const response = await fetch(
