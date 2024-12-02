@@ -77,7 +77,7 @@ public class QuizRestController {
         return quizRepository.findByIsPublished(true);
     }
 
-    //Endpoint for getting the quiz by id
+    //Exercise 11 - Endpoint for getting the quiz by id
     @Operation(
         summary = "Get quizzes by id",
         description = "Returns the quiz with the provided id"
@@ -96,7 +96,7 @@ public class QuizRestController {
     }
 
 
-    //Endpoint for getting the questions by quiz id
+    //Exercise 12 - Endpoint for getting the questions by quiz id
     @Operation(
         summary = "Get questions by quiz id",
         description = "Returns the list of questions for the quiz with the provided id"
@@ -119,7 +119,7 @@ public class QuizRestController {
     }
 
 
-//Endpoint for creating the UserAnswer by quiz id and question id
+//Exercise 13 - Endpoint for creating the UserAnswer by quiz id and question id
     @Operation(
         summary = "Submit an answer option for a specific question in a quiz",
         description = "Creates a new user answer entity using the provided data"
@@ -174,7 +174,7 @@ public class QuizRestController {
 
 
 
-       //Endpoint for getting the answers by quiz id and question id
+       //Updated Exercise 14 - Endpoint for getting all userAnswers 
        @Operation(
     summary = "Get all user answers for a specific quiz",
     description = "Fetches all user answers submitted for the quiz"
@@ -194,9 +194,34 @@ public class QuizRestController {
     return ResponseEntity.ok(userAnswers);
 }
 
+    //Old Exercise 14 - Endpoint for getting the answers (answer entity) by quiz id and question id
+    @Operation(
+        summary = "Get answers by quiz id and question id",
+        description = "Returns the list of answers for the quiz and question with the provided id"
+    )
+        @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "404", description = "No answers for the quiz with the porvided id")
+        })
+
+       @GetMapping("/quizzes/{quizId}/answers")
+       public ResponseEntity<?> getAnswersByQuizId(@PathVariable Long quizId) {
+           if (!quizRepository.existsById(quizId)) {
+               return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                       .body("Quiz with the provided id does not exist");
+           }
+           List<Answer> answers = answerRepository.findByQuestionQuizId(quizId);
+   
+           if (answers.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+           }
+
+           return ResponseEntity.ok(answers);
+        
+       }
 
 
-       // Exercise 15 REST API endpoint for getting all categories
+       // Exercise 15 - REST API endpoint for getting all categories
 
        @Operation(
         summary = "Get all categories of the quizzes",
@@ -214,7 +239,7 @@ public class QuizRestController {
     }
 
 
-    // Exercise 16 REST API endpoint for getting the category by id
+    // Exercise 16 -  REST API endpoint for getting the category by id
 
     @Operation(
         summary = "Get the category by id",
@@ -230,7 +255,7 @@ public class QuizRestController {
     }
 
 
-    // Exercise 17 REST API endpoint for getting the published quizzes by category id
+    // Exercise 17 - REST API endpoint for getting the published quizzes by category id
 
     @Operation(
         summary = "Get the list of quizzes of a category",
