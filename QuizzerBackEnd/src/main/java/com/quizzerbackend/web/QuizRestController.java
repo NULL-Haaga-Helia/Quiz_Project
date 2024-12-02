@@ -153,8 +153,7 @@ public class QuizRestController {
                     .body("Quiz is not published");
         }
 
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("Question with the provided id does not exist"));
+
 
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
@@ -165,9 +164,7 @@ public class QuizRestController {
         }
 
         UserAnswer userAnswer = new UserAnswer();
-        userAnswer.setUserAnswerId(AnswerDTO.getUserAnswerId());
         userAnswer.setAnswer(answer);
-        userAnswer.setQuestion(question);
 
         userAnswerRepository.save(userAnswer);
 
@@ -192,7 +189,7 @@ public class QuizRestController {
     // Quiz quiz = quizRepository.findById(quizId)
             //.orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
 
-    List<UserAnswer> userAnswers = userAnswerRepository.findByQuestionQuizId(quizId);
+    List<UserAnswer> userAnswers = userAnswerRepository.findByAnswerQuestionQuizId(quizId);
 
     return ResponseEntity.ok(userAnswers);
 }

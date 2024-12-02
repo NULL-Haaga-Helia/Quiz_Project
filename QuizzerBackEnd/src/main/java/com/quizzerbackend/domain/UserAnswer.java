@@ -20,18 +20,13 @@ public class UserAnswer {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer; 
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "question_id", nullable = false)
-    private Question question; 
 
     public UserAnswer() {
 
     }
 
-    public UserAnswer(Answer answer, Question question) {
+    public UserAnswer(Answer answer) {
         this.answer = answer;
-        this.question = question;
     }
 
     public Long getUserAnswerId() {
@@ -48,14 +43,6 @@ public class UserAnswer {
     
     public void setAnswer(Answer answer) {
         this.answer = answer;
-    }
-    
-    public Question getQuestion() {
-        return question;
-    }
-    
-    public void setQuestion(Question question) {
-        this.question = question;
     }
     
 }

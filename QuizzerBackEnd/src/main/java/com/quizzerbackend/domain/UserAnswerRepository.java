@@ -4,5 +4,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
-    List<UserAnswer> findByQuestionQuizId(Long quizId);
+    List<UserAnswer> findByAnswerQuestionQuizId(Long quizId);
 }
