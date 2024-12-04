@@ -48,7 +48,10 @@ function QuizQuestions() {
 
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
-			.then((responseData) => setQuestions(responseData))
+			.then((responseData) => {
+				console.log("Quiz Questions:", responseData);
+				setQuestions(responseData);
+			})
 			.catch((err) => console.error("Failed to fetch questions:", err));
 	};
 
@@ -90,6 +93,23 @@ function QuizQuestions() {
 
 	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
+	//OLD VERSION:
+	/*
+    {answers
+		.filter(
+			(answer) => answer.question.questionId === question.questionId
+			)
+			.map((answer) => (
+				<FormControlLabel
+						key={answer.answerId}
+						value={answer.answerId}
+						control={<Radio />}
+						label={answer.text}
+				/>
+	))}
+	*/
+
+	//Rendering:
 	if (!quizId) {
 		console.warn("Quiz ID is unavailable");
 		return (
@@ -189,6 +209,7 @@ function QuizQuestions() {
 											{answers
 												.filter(
 													(answer) =>
+														answer.question &&
 														answer.question.questionId === question.questionId
 												)
 												.map((answer) => (

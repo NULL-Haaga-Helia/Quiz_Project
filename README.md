@@ -18,6 +18,26 @@ The architecture ensures a clear separation of responsibilities and emphasizes d
 
 ### Architecture Diagram (TBA)
 
+```mermaid
+flowchart TD
+    subgraph Frontend
+        A[ReactJS Application]
+    end
+
+    subgraph Backend
+        B[Spring Boot Application]
+    end
+
+    subgraph Database
+        C[H2 / PostgreSQL]
+    end
+
+    A -- REST API Calls --> B
+    B -- Query/Update --> C
+    C -- Response --> B
+    B -- JSON Data --> A
+```
+
 ## Data model
 
 The data model is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:

@@ -109,6 +109,13 @@ public class QuizRestController {
 
     @RequestMapping(value = "/quizzes/{quizId}/questions", method = RequestMethod.GET)
     public ResponseEntity<?> getAllQuestionsForQuiz(@PathVariable Long quizId) {
+
+        boolean quizExists = quizRepository.existsById(quizId);
+    if (!quizExists) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(Collections.singletonMap("message", "Quiz with the provided id does not exist"));
+    }
+    
         List<Question> questions = questionRepository.findByQuizId(quizId);
         
         if (questions == null || questions.isEmpty()) {
