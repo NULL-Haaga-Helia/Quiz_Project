@@ -2,7 +2,9 @@ package com.quizzerbackend.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -22,12 +24,13 @@ public class Question {
    
     @ManyToOne
     @JoinColumn(name = "id")  
+    @JsonBackReference
     private Quiz quiz;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    @JsonManagedReference
     private List<Answer> answers;
-
 
     public Question() {}
 

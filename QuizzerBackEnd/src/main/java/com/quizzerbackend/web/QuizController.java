@@ -5,14 +5,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.quizzerbackend.domain.Answer;
+import com.quizzerbackend.domain.AnswerDTO;
 import com.quizzerbackend.domain.AnswerRepository;
 import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
@@ -106,7 +111,7 @@ public class QuizController {
         return "questionlist";
     }
 
-    // Add a question 
+    // Add a question
     @RequestMapping(value = "/addquestion/{quizId}", method = RequestMethod.GET)
     public String addQuestion(@PathVariable("quizId") Long quizId, Model model) {
         Quiz quiz = quizRepository.findById(quizId)
@@ -118,7 +123,7 @@ public class QuizController {
         return "addquestion";
     }
 
-    // Save a question 
+    // Save a question
     @RequestMapping(value = "/savequestion", method = RequestMethod.POST)
     public String saveAddedQuestion(@Valid Question question, BindingResult bindingResult, Model model) {
         Quiz quiz = question.getQuiz();
@@ -128,9 +133,9 @@ public class QuizController {
             if (question.getQuestionId() != null) {
                 return "editquestion";
             } else {
-            return "addquestion";
+                return "addquestion";
+            }
         }
-    }
         questionRepository.save(question);
 
         return "redirect:/questionlist/" + quiz.getId();
@@ -174,7 +179,7 @@ public class QuizController {
         return "answerlist";
     }
 
-    // Add an answer 
+    // Add an answer
     @RequestMapping(value = "/addanswer/{questionId}", method = RequestMethod.GET)
     public String addAnswer(@PathVariable("questionId") Long questionId, Model model) {
 
@@ -187,12 +192,12 @@ public class QuizController {
         return "addanswer";
     }
 
-    // Save answer 
+    // Save answer
     @RequestMapping(value = "/saveanswer", method = RequestMethod.POST)
     public String saveAnswer(@Valid Answer answer, BindingResult bindingResult, Model model) {
         Question question = answer.getQuestion();
-            model.addAttribute("question", question);
-        
+        model.addAttribute("question", question);
+
         if (bindingResult.hasErrors()) {
 
             if (answer.getAnswerId() != null) {
@@ -249,8 +254,7 @@ public class QuizController {
     }
 
     // Delete a quiz category
-    @RequestMapping(value = "/deletequizcategory/{id}", method
-            = RequestMethod.GET)
+    @RequestMapping(value = "/deletequizcategory/{id}", method = RequestMethod.GET)
     public String deleteQuizCategory(@PathVariable("id") Long id, Model model) {
         quizCategoryRepository.deleteById(id);
         return "redirect:../quizcategorylist";
@@ -262,7 +266,6 @@ public class QuizController {
         model.addAttribute("quizCategory", quizCategoryRepository.findById(quizCategoryId));
         return "editquizcategory";
     }
-
 
     // Save a quiz category
     @RequestMapping(value = "/savequizcategory", method = RequestMethod.POST)
@@ -279,6 +282,5 @@ public class QuizController {
 
         return "redirect:/quizcategorylist";
     }
-
 
 }

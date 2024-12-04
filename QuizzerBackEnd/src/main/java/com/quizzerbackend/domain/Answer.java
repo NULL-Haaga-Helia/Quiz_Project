@@ -1,5 +1,7 @@
 package com.quizzerbackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,9 +16,10 @@ public class Answer {
     @NotBlank(message = "Answer text cannot be empty")
     private String text;
 
-   
+    
     @ManyToOne
     @JoinColumn(name = "questionId")  
+    @JsonBackReference
     private Question question;
 
 

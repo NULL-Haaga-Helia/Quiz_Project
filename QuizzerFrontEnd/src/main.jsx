@@ -1,17 +1,15 @@
-//import { StrictMode } from "react";
-//import { createRoot } from "react-dom/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-//import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import QuizList from "./components/QuizList";
-import CategoryList from "./components/CategoryList";
-import QuizQuestions from "./components/QuizQuestions";
-import QuizResults from "./components/QuizResults";
-import Error from "./components/Error";
+import QuizList from "./Components/Quizlist.jsx";
+import CategoryList from "./Components/CategoryList.jsx";
+import QuizQuestions from "./Components/QuizQuestions.jsx";
+import QuizResults from "./Components/QuizResults.jsx";
+import Error from "./Components/Error.jsx";
+import QuizCategoryList from "./Components/QuizCategoryList.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -26,6 +24,10 @@ const router = createBrowserRouter([
 			{
 				path: "categorylist",
 				element: <CategoryList />,
+			},
+			{
+				path: "quizcategorylist", 
+				element: <QuizCategoryList />,
 			},
 			{ path: "quizquestions", element: <QuizQuestions /> },
 			{ path: "quizresults", element: <QuizResults /> },
