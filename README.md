@@ -214,7 +214,7 @@ int answerId FK
 
 ## REST API documentation URL
 
-http://localhost:8080/v3/api-docs
+http://localhost:8080/swagger-ui/index.html#/
 
 NOTE: You're required to run the application on your device before you can access the REST API documentation
 
