@@ -15,6 +15,9 @@
         .margin-top {
             margin-top: 15px; 
         }
+		.error-message {
+            color: red;
+        }
     </style>
 	</head>
 	<body>
@@ -24,7 +27,7 @@
 			<form th:object="${answer}" th:action="@{/saveanswer}" method="post">
 
 				<div class="form-group">
-				<!-- Hidden input for questionId -->
+				<!-- Hidden input for question -->
 				<input type="hidden" name="question" th:field="*{question}" />
 				
 
@@ -38,6 +41,8 @@
 					class="form-control margin-bottom"
 					placeholder="Enter answer text"
 				/>
+				<p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="error-message">Answer text is required</p>
+
 
 				<div style="clear: both; display: block; height: 10px"></div>
 

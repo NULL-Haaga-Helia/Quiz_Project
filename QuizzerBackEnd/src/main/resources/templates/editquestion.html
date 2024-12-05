@@ -15,23 +15,19 @@
             .margin-top {
                 margin-top: 15px; 
             }
+            .error-message {
+				color: red;
+			}
     </style>
     </head>
     <body>
-        <!--NOTE:-->
-        <!--
-         th:href="@{../css/bootstrap.min.css}"  relative path with two dots isn't resolving correctly for whatever reason
-        The styling only works if you remove the dots.
-
-        -- This should be fixed :) Toan
-
-        -->
+        
         <div class="container">
             <h1 class="padding margin-top margin-bottom">Edit question content for quiz: "<span th:text="${quiz.name}"></span>"</h1>
-            <form th:object="${question}" th:action="@{/saveeditedquestion}" method="post">
+            <form th:object="${question}" th:action="@{/savequestion}" method="post">
                 <div class="form-group">
-                <!-- Hidden inputs for quizId & questionId-->
-                <input type="hidden" name="quizId" th:value="${quiz.id}" />
+                <!-- Hidden inputs for quiz & question-->
+                <input type="hidden" name="quizId" th:field="*{quiz}" />
                 <input type="hidden" id="id" th:field="*{questionId}" />
 
 
@@ -41,6 +37,7 @@
                     <label for="questiontxt"><strong>Question text</strong></label>
                     <div style="clear: both; display: block; height: 10px;"></div>
                     <input type="text" id="questiontxt" th:field="*{questionText}" class="form-control margin-bottom"/>
+                    <p th:if="${#fields.hasErrors('questionText')}" th:errors="*{questionText}" class="error-message">Question text cannot be empty</p>
                 </div>
                 
                 <div style="clear: both; display: block; height: 10px;"></div>
@@ -68,6 +65,7 @@
                         </label>
                     </div>
                 </div>
+                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}" class="error-message">Difficulty must be selected</p>
 
                 <div style="clear: both; display: block; height: 10px;"></div>
             </div> 

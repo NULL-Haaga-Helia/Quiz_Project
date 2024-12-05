@@ -1,13 +1,17 @@
 package com.quizzerbackend.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long answerId;
+
     private boolean isCorrect;
+
+    @NotBlank(message = "Answer text cannot be empty")
     private String text;
 
    
