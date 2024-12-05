@@ -29,7 +29,6 @@ function QuizQuestions() {
 	const { quizId } = location.state;
 	const [answers, setAnswers] = useState([]);
 	const [selectedAnswers, setSelectedAnswers] = useState({});
-	const [submittedQuestions, setSubmittedQuestions] = useState({});
 	const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
 	// Functions:
@@ -49,7 +48,10 @@ function QuizQuestions() {
 
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
-			.then((responseData) => setQuestions(responseData))
+			.then((responseData) => {
+				console.log("Quiz Questions:", responseData);
+				setQuestions(responseData);
+			})
 			.catch((err) => console.error("Failed to fetch questions:", err));
 	};
 
@@ -68,29 +70,16 @@ function QuizQuestions() {
 
 		try {
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
-			const input = selectedAnswerId - 1;
-			if (answers[input].isCorrect) {
-				setSnackbar({
-					open: true,
-					message: response.message || "Correct",
-				});
-			} else {
-				setSnackbar({
-					open: true,
-					message: "Incorrect",
-				});
-			}
 
-			setSubmittedQuestions((prev) => ({
-				...prev,
-				[questionId]: true,
-			}));
-
+			setSnackbar({
+				open: true,
+				message: response.message || "Answer submitted successfully!",
+			});
 		} catch (error) {
 			console.error("Error submitting answer:", error);
 			setSnackbar({
 				open: true,
-				message: "Error submitting answer",
+				message: "Error submitting answer. Please try again.",
 			});
 		}
 	};
@@ -104,6 +93,23 @@ function QuizQuestions() {
 
 	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
+	//OLD VERSION:
+	/*
+    {answers
+		.filter(
+			(answer) => answer.question.questionId === question.questionId
+			)
+			.map((answer) => (
+				<FormControlLabel
+						key={answer.answerId}
+						value={answer.answerId}
+						control={<Radio />}
+						label={answer.text}
+				/>
+	))}
+	*/
+
+	//Rendering:
 	if (!quizId) {
 		console.warn("Quiz ID is unavailable");
 		return (
@@ -203,6 +209,7 @@ function QuizQuestions() {
 											{answers
 												.filter(
 													(answer) =>
+														answer.question &&
 														answer.question.questionId === question.questionId
 												)
 												.map((answer) => (
@@ -225,7 +232,6 @@ function QuizQuestions() {
 												fontSize: "13px",
 												cursor: "pointer",
 											}}
-											disabled={!!submittedQuestions[question.questionId]}
 										>
 											SUBMIT YOUR ANSWER
 										</Button>

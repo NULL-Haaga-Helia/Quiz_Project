@@ -6,6 +6,8 @@ Quizzer is a web application designed to help teachers (at Haaga Helia) create a
 The project includes two main web-based dashboards: a teacher dashboard for quiz creation and management, and a student dashboard for quiz-taking and reviews.
 The application is accessible through any browser and provides an interactive learning experience for students.
 
+<<<<<<< HEAD
+=======
 ## Project Architecture
 
 The project architecture consists of three key components:
@@ -18,6 +20,27 @@ The architecture ensures a clear separation of responsibilities and emphasizes d
 
 ### Architecture Diagram (TBA)
 
+```mermaid
+flowchart TD
+    subgraph Frontend
+        A[ReactJS Application]
+    end
+
+    subgraph Backend
+        B[Spring Boot Application]
+    end
+
+    subgraph Database
+        C[H2 / PostgreSQL]
+    end
+
+    A -- REST API Calls --> B
+    B -- Query/Update --> C
+    C -- Response --> B
+    B -- JSON Data --> A
+```
+
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 ## Data model
 
 The data model is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:
@@ -41,7 +64,10 @@ The data model is designed to support the management of quizzes, their associate
   - `name` (string)
   - `isPublished` (string)
   - `addedOn` (string)
+<<<<<<< HEAD
+=======
   - `categoryId` (int, foreign key)
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents a collection of questions that belong to a specific category.
 
 ---
@@ -52,7 +78,10 @@ The data model is designed to support the management of quizzes, their associate
   - `questionId` (int, primary key)
   - `questionText` (string)
   - `difficulty` (string)
+<<<<<<< HEAD
+=======
   - `quizId` (int, foreign key)
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents an individual question in a quiz.
 
 ---
@@ -63,7 +92,10 @@ The data model is designed to support the management of quizzes, their associate
   - `answerId` (int, primary key)
   - `isCorrect` (boolean)
   - `text` (string)
+<<<<<<< HEAD
+=======
   - `questionId` (int, foreign key)
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents the possible answer options for a question and indicates whether an answer is correct or incorrect.
 
 ---
@@ -71,8 +103,12 @@ The data model is designed to support the management of quizzes, their associate
 #### userAnswer
 
 - **Attributes:**
+<<<<<<< HEAD
+  - `userId` (int)
+=======
   - `userAnswerId` (int, primary key)
   - `answerId` (int, foreign key)
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Tracks the user's selected answer options for questions in a quiz.
 
 ---
@@ -91,23 +127,35 @@ int id PK
 string name
 string isPublished
 string addedOn
+<<<<<<< HEAD
+=======
 int categoryId FK
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 }
 Question {
 int questionId PK
 string questionText
 string difficulty
+<<<<<<< HEAD
+=======
 int quizId FK
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 }
 Answer {
 int answerId PK
 boolean isCorrect
 string text
+<<<<<<< HEAD
+}
+userAnswer {
+int userId
+=======
 int questionId FK
 }
 userAnswer {
 int userAnswerId PK
 int answerId FK
+>>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 }
 
     Category ||--|{ Quiz : "has"
@@ -166,7 +214,7 @@ int answerId FK
 
 ## REST API documentation URL
 
-http://localhost:8080/v3/api-docs
+http://localhost:8080/swagger-ui/index.html#/
 
 NOTE: You're required to run the application on your device before you can access the REST API documentation
 
@@ -185,5 +233,3 @@ https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 ## Web service URL
 
 https://quiz-project-h7mc.onrender.com/
-
-Vili's Test

@@ -40,7 +40,7 @@
 				<tr th:each="quiz : ${quizzes}">
 					<td th:text="${quiz.name}"></td>
 					<td th:text="${quiz.description}"></td>
-					<td th:text="${quiz.quizCategory.getName()}"></td>
+					<td th:text="${quiz.quizCategory != null ? quiz.quizCategory.name : 'No Category'}"></td>
 					<td>
 						<span th:if="${quiz.isPublished}" class="badge bg-primary"
 							>Published</span
