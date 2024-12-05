@@ -29,6 +29,7 @@ function QuizQuestions() {
 	const { quizId } = location.state;
 	const [answers, setAnswers] = useState([]);
 	const [selectedAnswers, setSelectedAnswers] = useState({});
+	const [submittedQuestions, setSubmittedQuestions] = useState({});
 	const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
 	// Functions:
@@ -70,32 +71,38 @@ function QuizQuestions() {
 
 		try {
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
+			const input = selectedAnswerId - 1;
+			if (answers[input].isCorrect) {
+				setSnackbar({
+					open: true,
+					message: response.message || "Correct",
+				});
+			} else {
+				setSnackbar({
+					open: true,
+					message: "Incorrect",
+				});
+			}
 
-			setSnackbar({
-				open: true,
-				message: response.message || "Answer submitted successfully!",
-			});
+			setSubmittedQuestions((prev) => ({
+				...prev,
+				[questionId]: true,
+			}));
+
 		} catch (error) {
 			console.error("Error submitting answer:", error);
 			setSnackbar({
 				open: true,
-				message: "Error submitting answer. Please try again.",
+				message: "Error submitting answer",
 			});
 		}
-	};
-
-	const handleAnswerChange = (questionId, answerId) => {
-		setSelectedAnswers((prev) => ({
-			...prev,
-			[questionId]: answerId,
-		}));
 	};
 
 	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
 	//OLD VERSION:
 	/*
-    {answers
+	{answers
 		.filter(
 			(answer) => answer.question.questionId === question.questionId
 			)

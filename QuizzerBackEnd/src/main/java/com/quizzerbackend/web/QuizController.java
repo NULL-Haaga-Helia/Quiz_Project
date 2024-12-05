@@ -22,8 +22,11 @@ import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
+import com.quizzerbackend.domain.QuizReviewRepository;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
+import com.quizzerbackend.domain.QuizRating;
+import com.quizzerbackend.domain.QuizReviewRepository;
 
 import jakarta.validation.Valid;
 
@@ -41,6 +44,9 @@ public class QuizController {
 
     @Autowired
     private QuizCategoryRepository quizCategoryRepository;
+
+      @Autowired
+    private QuizReviewRepository QuizRatingRepository;
 
     // QUIZ METHODS//
     // List all quizzes
@@ -281,5 +287,34 @@ public class QuizController {
 
         return "redirect:/quizcategorylist";
     }
+
+    //Review list
+    @RequestMapping(value = "/quizreviewlist")
+    public String quizReviewList(Model model) {
+        model.addAttribute("quizRatings", QuizRatingRepository.findAll());
+        return "reviewlist";    
+    }
+
+    //Add Review
+    @RequestMapping(value = "/addreview")
+    public String addQuizReview(Model model) {
+        model.addAttribute("quizrating", new QuizRating());
+        return "addreview";
+    }
+
+    // Delete a quiz category
+    @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.GET)
+    public String deleteQuizReview(@PathVariable("id") Long id, Model model) {
+        QuizRatingRepository.deleteById(id);
+        return "redirect:../reviewlist";
+       }
+   
+     // Edit a quiz category
+     @RequestMapping(value = "/editreview/{id}", method = RequestMethod.GET)
+     public String editQuizReview(@PathVariable("id") Long ratingId, Model model) {
+        model.addAttribute("quizrating", QuizRatingRepository.findById(ratingId));
+        return "editreview";
+       }
+
 
 }
