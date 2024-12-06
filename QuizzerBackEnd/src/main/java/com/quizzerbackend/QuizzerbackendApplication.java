@@ -61,9 +61,9 @@ public class QuizzerbackendApplication {
 				quizRepository.save(q2);	
 				quizRepository.save(q3);
 
-				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user1", 5, "Great quiz!", "12.12.2024"));
-				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user2", 4, "Good quiz!", "12.12.2024"));
-				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user3", 3, "Okay quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(q1, "user1", 5, "Great quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(q1, "user2", 4, "Good quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(q1, "user3", 3, "Okay quiz!", "12.12.2024"));
 
 				log.info("fetch all Quizzes");
 				for (Quiz quiz : quizRepository.findAll()) {

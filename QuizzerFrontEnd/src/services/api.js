@@ -121,13 +121,12 @@ export function getAllCategories() {
 
 //handles getting all reviews
 export function getAllQuizReviews(quizId) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/review`)
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error("Something went wrong: " + response.statusText);
-			}
-			return response.json();
-		})
-		.catch((err) => console.error("Error fetching all categories:", err));
-
-}
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews`)
+	  .then((response) => {
+		if (!response.ok) {
+		  throw new Error("Something went wrong: " + response.statusText);
+		}
+		return response.json();  
+	  })
+	  .catch((err) => console.error("Error fetching reviews:", err));
+  }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getQuizById, getAllQuizReviews } from "../services/api"; // import the getAllQuizReviews function
+import { getQuizById, getAllQuizReviews } from "../services/api"; 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

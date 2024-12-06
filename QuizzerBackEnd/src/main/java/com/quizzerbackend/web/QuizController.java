@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +24,9 @@ import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
 import com.quizzerbackend.domain.QuizReviewRepository;
+import com.quizzerbackend.domain.Reviews;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
-import com.quizzerbackend.domain.QuizRating;
-import com.quizzerbackend.domain.QuizReviewRepository;
 
 import jakarta.validation.Valid;
 
@@ -288,17 +288,25 @@ public class QuizController {
         return "redirect:/quizcategorylist";
     }
 
+
+
+
+
+
+    
     //Review list
-    @RequestMapping(value = "/quizreviewlist")
-    public String quizReviewList(Model model) {
-        model.addAttribute("quizRatings", quizReviewRepository.findAll());
-        return "reviewlist";    
+    @GetMapping("/{quizId}/reviews")
+    public ResponseEntity<List<Reviews>> getReviewsByQuizId(@PathVariable("quizId") Long quizId) {
+        List<Reviews> reviews = quizReviewRepository.findByQuizId(quizId);
+        return ResponseEntity.ok(reviews);
     }
 
+    
+/*
     //Add Review
     @RequestMapping(value = "/addreview")
     public String addQuizReview(Model model) {
-        model.addAttribute("quizrating", new QuizRating());
+        model.addAttribute("quizReview", new Reviews());
         return "addreview";
     }
 
@@ -309,12 +317,12 @@ public class QuizController {
         return "redirect:../reviewlist";
        }
    
-     // Edit a quiz category
+     // Edit a quiz review
      @RequestMapping(value = "/editreview/{id}", method = RequestMethod.GET)
-     public String editQuizReview(@PathVariable("id") Long ratingId, Model model) {
-        model.addAttribute("quizrating", quizReviewRepository.findById(ratingId));
+     public String editQuizReview(@PathVariable("id") Long reviewId, Model model) {
+        model.addAttribute("quizReview", quizReviewRepository.findById(reviewId));
         return "editreview";
        }
 
-
+ */
 }
