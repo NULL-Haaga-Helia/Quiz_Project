@@ -45,6 +45,7 @@ function QuizList() {
 		console.log("Navigating to QuizResults with quiz ID:", quizId);
 		navigate("/quizreviewlist", { state: { quizId } });
 	};
+	
 
 	//Rendering:
 	return (

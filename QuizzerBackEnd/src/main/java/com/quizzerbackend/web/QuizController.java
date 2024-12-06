@@ -288,11 +288,6 @@ public class QuizController {
         return "redirect:/quizcategorylist";
     }
 
-
-
-
-
-
     
     //Review list
     @GetMapping("/{quizId}/reviews")
@@ -301,7 +296,7 @@ public class QuizController {
         return ResponseEntity.ok(reviews);
     }
 
-    
+
 /*
     //Add Review
     @RequestMapping(value = "/addreview")
