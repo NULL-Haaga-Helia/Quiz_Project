@@ -34,7 +34,7 @@ public class Quiz {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quiz")
-    private List<QuizRating> quizRatings;
+    private List<Reviews> reviews;
 
     public Quiz() {
     }
@@ -104,12 +104,12 @@ public class Quiz {
         this.quizCategory = quizCategory;
     }
 
-    public List<QuizRating> getQuizRatings() {
-        return quizRatings;
+    public List<Reviews> getReviews() {
+        return reviews;
     }
 
-    public void setQuizRatings(List<QuizRating> quizRatings) {
-        this.quizRatings = quizRatings;
+    public void setReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
     }
 
     @Override

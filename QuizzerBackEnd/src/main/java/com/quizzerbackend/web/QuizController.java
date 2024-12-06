@@ -46,7 +46,7 @@ public class QuizController {
     private QuizCategoryRepository quizCategoryRepository;
 
       @Autowired
-    private QuizReviewRepository QuizRatingRepository;
+    private QuizReviewRepository quizReviewRepository;
 
     // QUIZ METHODS//
     // List all quizzes
@@ -291,7 +291,7 @@ public class QuizController {
     //Review list
     @RequestMapping(value = "/quizreviewlist")
     public String quizReviewList(Model model) {
-        model.addAttribute("quizRatings", QuizRatingRepository.findAll());
+        model.addAttribute("quizRatings", quizReviewRepository.findAll());
         return "reviewlist";    
     }
 
@@ -305,14 +305,14 @@ public class QuizController {
     // Delete a quiz category
     @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.GET)
     public String deleteQuizReview(@PathVariable("id") Long id, Model model) {
-        QuizRatingRepository.deleteById(id);
+        quizReviewRepository.deleteById(id);
         return "redirect:../reviewlist";
        }
    
      // Edit a quiz category
      @RequestMapping(value = "/editreview/{id}", method = RequestMethod.GET)
      public String editQuizReview(@PathVariable("id") Long ratingId, Model model) {
-        model.addAttribute("quizrating", QuizRatingRepository.findById(ratingId));
+        model.addAttribute("quizrating", quizReviewRepository.findById(ratingId));
         return "editreview";
        }
 

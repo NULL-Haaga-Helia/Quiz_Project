@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getQuizById, getAllQuizReviews } from "../services/api";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getQuizById, getAllQuizReviews } from "../services/api"; // import the getAllQuizReviews function
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,16 +11,13 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
-
-
 function QuizReviewList() {
-
+  // States
   const [quiz, setQuiz] = useState(null);
+  const [reviewsList, setReviewsList] = useState([]);
   const location = useLocation();
-  const { quizId } = location.state;
-  const [ReviewsList, setReviewsList] = useState([]);
+  const { quizId } = location.state; 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (quizId) {
@@ -40,12 +36,17 @@ function QuizReviewList() {
   };
 
   const fetchReviews = () => {
-    getAllQuizReviews()
+    getAllQuizReviews(quizId) 
       .then((responseData) => {
         console.log("Fetched reviews:", responseData);
-        setReviewsList(responseData);
+        setReviewsList(responseData); 
       })
-      .catch((err) => console.error("Error fetching reviews", err));
+      .catch((err) => console.error("Error fetching reviews:", err));
+  };
+
+  const handleWriteReviewClick = () => {
+    console.log("Navigating to review submission page");
+    navigate("/submitreview", { state: { quizId: quiz.id } });
   };
 
   return (
@@ -55,37 +56,55 @@ function QuizReviewList() {
         gutterBottom
         sx={{ textAlign: "left", marginBottom: 2 }}
       >
-        Results of ""
+        Results of {quiz?.name || "Quiz"}
       </Typography>
 
+      {/* Button to navigate to review submission */}
       <TableCell
-      //		component="th"
-      //		scope="row"
-      //		style={{ cursor: "pointer", color: "#1976d2" }}
-      //		onClick={() => handleQuizReviewsClick(quiz.id)}
-      //		align="left"
+        sx={{
+          cursor: "pointer",
+          color: "#1976d2",
+          fontWeight: "bold",
+        }}
+        onClick={handleWriteReviewClick}
+        align="left"
       >
         Write your own review
       </TableCell>
 
-      {ReviewsList && ReviewsList.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Nickname
+      {/* Display Reviews Table if reviews exist */}
+      {reviewsList && reviewsList.length > 0 ? (
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }} align="left">
+                Nickname
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="left">
+                Rating
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="left">
+                Review
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reviewsList.map((review) => (
+              <TableRow
+                key={review.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {review.nickname}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  rating
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  review
-                </TableCell>
+                <TableCell align="left">{review.rating}</TableCell>
+                <TableCell align="left">{review.review}</TableCell>
               </TableRow>
-            </TableHead>
-          </Table>
-        </TableContainer>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       ) : (
         <Typography variant="h6" sx={{ textAlign: "center" }}>
           No Reviews found

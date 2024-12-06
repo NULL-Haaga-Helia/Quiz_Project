@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QuizReviewRepository extends JpaRepository<QuizRating, Long> {
+public interface QuizReviewRepository extends JpaRepository<Reviews, Long> {
     
-    List<QuizRating> findByRatingUser(String ratingUser);
-    List<QuizRating> findByRating(int rating);
-    List<QuizRating> findByReview(String review);
+    List<Reviews> findByNickname(String nickname);
+    List<Reviews> findByRating(int rating);
+    List<Reviews> findByReview(String review);
     
-    List<QuizRating> findByQuizId(Long quizId);
+    List<Reviews> findByQuizId(Long quizId);
 
     
 }

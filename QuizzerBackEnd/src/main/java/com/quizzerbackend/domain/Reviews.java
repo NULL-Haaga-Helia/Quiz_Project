@@ -6,22 +6,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long reviewId;
 
     @NotBlank(message = "Quiz review nickname cannot be empty")
     private String nickname;
 
-    @NotBlank(message = "Quiz rating cannot be empty")
+    @NotNull(message = "Rating must not be null")
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 5, message = "Rating must be at most 5")    
     private int rating;
 
     @NotBlank(message = "Quiz review cannot be empty")
     private String review;
+
+    @NotBlank(message = "Quiz write cannot be empty")
+    private String writtenOn;
+
 
 
     @ManyToOne
@@ -29,22 +38,37 @@ public class Reviews {
     private Quiz quiz;
 
     public Reviews(){
-
+        super();
     }
 
-    public Reviews(String nickname, int rating, String review){
+    public Reviews(Quiz quiz, String nickname, int rating, String review, String writtenOn){
         super();
+        this.quiz=quiz;
         this.nickname = nickname;
         this.rating = rating;
         this.review = review;
+        this.writtenOn = writtenOn;
+
     }
 
-    public Long getId() {
-        return id;
+    public Reviews(Quiz quiz) {
+        this.quiz = quiz;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getReviewId() {
+        return reviewId;
+    }
+
+    public String getWrittenOn() {
+        return writtenOn;
+    }
+
+    public void setWrittenOn(String writtenOn) {
+        this.writtenOn = writtenOn;
+    }
+
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getNickname() {
@@ -80,6 +104,10 @@ public class Reviews {
     }
 
     
-    
-
+    @Override
+    public String toString() {
+        return "QuizRating [reviewId=" + reviewId + ", quiz=" + quiz.getName() + ", nickname=" + nickname
+                + ", rating="
+                + rating + ", review=" + review + ", writtenOn=" + writtenOn + "]";
+    }
 }

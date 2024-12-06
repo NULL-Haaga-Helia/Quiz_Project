@@ -1,34 +1,34 @@
 package com.quizzerbackend.domain;
 
-public class QuizRatingDTO {
-    private String ratingUser;
+public class QuizReviewDTO {
+    private String nickname;
     private int rating;
     private String review;
     private String writtenOn;
 
-    public QuizRatingDTO() {
+    public QuizReviewDTO() {
     }
 
-    public QuizRatingDTO(QuizRating quizRating) {
-        this.ratingUser = quizRating.getRatingUser();
-        this.rating = quizRating.getRating();
-        this.review = quizRating.getReview();
-        this.writtenOn = quizRating.getWrittenOn();
+    public QuizReviewDTO(Reviews reviews) {
+        this.nickname = reviews.getNickname();
+        this.rating = reviews.getRating();
+        this.review = reviews.getReview();
+        this.writtenOn = reviews.getWrittenOn();
     }
 
-    public QuizRatingDTO(String ratingUser, int rating, String review, String writtenOn) {
-        this.ratingUser = ratingUser;
+    public QuizReviewDTO(String nickname, int rating, String review, String writtenOn) {
+        this.nickname = nickname;
         this.rating = rating;
         this.review = review;
         this.writtenOn = writtenOn;
     }
 
-    public String getRatingUser() {
-        return ratingUser;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setRatingUser(String ratingUser) {
-        this.ratingUser = ratingUser;
+    public void setRatingUser(String nickname) {
+        this.nickname = nickname;
     }
 
     public int getRating() {
@@ -57,7 +57,7 @@ public class QuizRatingDTO {
 
     @Override
     public String toString() {
-        return "QuizRatingDTO [ratingUser=" + ratingUser + ", rating=" + rating + ", review=" + review + ", writtenOn="
+        return "QuizRatingDTO [nickname=" + nickname + ", rating=" + rating + ", review=" + review + ", writtenOn="
                 + writtenOn + "]";
     }
 

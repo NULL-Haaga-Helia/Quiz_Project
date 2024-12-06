@@ -13,12 +13,10 @@ import com.quizzerbackend.domain.QuestionRepository;
 
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
-
+import com.quizzerbackend.domain.QuizReviewRepository;
+import com.quizzerbackend.domain.Reviews;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
-
-import com.quizzerbackend.domain.QuizRating;
-import com.quizzerbackend.domain.QuizRatingRepo;
 
 
 
@@ -34,7 +32,7 @@ public class QuizzerbackendApplication {
 	}
  
 	@Bean
-	public CommandLineRunner quizDemo(QuizRepository quizRepository, QuestionRepository questionRepository, QuizCategoryRepository quizCategoryRepository, QuizRatingRepo quizRatingRepo) {
+	public CommandLineRunner quizDemo(QuizRepository quizRepository, QuestionRepository questionRepository, QuizCategoryRepository quizCategoryRepository, QuizReviewRepository quizReviewRepository) {
 		return (args) -> {
 
 			var quizzes = quizRepository.findAll();
@@ -63,9 +61,9 @@ public class QuizzerbackendApplication {
 				quizRepository.save(q2);	
 				quizRepository.save(q3);
 
-				quizRatingRepo.save(new QuizRating(quizRepository.findByName("Biology").get(0), "user1", 5, "Great quiz!", "12.12.2024"));
-				quizRatingRepo.save(new QuizRating(quizRepository.findByName("Biology").get(0), "user2", 4, "Good quiz!", "12.12.2024"));
-				quizRatingRepo.save(new QuizRating(quizRepository.findByName("Biology").get(0), "user3", 3, "Okay quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user1", 5, "Great quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user2", 4, "Good quiz!", "12.12.2024"));
+				quizReviewRepository.save(new Reviews(quizRepository.findByName("Biology").get(0), "user3", 3, "Okay quiz!", "12.12.2024"));
 
 				log.info("fetch all Quizzes");
 				for (Quiz quiz : quizRepository.findAll()) {

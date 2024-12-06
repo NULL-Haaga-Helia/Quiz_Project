@@ -25,11 +25,11 @@ import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
 import com.quizzerbackend.domain.QuizRepository;
+import com.quizzerbackend.domain.QuizReviewDTO;
+import com.quizzerbackend.domain.QuizReviewRepository;
+import com.quizzerbackend.domain.Reviews;
 import com.quizzerbackend.domain.UserAnswer;
 import com.quizzerbackend.domain.UserAnswerRepository;
-import com.quizzerbackend.domain.QuizRating;
-import com.quizzerbackend.domain.QuizRatingRepo;
-import com.quizzerbackend.domain.QuizRatingDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -62,7 +62,7 @@ public class QuizRestController {
     private QuizCategoryRepository quizCategoryRepository;
 
     @Autowired
-    private QuizRatingRepo quizRatingRepo;
+    private QuizReviewRepository quizReviewRepository;
 
     // Endpoint for getting all published quizzes
     @Operation(summary = "Get a all published quizzes", description = "Returns the list of published quizzes")
@@ -252,81 +252,78 @@ public class QuizRestController {
         return ResponseEntity.ok(quizzes);
     }
 
-    // REST API endpoint for getting the quiz ratings by quiz id
+    // REST API endpoint for getting the quiz review by quiz id
 
     @Operation(summary = "Get the ratings for a quiz", description = "Returns the list of ratings for the quiz with the provided id")
 
-    @GetMapping("/quizzes/{quizId}/ratings")
-    public ResponseEntity<?> getRatingsByQuizId(@PathVariable Long quizId) {
+    @GetMapping("/quizzes/{quizId}/reviews")
+    public ResponseEntity<?> getReviewByQuizId(@PathVariable Long quizId) {
         if (!quizRepository.existsById(quizId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Quiz with the provided id does not exist");
         }
-        List<QuizRating> ratings = quizRatingRepo.findByQuizId(quizId);
-        if (ratings.isEmpty()) {
+        List<Reviews> reviews = quizReviewRepository.findByQuizId(quizId);
+        if (reviews.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No ratings found for the provided quiz id");
         }
-        return ResponseEntity.ok(ratings);
+        return ResponseEntity.ok(reviews);
     }
 
-    // REST API endpoint for creating the quiz rating
-    @Operation(summary = "Create a new rating for a quiz", description = "Request:\r\n" + //
-            "\r\n" + //
-            "HTTP Method: POST\r\n" + //
-            "Endpoint: api/quizzes/{quizId}/ratings\r\n" + //
-            "Request Headers:\r\n" + //
-            "'Content-Type' : 'application/json'\r\n" + //
-            "Request body: JSON object containing the rating details")
-    @PostMapping("/quizzes/{quizId}/ratings")
-    public ResponseEntity<?> createRating(@PathVariable Long quizId, @Valid @RequestBody QuizRatingDTO rating) {
-        if (!quizRepository.existsById(quizId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Quiz with the provided id does not exist");
-        }
-        QuizRating newRating = new QuizRating(quizRepository.findById(quizId).get(), rating.getRatingUser(),
-                rating.getRating(), rating.getReview(), rating.getWrittenOn());
-        quizRatingRepo.save(newRating);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newRating);
+  // REST API endpoint for getting the quiz reviews by quiz id
+@Operation(summary = "Get the reviews for a quiz", description = "Returns the list of reviews for the quiz with the provided id")
+@PostMapping("/quizzes/{quizId}/reviews")
+public ResponseEntity<?> getReviewsByQuizId(@PathVariable Long quizId) {
+    if (!quizRepository.existsById(quizId)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Quiz with the provided id does not exist");
     }
+    List<Reviews> reviews = quizReviewRepository.findByQuizId(quizId);
+    if (reviews.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("No reviews found for the provided quiz id");
+    }
+    return ResponseEntity.ok(reviews);
+}
+
 
     // REST API endpoint for editing the quiz rating by rating id
-    @Operation(summary = "Edit the rating for a quiz", description = "Request:\r\n" + //
+    @Operation(summary = "Edit the reviews for a quiz", description = "Request:\r\n" + //
             "\r\n" + //
             "HTTP Method: PUT\r\n" + //
-            "Endpoint: api/ratings/{ratingId}\r\n" + //
-            "Path Parameters: {ratingId} is the unique identifier of the Rating.\r\n" + //
+            "Endpoint: api/reviews/{reviewId}\r\n" + //
+            "Path Parameters: {reviewId} is the unique identifier of the reviews.\r\n" + //
             "Request Headers:\r\n" + //
             "'Content-Type' : 'application/json'\r\n" + //
-            "Request body: JSON object containing the updated rating details")
-    @PutMapping("/ratings/{ratingId}")
-    public ResponseEntity<?> editRating(@PathVariable Long ratingId, @Valid @RequestBody QuizRatingDTO rating) {
-        if (!quizRatingRepo.existsById(ratingId)) {
+            "Request body: JSON object containing the updated review details")
+    @PutMapping("/reviews/{reviewId}")
+    public ResponseEntity<?> editReview(@PathVariable Long reviewId, @Valid @RequestBody QuizReviewDTO reviews) {
+        if (!quizReviewRepository.existsById(reviewId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Rating with the provided id does not exist");
         }
-        QuizRating updatedRating = quizRatingRepo.findById(ratingId).get();
-        updatedRating.setRatingUser(rating.getRatingUser());
-        updatedRating.setRating(rating.getRating());
-        updatedRating.setReview(rating.getReview());
-        updatedRating.setWrittenOn(rating.getWrittenOn());
-        quizRatingRepo.save(updatedRating);
-        return ResponseEntity.ok(updatedRating);
+        Reviews updatedReviews = quizReviewRepository.findById(reviewId).get();
+        updatedReviews.setNickname(reviews.getNickname());
+        updatedReviews.setRating(reviews.getRating());
+        updatedReviews.setReview(reviews.getReview());
+        updatedReviews.setWrittenOn(reviews.getWrittenOn());
+        quizReviewRepository.save(updatedReviews);
+        return ResponseEntity.ok(updatedReviews);
     }
 
     // REST API endpoint for deleting the quiz rating by rating id
-    @Operation(summary = "Delete the rating for a quiz", description = "Request:\r\n" + //
+    @Operation(summary = "Delete the review for a quiz", description = "Request:\r\n" + //
             "\r\n" + //
             "HTTP Method: DELETE\r\n" + //
-            "Endpoint: api/ratings/{ratingId}\r\n" + //
-            "Path Parameters: {ratingId} is the unique identifier of the Rating.")
-    @RequestMapping(value = "/ratings/{ratingId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteRating(@PathVariable Long ratingId) {
-        if (!quizRatingRepo.existsById(ratingId)) {
+            "Endpoint: api/reviews/{reviewId}\r\n" + //
+            "Path Parameters: {reviewId} is the unique identifier of the reviews.")
+    @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
+        if (!quizReviewRepository.existsById(reviewId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Rating with the provided id does not exist");
+                    .body("Review with the provided id does not exist");
         }
-        quizRatingRepo.deleteById(ratingId);
+        quizReviewRepository.deleteById(reviewId);
         return ResponseEntity.ok("Rating deleted successfully");
     }
 
