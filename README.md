@@ -142,7 +142,7 @@ userAnswer {
 int userAnswerId PK
 int answerId FK
 }
-Review {
+Reviews {
 int reviewId PK
 string nickname
 int rating
@@ -155,7 +155,7 @@ Category ||--|{ Quiz : "has"
 Quiz ||--|{ Question : "contains"
 Question ||--|{ Answer : "has"
 Answer ||--|{ userAnswer : "selected by"
-Quiz ||--|{ Review : "has"
+Quiz ||--|{ Reviews : "has"
 ```
 
 ## Developer guide
