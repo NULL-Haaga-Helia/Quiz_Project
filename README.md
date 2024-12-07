@@ -106,7 +106,7 @@ The data model is designed to support the management of quizzes, their associate
   - `review` (string)
   - `writtenOn` (string)
   - `quizId` (int, foreign key)
-- **Purpose:** Tracks the user's selected answer options for questions in a quiz.
+- **Purpose:** Represents user-submitted reviews for quizzes. Each review is linked to a specific quiz.
 
 ---
 
