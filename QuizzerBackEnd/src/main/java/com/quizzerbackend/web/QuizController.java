@@ -3,8 +3,11 @@ package com.quizzerbackend.web;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -306,18 +309,29 @@ public class QuizController {
     }
 
     // Delete a quiz review
-    @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.GET)
-    public String deleteQuizReview(@PathVariable("id") Long id, Model model) {
-        quizReviewRepository.deleteById(id);
-        return "redirect:../reviewlist";
-       }
+    @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.DELETE)
+public ResponseEntity<?> deleteQuizReview(@PathVariable("id") Long id) {
+    if (!quizReviewRepository.existsById(id)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found");
+    }
+    quizReviewRepository.deleteById(id);
+    return ResponseEntity.ok().body("Review deleted successfully");
+}
    
      // Edit a quiz review
-     @RequestMapping(value = "/editreview/{id}", method = RequestMethod.GET)
-     public String editQuizReview(@PathVariable("id") Long reviewId, Model model) {
-        model.addAttribute("quizReview", quizReviewRepository.findById(reviewId));
-        return "editreview";
-       }
-
+     @RequestMapping(value = "/editreview/{id}", method = RequestMethod.PUT)
+     public ResponseEntity<?> editQuizReview(@PathVariable("id") Long reviewId, @RequestBody Reviews updatedReview) {
+         Optional<Reviews> existingReview = quizReviewRepository.findById(reviewId);
+         if (!existingReview.isPresent()) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found");
+         }
+     
+         Reviews review = existingReview.get();
+         review.setRating(updatedReview.getRating());
+         review.setReview(updatedReview.getReview());
+         quizReviewRepository.save(review);
+     
+         return ResponseEntity.ok(review); // Return the updated review as JSON
+     }
  
 }

@@ -173,3 +173,21 @@ export function getAllQuizReviews(quizId) {
 		  .catch((err) => console.error("Error editing review:", err));
 	  }
 	  
+	  // Handles adding a new review
+export function addReview(quizId, newReviewData) {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/add`, {
+	  method: 'POST', 
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify(newReviewData),  
+	})
+	.then((response) => {
+	  if (!response.ok) {
+		throw new Error("Something went wrong: " + response.statusText);
+	  }
+	  return response.json();  
+	})
+	.catch((err) => console.error("Error adding review:", err));  
+  }
+  
