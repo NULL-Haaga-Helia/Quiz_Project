@@ -48,6 +48,7 @@ function QuizReviewList() {
       .catch((err) => console.error("Error fetching reviews:", err));
   };
 
+  
   const handleReviewDelete = (reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       deleteReview(quizId, reviewId)
@@ -87,7 +88,11 @@ function QuizReviewList() {
 
   return (
     <Box sx={{ width: "100%", marginTop: 8 }}>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "left", marginBottom: 2 }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ textAlign: "left", marginBottom: 2 }}
+      >
         Results of {quiz?.name || "Quiz"}
       </Typography>
 

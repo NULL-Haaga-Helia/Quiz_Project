@@ -11,7 +11,7 @@ import QuizResults from "./Components/QuizResults.jsx";
 import Error from "./Components/Error.jsx";
 import QuizCategoryList from "./Components/QuizCategoryList.jsx";
 import QuizReviewList from "./Components/QuizReviewList.jsx"
-import SubmitReview from "./Components/submitreview.jsx";
+
 
 const router = createBrowserRouter([
 	{
@@ -34,7 +34,6 @@ const router = createBrowserRouter([
 			{ path: "quizquestions", element: <QuizQuestions /> },
 			{ path: "quizresults", element: <QuizResults /> },
 			{ path: "quizreviewlist", element: <QuizReviewList />},
-			{ path: "submitreview", element: <SubmitReview />}
 		],
 	},
 ]);
