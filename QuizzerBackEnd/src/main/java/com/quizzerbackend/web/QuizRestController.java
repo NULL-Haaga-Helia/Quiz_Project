@@ -316,8 +316,8 @@ public ResponseEntity<?> getReviewsByQuizId(@PathVariable Long quizId) {
             "\r\n" + //
             "HTTP Method: DELETE\r\n" + //
             "Endpoint: api/reviews/{reviewId}\r\n" + //
-            "Path Parameters: {reviewId} is the unique identifier of the reviews.")
-    @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.DELETE)
+            "Path Parameters: {quizId} and {reviewId} is the unique identifier of the reviews.")
+    @RequestMapping(value = "/quizzes/{quizId}/reviews/{reviewId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
         if (!quizReviewRepository.existsById(reviewId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

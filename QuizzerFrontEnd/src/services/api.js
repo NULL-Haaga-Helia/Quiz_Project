@@ -133,7 +133,7 @@ export function getAllQuizReviews(quizId) {
 
   //handles deleting reviews
   export function deleteReview(quizId, reviewId) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}`, {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/reviews/${reviewId}`, {
 	  method: 'DELETE',
 	  headers: {
 		'Content-Type': 'application/json',
