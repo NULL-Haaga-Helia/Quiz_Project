@@ -173,21 +173,36 @@ export function getAllQuizReviews(quizId) {
 		  .catch((err) => console.error("Error editing review:", err));
 	  }
 	  
-	  // Handles adding a new review
-export function addReview(quizId, newReviewData) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/add`, {
-	  method: 'POST', 
-	  headers: {
-		'Content-Type': 'application/json',
-	  },
-	  body: JSON.stringify(newReviewData),  
-	})
-	.then((response) => {
-	  if (!response.ok) {
-		throw new Error("Something went wrong: " + response.statusText);
-	  }
-	  return response.json();  
-	})
-	.catch((err) => console.error("Error adding review:", err));  
-  }
-  
+	  // Handles adding a new review  
+  export const addReview = async (quizId, newReviewData) => {
+	try {
+		const quizReviewDTO = {
+			newReviewData: newReviewData,
+		};
+
+		const response = await fetch(
+			`${
+				import.meta.env.VITE_BACKEND_URL
+			}/api/${quizId}/reviews/add`,
+			{
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(quizReviewDTO),
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error(`Something went wrong: ${response.statusText}`);
+		}
+
+		const responseData = await response.json();
+		return responseData;
+	} catch (error) {
+		console.error("Error submitting review:", error);
+		console.log("data", newReviewData);
+		return "Error submitting review.";
+	}
+};
