@@ -130,3 +130,37 @@ export function getAllQuizReviews(quizId) {
 	  })
 	  .catch((err) => console.error("Error fetching reviews:", err));
   }
+
+  //handles deleting reviews
+  export function deleteReview(quizId, reviewId) {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/delete`, {
+	  method: 'DELETE',
+	})
+	  .then((response) => {
+		if (!response.ok) {
+		  throw new Error("Something went wrong: " + response.statusText);
+		}
+		return response.json();  
+	  })
+	  .catch((err) => console.error("Error deleting review:", err));
+  }
+  
+
+    //handles editing reviews
+	export function editReview(quizId, reviewId, updatedReviewData) {
+		return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/edit`, {
+		  method: 'PUT', 
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify(updatedReviewData),
+		})
+		  .then((response) => {
+			if (!response.ok) {
+			  throw new Error("Something went wrong: " + response.statusText);
+			}
+			return response.json();  
+		  })
+		  .catch((err) => console.error("Error editing review:", err));
+	  }
+	  
