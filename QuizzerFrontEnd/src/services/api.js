@@ -121,7 +121,7 @@ export function getAllCategories() {
 
 //handles getting all reviews
 export function getAllQuizReviews(quizId) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews`)
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/reviews`)
 	  .then((response) => {
 		if (!response.ok) {
 		  throw new Error("Something went wrong: " + response.statusText);

@@ -213,18 +213,18 @@ function QuizQuestions() {
 												)
 											}
 										>
-											{answers
+											{questions
 												.filter(
-													(answer) =>
-														answer.question &&
-														answer.question.questionId === question.questionId
+													(question) =>
+														question.answers &&
+														question.answers.questionId === question.answers[0]
 												)
-												.map((answer) => (
+												.map((question) => (
 													<FormControlLabel
-														key={answer.answerId}
-														value={answer.answerId}
+														key={question.answers.answerId}
+														value={question.answers.answerId}
 														control={<Radio />}
-														label={answer.text}
+														label={question.answers.text}
 													/>
 												))}
 										</RadioGroup>
