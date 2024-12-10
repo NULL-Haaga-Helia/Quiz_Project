@@ -18,9 +18,11 @@ function QuizReviewList() {
   const [addReviewModalOpen, setAddReviewModalOpen] = useState(false);
   const [currentReview, setCurrentReview] = useState(null); 
   const [updatedRating, setUpdatedRating] = useState("");
-  const [updatedReview, setUpdatedReview] = useState(""); // Review comment for editing
-  const [newRating, setNewRating] = useState(""); // For new review
-  const [newReview, setNewReview] = useState(""); // For new review
+  const [updatedReview, setUpdatedReview] = useState(""); 
+  const [newRating, setNewRating] = useState("");
+  const [newReview, setNewReview] = useState(""); 
+  const [newNickname, setNewNickname] = useState(""); 
+
   
   const location = useLocation();
   const { quizId } = location.state;
@@ -98,6 +100,7 @@ function QuizReviewList() {
 
   const handleSaveNewReview = () => {
     const newReviewData = {
+      nickname: newNickname,
       rating: newRating,
       review: newReview,
     };
@@ -189,10 +192,26 @@ function QuizReviewList() {
           </Typography>
           <TextField
             fullWidth
+            label="Nickname"
+            value={newNickname}  
+            onChange={(e) => setNewNickname(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            fullWidth
             label="Rating"
             type="number"
             value={newRating}
             onChange={(e) => setNewRating(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Review"
+            multiline
+            rows={4}
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
           <Button variant="contained" color="primary" onClick={handleSaveNewReview}>
@@ -206,6 +225,7 @@ function QuizReviewList() {
           <Typography variant="h6" gutterBottom>
             Edit Review
           </Typography>
+     
           <TextField
             fullWidth
             label="Rating"
