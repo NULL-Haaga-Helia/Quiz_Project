@@ -6,8 +6,6 @@ Quizzer is a web application designed to help teachers (at Haaga Helia) create a
 The project includes two main web-based dashboards: a teacher dashboard for quiz creation and management, and a student dashboard for quiz-taking and reviews.
 The application is accessible through any browser and provides an interactive learning experience for students.
 
-<<<<<<< HEAD
-=======
 ## Project Architecture
 
 The project architecture consists of three key components:
@@ -40,7 +38,6 @@ flowchart TD
     B -- JSON Data --> A
 ```
 
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 ## Data model
 
 The data model is designed to support the management of quizzes, their associated categories, questions, answer options and user interactions. The primary entities, their attributes, and relationships are as follows:
@@ -64,10 +61,7 @@ The data model is designed to support the management of quizzes, their associate
   - `name` (string)
   - `isPublished` (string)
   - `addedOn` (string)
-<<<<<<< HEAD
-=======
   - `categoryId` (int, foreign key)
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents a collection of questions that belong to a specific category.
 
 ---
@@ -78,10 +72,7 @@ The data model is designed to support the management of quizzes, their associate
   - `questionId` (int, primary key)
   - `questionText` (string)
   - `difficulty` (string)
-<<<<<<< HEAD
-=======
   - `quizId` (int, foreign key)
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents an individual question in a quiz.
 
 ---
@@ -92,10 +83,7 @@ The data model is designed to support the management of quizzes, their associate
   - `answerId` (int, primary key)
   - `isCorrect` (boolean)
   - `text` (string)
-<<<<<<< HEAD
-=======
   - `questionId` (int, foreign key)
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Represents the possible answer options for a question and indicates whether an answer is correct or incorrect.
 
 ---
@@ -103,13 +91,22 @@ The data model is designed to support the management of quizzes, their associate
 #### userAnswer
 
 - **Attributes:**
-<<<<<<< HEAD
-  - `userId` (int)
-=======
   - `userAnswerId` (int, primary key)
   - `answerId` (int, foreign key)
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 - **Purpose:** Tracks the user's selected answer options for questions in a quiz.
+
+---
+
+#### Reviews
+
+- **Attributes:**
+  - `reviewId` (int, primary key)
+  - `nickname` (string)
+  - `rating` (int)
+  - `review` (string)
+  - `writtenOn` (string)
+  - `quizId` (int, foreign key)
+- **Purpose:** Represents user-submitted reviews for quizzes. Each review is linked to a specific quiz.
 
 ---
 
@@ -127,41 +124,38 @@ int id PK
 string name
 string isPublished
 string addedOn
-<<<<<<< HEAD
-=======
 int categoryId FK
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 }
 Question {
 int questionId PK
 string questionText
 string difficulty
-<<<<<<< HEAD
-=======
 int quizId FK
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
 }
 Answer {
 int answerId PK
 boolean isCorrect
 string text
-<<<<<<< HEAD
-}
-userAnswer {
-int userId
-=======
 int questionId FK
 }
 userAnswer {
 int userAnswerId PK
 int answerId FK
->>>>>>> b6df30cce6e77f74fdf4b0472b0578edb912451e
+}
+Reviews {
+int reviewId PK
+string nickname
+int rating
+string review
+string writtenOn
+int quizId FK
 }
 
-    Category ||--|{ Quiz : "has"
-    Quiz ||--|{ Question : "contains"
-    Question ||--|{ Answer : "has"
-    Answer ||--|{ userAnswer : "selected by"
+Category ||--|{ Quiz : "has"
+Quiz ||--|{ Question : "contains"
+Question ||--|{ Answer : "has"
+Answer ||--|{ userAnswer : "selected by"
+Quiz ||--|{ Reviews : "has"
 ```
 
 ## Developer guide
@@ -194,6 +188,10 @@ int answerId FK
 - Programming Language: Java
 - Frameworks: Spring Boot, MVC (Model-View-Controller)
 - Major Libraries: Thymeleaf, Maven, Bootstrap, H2
+
+3. Running tests
+- Using a Command-line interface (CLI), navigate to the project's QuizzerBackEnd folder
+- Run the following command `./mvnw test`
 
 ### Database
 
