@@ -297,7 +297,7 @@ public class QuizController {
     }
 
 
-/*
+
     //Add Review
     @RequestMapping(value = "/addreview")
     public String addQuizReview(Model model) {
@@ -305,7 +305,7 @@ public class QuizController {
         return "addreview";
     }
 
-    // Delete a quiz category
+    // Delete a quiz review
     @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.GET)
     public String deleteQuizReview(@PathVariable("id") Long id, Model model) {
         quizReviewRepository.deleteById(id);
@@ -319,5 +319,5 @@ public class QuizController {
         return "editreview";
        }
 
- */
+ 
 }
