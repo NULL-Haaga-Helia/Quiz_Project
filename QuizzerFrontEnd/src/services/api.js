@@ -133,21 +133,30 @@ export function getAllQuizReviews(quizId) {
 
   //handles deleting reviews
   export function deleteReview(quizId, reviewId) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/delete`, {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}`, {
 	  method: 'DELETE',
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
 	})
 	  .then((response) => {
 		if (!response.ok) {
-		  throw new Error("Something went wrong: " + response.statusText);
+		  throw new Error(`Failed to delete review: ${response.status} ${response.statusText}`);
 		}
-		return response.json();  
+		return response.ok;
 	  })
-	  .catch((err) => console.error("Error deleting review:", err));
+	  .catch((err) => {
+		console.error("Error deleting review:", err);
+		throw err; 
+	  });
   }
+  
   
 
     //handles editing reviews
 	export function editReview(quizId, reviewId, updatedReviewData) {
+		console.log('quizId:', quizId, 'reviewId:', reviewId, 'updatedReviewData:', updatedReviewData);
+
 		return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/edit`, {
 		  method: 'PUT', 
 		  headers: {

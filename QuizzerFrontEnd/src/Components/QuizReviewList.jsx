@@ -15,8 +15,7 @@ function QuizReviewList() {
   const [quiz, setQuiz] = useState(null);
   const [reviewsList, setReviewsList] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [currentReview, setCurrentReview] = useState(null); // For editing
-  const [updatedComment, setUpdatedComment] = useState("");
+  const [currentReview, setCurrentReview] = useState(null); 
   const [updatedRating, setUpdatedRating] = useState("");
 
   const location = useLocation();
@@ -61,7 +60,6 @@ function QuizReviewList() {
 
   const handleReviewEdit = (review) => {
     setCurrentReview(review);
-    setUpdatedComment(review.comment);
     setUpdatedRating(review.rating);
     setEditModalOpen(true);
   };
@@ -69,7 +67,6 @@ function QuizReviewList() {
   const handleSaveEdit = () => {
     const updatedData = {
       rating: updatedRating,
-      comment: updatedComment,
     };
 
     editReview(quizId, currentReview.id, updatedData)
@@ -97,7 +94,7 @@ function QuizReviewList() {
           color: "#1976d2",
           fontWeight: "bold",
         }}
-        onClick={() => navigate("/submitreview", { state: { quizId: quiz.id } })}
+        onClick={() => navigate("/editreview", { state: { reviewId: reviews.Id} })}
         align="left"
       >
         Write your own review
@@ -125,7 +122,7 @@ function QuizReviewList() {
             <TableBody>
               {reviewsList.map((review) => (
                 <TableRow
-                  key={review.id}
+                  key={review.Id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
@@ -141,14 +138,14 @@ function QuizReviewList() {
                         color: "#1976d2",
                         marginRight: 8,
                       }}
-                      onClick={() => handleReviewDelete(review.id)}
+                      onClick={() => handleReviewDelete(review.reviewId)}
                     >
                       Delete
                     </Typography>
                     <Typography
                       component="span"
                       style={{ cursor: "pointer", color: "#1976d2" }}
-                      onClick={() => handleReviewEdit(review)}
+                      onClick={() => handleReviewEdit(review.reviewId)}
                     >
                       Edit
                     </Typography>
@@ -175,15 +172,6 @@ function QuizReviewList() {
             type="number"
             value={updatedRating}
             onChange={(e) => setUpdatedRating(e.target.value)}
-            sx={{ marginBottom: 2 }}
-          />
-          <TextField
-            fullWidth
-            label="Comment"
-            multiline
-            rows={4}
-            value={updatedComment}
-            onChange={(e) => setUpdatedComment(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
           <Button variant="contained" color="primary" onClick={handleSaveEdit}>
