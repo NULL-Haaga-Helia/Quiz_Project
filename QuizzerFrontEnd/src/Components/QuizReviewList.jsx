@@ -56,7 +56,7 @@ function QuizReviewList() {
         gutterBottom
         sx={{ textAlign: "left", marginBottom: 2 }}
       >
-        Results of {quiz?.name || "Quiz"}
+        Reviews of {quiz?.name || "Quiz"}
       </Typography>
 
       {/* Button to navigate to review submission */}
