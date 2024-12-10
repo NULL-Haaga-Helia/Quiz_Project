@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getQuizById, getAllQuizReviews, deleteReview, editReview, addReview } from "../services/api"; 
+import { getQuizById, getAllQuizReviews, deleteReview, editReview, addReview } from "../services/api";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,12 +16,12 @@ function QuizReviewList() {
   const [reviewsList, setReviewsList] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addReviewModalOpen, setAddReviewModalOpen] = useState(false);
-  const [currentReview, setCurrentReview] = useState(null); 
+  const [currentReview, setCurrentReview] = useState(null);
   const [updatedRating, setUpdatedRating] = useState("");
   const [updatedReview, setUpdatedReview] = useState(""); // Review comment for editing
   const [newRating, setNewRating] = useState(""); // For new review
   const [newReview, setNewReview] = useState(""); // For new review
-  
+
   const location = useLocation();
   const { quizId } = location.state;
   const navigate = useNavigate();
@@ -51,8 +51,8 @@ function QuizReviewList() {
       .catch((err) => console.error("Error fetching reviews:", err));
   };
 
-  
-  const handleReviewDelete = (reviewId) => {
+  /*
+  const handleReviewDelete = (quizId, reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       fetch(`/api/deletereview/${reviewId}`, {
         method: "DELETE",
@@ -66,7 +66,21 @@ function QuizReviewList() {
         .catch((err) => console.error("Error deleting review:", err));
     }
   };
-  
+  */
+  const handleReviewDelete = (quizId, reviewId) => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      deleteReview(quizId, reviewId)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error deleting review");
+          }
+          setReviewsList((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+        })
+        .catch((err) => console.error("Error deleting review:", err));
+    }
+  };
+
+
   const handleReviewEdit = (review) => {
     setCurrentReview(review);
     setUpdatedRating(review.rating);
