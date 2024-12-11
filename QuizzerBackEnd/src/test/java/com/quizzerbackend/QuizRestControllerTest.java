@@ -116,5 +116,29 @@ public class QuizRestControllerTest {
                 .andExpect(jsonPath("$[1].quizCategory.name").value("Category 1"));
 }
 
+        //Returns the quiz details when a quiz with the specified id exists
+        @Test
+        public void getQuizByIdReturnsQuizWhenExists() throws Exception {
+            // Arrange
+            QuizCategory category = new QuizCategory("Category 1", "Description of Category 1");
+            quizCategoryRepository.save(category);
+
+            Quiz quiz = new Quiz("Quiz 1", "Description 1", "01.12.2024", true, category);
+            quizRepository.save(quiz);
+
+            // Act & Assert
+            this.mockMvc.perform(get("/api/quizzes/{quizId}", quiz.getId()))
+                    .andExpect(status().isOk()) 
+                    .andExpect(jsonPath("$.name").value("Quiz 1"))
+                    .andExpect(jsonPath("$.description").value("Description 1"));
+        }
+
+        //Returns not found status when a quiz with the specified id does not exist
+        @Test
+        public void getQuizByIdReturnsNotFoundWhenQuizDoesNotExist() throws Exception {
+            // Act & Assert
+            this.mockMvc.perform(get("/api/quizzes/{quizId}", 9999)) 
+                    .andExpect(status().isNotFound()); 
+        }
 
 }
