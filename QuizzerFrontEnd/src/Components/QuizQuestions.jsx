@@ -214,20 +214,18 @@ function QuizQuestions() {
 											}
 										>
 											{questions
-												.filter(
-													(question) =>
-														question.answers &&
-														question.answers.questionId === question.answers[0]
-												)
 												.map((question) => (
-													<FormControlLabel
-														key={question.answers.answerId}
-														value={question.answers.answerId}
-														control={<Radio />}
-														label={question.answers.text}
-													/>
-												))}
+													question.answers
+														.map((answer) => (
+															<FormControlLabel
+																key={answer.answerId}
+																value={answer.id}
+																control={<Radio />}
+																label={answer.text}
+															/>
+														))))}
 										</RadioGroup>
+
 
 										<Button
 											onClick={() => handleSubmit(question.questionId)}
