@@ -149,6 +149,16 @@ public class QuizRestController {
                     .body("Quiz is not published");
         }
 
+        if (AnswerDTO.getAnswerId() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Answer option is required");
+        }
+
+        if (answerRepository.findById(answerId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Answer with the provided id does not exist");
+        }
+
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new IllegalArgumentException("Answer with the provided id does not exist"));
 
