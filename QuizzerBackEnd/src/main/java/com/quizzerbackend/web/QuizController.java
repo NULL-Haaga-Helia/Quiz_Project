@@ -14,13 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.quizzerbackend.domain.Answer;
-import com.quizzerbackend.domain.AnswerDTO;
 import com.quizzerbackend.domain.AnswerRepository;
 import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;

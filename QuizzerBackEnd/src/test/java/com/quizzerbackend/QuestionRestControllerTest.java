@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,7 +12,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.List;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.quizzerbackend.domain.QuizRepository;
 import com.quizzerbackend.domain.QuizReviewRepository;
@@ -140,14 +138,6 @@ public void getQuestionsByQuizIdReturnsErrorWhenQuizDoesNotExist() throws Except
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.message").value("Quiz with the provided id does not exist"));
 }
-
-
-//QUIZ BY ID
-
-// Return a quiz by id 
-
-
-
 
 //REVIEWS 
 
