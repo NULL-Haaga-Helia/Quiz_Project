@@ -71,6 +71,7 @@ function QuizReviewList() {
   */
   const handleReviewDelete = (quizId, reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
+      console.log("quizId:", quizId, "reviewId:", reviewId);
       deleteReview(quizId, reviewId)
         .then((response) => {
           if (!response.ok) {
@@ -81,6 +82,8 @@ function QuizReviewList() {
         .catch((err) => console.error("Error deleting review:", err));
     }
   };
+
+  
 
 
   const handleReviewEdit = (review) => {
@@ -159,7 +162,9 @@ function QuizReviewList() {
                 <TableCell sx={{ fontWeight: "bold" }} align="left">Nickname</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }} align="left">Rating</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }} align="left">Review</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Actions</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">Edit</TableCell>            
+                <TableCell sx={{ fontWeight: "bold" }} align="left">Delete</TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -176,21 +181,23 @@ function QuizReviewList() {
                   <TableCell align="left">
                     <Typography
                       component="span"
+                      style={{ cursor: "pointer", color: "#1976d2" }}
+                      onClick={() => handleReviewEdit(review)}
+                    >
+                      Edit
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                  <Typography
+                      component="span"
                       style={{
                         cursor: "pointer",
                         color: "#1976d2",
                         marginRight: 8,
                       }}
-                      onClick={() => handleReviewDelete(review.id)}
+                      onClick={() => handleReviewDelete(quiz.quizId, review.reviewId)}
                     >
                       Delete
-                    </Typography>
-                    <Typography
-                      component="span"
-                      style={{ cursor: "pointer", color: "#1976d2" }}
-                      onClick={() => handleReviewEdit(review)}
-                    >
-                      Edit
                     </Typography>
                   </TableCell>
                 </TableRow>
