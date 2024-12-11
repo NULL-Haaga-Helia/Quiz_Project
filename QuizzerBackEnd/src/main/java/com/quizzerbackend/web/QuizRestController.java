@@ -88,9 +88,11 @@ public class QuizRestController {
     @RequestMapping(value = "/quizzes/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuizById(@PathVariable Long id) {
         Quiz quiz = quizRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Quiz with the provided id does not exist"));
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND, "Quiz with the provided id does not exist"));
         return ResponseEntity.ok(quiz);
     }
+
 
     // Exercise 12 - Endpoint for getting the questions by quiz id
     @Operation(summary = "Get questions by quiz id", description = "Returns the list of questions for the quiz with the provided id")
