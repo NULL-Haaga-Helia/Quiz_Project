@@ -62,6 +62,7 @@ function QuizQuestions() {
 			.catch((err) => console.error("Failed to fetch answers:", err));
 	};
 
+	//Submitting Answers
 	const handleSubmit = async (questionId) => {
 		const selectedAnswerId = selectedAnswers[questionId];
 		if (!selectedAnswerId) {
@@ -70,51 +71,65 @@ function QuizQuestions() {
 		}
 
 		try {
-			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
-			const input = selectedAnswerId - 1;
-			if (answers[input].isCorrect) {
+
+			const question = questions.find((q) => q.questionId === questionId);
+
+			if (!question) {
+				console.error(`Question with ID ${questionId} not found.`);
 				setSnackbar({
 					open: true,
-					message: response.message || "Correct",
+					message: "Question not found.",
 				});
-			} else {
-				setSnackbar({
-					open: true,
-					message: "Incorrect",
-				});
+				return;
 			}
+
+
+			const correctAnswer = question.answers.find((answer) => answer.isCorrect);
+
+			if (!correctAnswer) {
+				console.error(`Correct answer not found for question ID ${questionId}.`);
+				setSnackbar({
+					open: true,
+					message: "Correct answer data missing.",
+				});
+				return;
+			}
+
+
+			const isCorrect = selectedAnswerId === correctAnswer.answerId;
+
+
+			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
+
+
+			setSnackbar({
+				open: true,
+				message: isCorrect ? response.message || "Correct" : "Incorrect",
+			});
+
 
 			setSubmittedQuestions((prev) => ({
 				...prev,
 				[questionId]: true,
 			}));
-
 		} catch (error) {
 			console.error("Error submitting answer:", error);
 			setSnackbar({
 				open: true,
-				message: "Error submitting answer",
+				message: "Error submitting answer.",
 			});
 		}
 	};
 
-	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
-	//OLD VERSION:
-	/*
-	{answers
-		.filter(
-			(answer) => answer.question.questionId === question.questionId
-			)
-			.map((answer) => (
-				<FormControlLabel
-						key={answer.answerId}
-						value={answer.answerId}
-						control={<Radio />}
-						label={answer.text}
-				/>
-	))}
-	*/
+	const handleAnswerChange = (questionId, answerId) => {
+		setSelectedAnswers((prev) => ({
+			...prev,
+			[questionId]: answerId,
+		}));
+	};
+
+	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
 	//Rendering:
 	if (!quizId) {
@@ -223,13 +238,14 @@ function QuizQuestions() {
 
 										<Button
 											onClick={() => handleSubmit(question.questionId)}
+											disabled={submittedQuestions[question.questionId]}
 											style={{
 												paddingTop: "10px",
 												border: "none",
-												background: "white",
-												color: "blue",
+												background: submittedQuestions[question.questionId] ? "gray" : "white",
+												color: submittedQuestions[question.questionId] ? "darkgray" : "blue",
 												fontSize: "13px",
-												cursor: "pointer",
+												cursor: submittedQuestions[question.questionId] ? "not-allowed" : "pointer",
 											}}
 										>
 											SUBMIT YOUR ANSWER

@@ -51,12 +51,11 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 	try {
 		const answerDTO = {
 			answerId: answerId,
-			//questionId: questionId,
+
 		};
 
 		const response = await fetch(
-			`${
-				import.meta.env.VITE_BACKEND_URL
+			`${import.meta.env.VITE_BACKEND_URL
 			}/api/quizzes/${quizId}/questions/${questionId}/answers/${answerId}/userAnswers`,
 			{
 				method: "POST",
@@ -79,6 +78,18 @@ export const submitAnswer = async (quizId, questionId, answerId) => {
 		return "Error submitting answer.";
 	}
 };
+
+//Fetching user answers for results page
+export function getUserResults(quizId) {
+	return fetch(
+		`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/userAnswers`)
+		.then((response) => {
+			if (!response.ok)
+				throw new Error("Something went wrong: " + response.statusText);
+			return response.json();
+		})
+		.catch((err) => console.error("Error fetching user answers:", err));
+}
 
 //Handling getting quizzes by category
 export function getQuizzesByCategory(categoryId) {
@@ -122,67 +133,66 @@ export function getAllCategories() {
 //handles getting all reviews
 export function getAllQuizReviews(quizId) {
 	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/reviews`)
-	  .then((response) => {
-		if (!response.ok) {
-		  throw new Error("Something went wrong: " + response.statusText);
-		}
-		return response.json();  
-	  })
-	  .catch((err) => console.error("Error fetching reviews:", err));
-  }
-
-  //handles deleting reviews
-  export function deleteReview(quizId, reviewId) {
-	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/reviews/${reviewId}`, {
-	  method: 'DELETE',
-	  headers: {
-		'Content-Type': 'application/json',
-	  },
-	})
-	  .then((response) => {
-		if (!response.ok) {
-		  throw new Error(`Failed to delete review: ${response.status} ${response.statusText}`);
-		}
-		return response.ok;
-	  })
-	  .catch((err) => {
-		console.error("Error deleting review:", err);
-		throw err; 
-	  });
-  }
-  
-  
-
-    //handles editing reviews
-	export function editReview(quizId, reviewId, updatedReviewData) {
-		console.log('quizId:', quizId, 'reviewId:', reviewId, 'updatedReviewData:', updatedReviewData);
-
-		return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/edit`, {
-		  method: 'PUT', 
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		  body: JSON.stringify(updatedReviewData),
-		})
-		  .then((response) => {
+		.then((response) => {
 			if (!response.ok) {
-			  throw new Error("Something went wrong: " + response.statusText);
+				throw new Error("Something went wrong: " + response.statusText);
 			}
-			return response.json();  
-		  })
-		  .catch((err) => console.error("Error editing review:", err));
-	  }
-	  
-	  // Handles adding a new review  
-  export const addReview = async (quizId, newReviewData) => {
+			return response.json();
+		})
+		.catch((err) => console.error("Error fetching reviews:", err));
+}
+
+//handles deleting reviews
+export function deleteReview(quizId, reviewId) {
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/quizzes/${quizId}/reviews/${reviewId}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error(`Failed to delete review: ${response.status} ${response.statusText}`);
+			}
+			return response.ok;
+		})
+		.catch((err) => {
+			console.error("Error deleting review:", err);
+			throw err;
+		});
+}
+
+
+
+//handles editing reviews
+export function editReview(quizId, reviewId, updatedReviewData) {
+	console.log('quizId:', quizId, 'reviewId:', reviewId, 'updatedReviewData:', updatedReviewData);
+
+	return fetch(`${import.meta.env.VITE_BACKEND_URL}/api/${quizId}/reviews/${reviewId}/edit`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(updatedReviewData),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Something went wrong: " + response.statusText);
+			}
+			return response.json();
+		})
+		.catch((err) => console.error("Error editing review:", err));
+}
+
+// Handles adding a new review  
+export const addReview = async (quizId, newReviewData) => {
 	try {
 		const quizReviewDTO = {
 			newReviewData: newReviewData,
 		};
 
 		const response = await fetch(
-			`${
-				import.meta.env.VITE_BACKEND_URL
+			`${import.meta.env.VITE_BACKEND_URL
 			}/api/${quizId}/reviews/add`,
 			{
 				method: "POST",

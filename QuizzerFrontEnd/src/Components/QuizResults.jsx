@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllQuizzes, getQuizById, getQuizQuestions } from "../services/api";
+import { getAllQuizzes, getQuizById, getQuizQuestions, getUserResults } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
@@ -17,14 +17,16 @@ function QuizResults() {
 	const location = useLocation();
 	const { quizId } = location.state;
 	const [questions, setQuestions] = useState([]);
+	const [results, setResults] = useState([]);
 	const [totalAnswers, setTotalAnswers] = useState();
-	const [ correctAnswers, setCorrectAnswers ] = useState();
-	const [ wrongAnswers, setWrongAnswers ] = useState();
+	const [correctAnswers, setCorrectAnswers] = useState();
+	const [wrongAnswers, setWrongAnswers] = useState();
 
 	useEffect(() => {
 		if (quizId) {
 			fetchQuiz();
 			fetchQuizQuestions();
+			fetchUserAnswers();
 		}
 	}, [quizId]);
 
@@ -40,6 +42,13 @@ function QuizResults() {
 		getQuizQuestions(quizId)
 			.then((responseData) => setQuestions(responseData))
 			.catch((err) => console.error("Failed to fetch questions:", err));
+	};
+
+	const fetchUserAnswers = () => {
+		getUserResults(quizId)
+			.then((responseData) => setResults(responseData))
+			.catch((err) => console.error("Failed to fetch user answers:", err));
+			console.log("results:", results)
 	};
 
 	return (
