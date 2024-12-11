@@ -207,26 +207,17 @@ function QuizQuestions() {
 										<RadioGroup
 											value={selectedAnswers[question.questionId] || ""}
 											onChange={(e) =>
-												handleAnswerChange(
-													question.questionId,
-													parseInt(e.target.value)
-												)
+												handleAnswerChange(question.questionId, parseInt(e.target.value))
 											}
 										>
-											{questions
-												.filter(
-													(question) =>
-														question.answers &&
-														question.answers.questionId === question.answers[0]
-												)
-												.map((question) => (
-													<FormControlLabel
-														key={question.answers.answerId}
-														value={question.answers.answerId}
-														control={<Radio />}
-														label={question.answers.text}
-													/>
-												))}
+											{question.answers.map((answer) => (
+												<FormControlLabel
+													key={answer.answerId}
+													value={answer.answerId}
+													control={<Radio />}
+													label={answer.text}
+												/>
+											))}
 										</RadioGroup>
 
 										<Button
