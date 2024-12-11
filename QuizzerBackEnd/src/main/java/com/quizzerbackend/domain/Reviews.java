@@ -32,7 +32,7 @@ public class Reviews {
     private String writtenOn;
 
 
-
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "quizId")
     private Quiz quiz;
@@ -58,6 +58,10 @@ public class Reviews {
     public Long getReviewId() {
         return reviewId;
     }
+    
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
+    }
 
     public String getWrittenOn() {
         return writtenOn;
@@ -67,9 +71,6 @@ public class Reviews {
         this.writtenOn = writtenOn;
     }
 
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
-    }
 
     public String getNickname() {
         return nickname;

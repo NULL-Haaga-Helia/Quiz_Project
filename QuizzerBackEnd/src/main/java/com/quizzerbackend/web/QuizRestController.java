@@ -88,11 +88,10 @@ public class QuizRestController {
     @RequestMapping(value = "/quizzes/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuizById(@PathVariable Long id) {
         Quiz quiz = quizRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(
-            HttpStatus.NOT_FOUND, "Quiz with the provided id does not exist"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Quiz with the provided id does not exist"));
         return ResponseEntity.ok(quiz);
     }
-
 
     // Exercise 12 - Endpoint for getting the questions by quiz id
     @Operation(summary = "Get questions by quiz id", description = "Returns the list of questions for the quiz with the provided id")
@@ -282,22 +281,25 @@ public class QuizRestController {
         return ResponseEntity.ok(reviews);
     }
 
-  // REST API endpoint for getting the quiz reviews by quiz id
-@Operation(summary = "Get the reviews for a quiz", description = "Returns the list of reviews for the quiz with the provided id")
-@PostMapping("/quizzes/{quizId}/reviews")
-public ResponseEntity<?> getReviewsByQuizId(@PathVariable Long quizId) {
-    if (!quizRepository.existsById(quizId)) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("Quiz with the provided id does not exist");
+    // REST API endpoint for creating the quiz rating
+    @Operation(summary = "Create a new rating for a quiz", description = "Request:\r\n" + //
+            "\r\n" + //
+            "HTTP Method: POST\r\n" + //
+            "Endpoint: api/quizzes/{quizId}/ratings\r\n" + //
+            "Request Headers:\r\n" + //
+            "'Content-Type' : 'application/json'\r\n" + //
+            "Request body: JSON object containing the rating details")
+    @PostMapping("/quizzes/{quizId}/reviews")
+    public ResponseEntity<?> createReview(@PathVariable Long quizId, @Valid @RequestBody QuizReviewDTO reviewDTO) {
+        if (!quizRepository.existsById(quizId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Quiz with the provided id does not exist");
+        }
+        Reviews newReview = new Reviews(quizRepository.findById(quizId).get(), reviewDTO.getNickname(),
+        reviewDTO.getRating(), reviewDTO.getReview(), reviewDTO.getWrittenOn());
+        quizReviewRepository.save(newReview);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newReview);
     }
-    List<Reviews> reviews = quizReviewRepository.findByQuizId(quizId);
-    if (reviews.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("No reviews found for the provided quiz id");
-    }
-    return ResponseEntity.ok(reviews);
-}
-
 
     // REST API endpoint for editing the quiz rating by rating id
     @Operation(summary = "Edit the reviews for a quiz", description = "Request:\r\n" + //
@@ -315,7 +317,6 @@ public ResponseEntity<?> getReviewsByQuizId(@PathVariable Long quizId) {
                     .body("Rating with the provided id does not exist");
         }
         Reviews updatedReviews = quizReviewRepository.findById(reviewId).get();
-        updatedReviews.setNickname(reviews.getNickname());
         updatedReviews.setRating(reviews.getRating());
         updatedReviews.setReview(reviews.getReview());
         updatedReviews.setWrittenOn(reviews.getWrittenOn());
@@ -329,7 +330,7 @@ public ResponseEntity<?> getReviewsByQuizId(@PathVariable Long quizId) {
             "HTTP Method: DELETE\r\n" + //
             "Endpoint: api/reviews/{reviewId}\r\n" + //
             "Path Parameters: {quizId} and {reviewId} is the unique identifier of the reviews.")
-    @RequestMapping(value = "/quizzes/{quizId}/reviews/{reviewId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
         if (!quizReviewRepository.existsById(reviewId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

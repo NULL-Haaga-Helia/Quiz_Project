@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getQuizById, getAllQuizReviews, deleteReview, editReview, addReview } from "../services/api";
+import {
+  getQuizById,
+  getAllQuizReviews,
+  deleteReview,
+  editReview,
+  addReview,
+} from "../services/api";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,14 +22,19 @@ function QuizReviewList() {
   const [reviewsList, setReviewsList] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addReviewModalOpen, setAddReviewModalOpen] = useState(false);
-  const [currentReview, setCurrentReview] = useState(null);
-  const [updatedRating, setUpdatedRating] = useState("");
-  const [updatedReview, setUpdatedReview] = useState(""); 
-  const [newRating, setNewRating] = useState("");
-  const [newReview, setNewReview] = useState(""); 
-  const [newNickname, setNewNickname] = useState(""); 
 
-  
+  const [currentReview, setCurrentReview] = useState(null);
+
+  const [updatedNickname, setUpdatedNickname] = useState("");
+  const [updatedRating, setUpdatedRating] = useState("");
+  const [updatedReview, setUpdatedReview] = useState("");
+  const [updatedWrittenOn, setUpdatedWrittenOn] = useState("");
+
+  const [newRating, setNewRating] = useState("");
+  const [newReview, setNewReview] = useState("");
+  const [newNickname, setNewNickname] = useState("");
+  const [newWrittenOn, setNewWrittenOn] = useState("");
+
   const location = useLocation();
   const { quizId } = location.state;
   const navigate = useNavigate();
@@ -53,61 +64,39 @@ function QuizReviewList() {
       .catch((err) => console.error("Error fetching reviews:", err));
   };
 
-  /*
-  const handleReviewDelete = (quizId, reviewId) => {
+  const handleReviewDelete = (reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
-      fetch(`/api/deletereview/${reviewId}`, {
-        method: "DELETE",
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Error deleting review");
-          }
-          setReviewsList((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+      console.log("reviewId:", reviewId);
+      deleteReview(reviewId)
+        .then(() => {
+          fetchReviews();
         })
         .catch((err) => console.error("Error deleting review:", err));
     }
   };
-  */
-  const handleReviewDelete = (quizId, reviewId) => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
-      console.log("quizId:", quizId, "reviewId:", reviewId);
-      deleteReview(quizId, reviewId)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Error deleting review");
-          }
-          setReviewsList((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
-        })
-        .catch((err) => console.error("Error deleting review:", err));
-    }
-  };
-
-  
-
 
   const handleReviewEdit = (review) => {
     setCurrentReview(review);
+    setUpdatedNickname(review.nickname);
     setUpdatedRating(review.rating);
     setUpdatedReview(review.review);
+    setUpdatedWrittenOn(review.writtenOn);
     setEditModalOpen(true);
   };
 
   const handleSaveEdit = () => {
     const updatedData = {
+      nickname: updatedNickname,
       rating: updatedRating,
-      review: updatedReview
+      review: updatedReview,
+      writtenOn: updatedWrittenOn,
     };
 
-    editReview(quizId, currentReview.id, updatedData)
+    editReview(quizId, currentReview.reviewId, updatedData)
       .then((updatedReview) => {
         console.log("Review edited successfully:", updatedReview);
-        setReviewsList((prev) =>
-          prev.map((review) =>
-            review.id === currentReview.id ? { ...review, ...updatedReview } : review
-          )
-        );
         setEditModalOpen(false);
+        fetchReviews();
       })
       .catch((err) => console.error("Error editing review:", err));
   };
@@ -121,17 +110,17 @@ function QuizReviewList() {
       nickname: newNickname,
       rating: newRating,
       review: newReview,
+      writtenOn: newWrittenOn,
     };
 
     addReview(quizId, newReviewData)
       .then((addedReview) => {
         console.log("Review added successfully:", addedReview);
-        setReviewsList((prev) => [...prev, addedReview]);
         setAddReviewModalOpen(false);
+        fetchReviews();
       })
       .catch((err) => console.error("Error adding review:", err));
   };
-
 
   return (
     <Box sx={{ width: "100%", marginTop: 8 }}>
@@ -160,12 +149,24 @@ function QuizReviewList() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Nickname</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Rating</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Review</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Edit</TableCell>            
-                <TableCell sx={{ fontWeight: "bold" }} align="left">Delete</TableCell>
-
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Nickname
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Rating
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Review
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Written On
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Edit
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="left">
+                  Delete
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -179,6 +180,7 @@ function QuizReviewList() {
                   </TableCell>
                   <TableCell align="left">{review.rating}</TableCell>
                   <TableCell align="left">{review.review}</TableCell>
+                  <TableCell align="left"> {review.writtenOn}</TableCell>
                   <TableCell align="left">
                     <Typography
                       component="span"
@@ -189,14 +191,16 @@ function QuizReviewList() {
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
-                  <Typography
+                    <Typography
                       component="span"
                       style={{
                         cursor: "pointer",
                         color: "#1976d2",
                         marginRight: 8,
                       }}
-                      onClick={() => handleReviewDelete(quiz.quizId, review.reviewId)}
+                      onClick={() =>
+                        handleReviewDelete(review.reviewId)
+                      }
                     >
                       Delete
                     </Typography>
@@ -212,15 +216,26 @@ function QuizReviewList() {
         </Typography>
       )}
 
-      <Modal open={addReviewModalOpen} onClose={() => setAddReviewModalOpen(false)}>
-        <Box sx={{ padding: 4, backgroundColor: "white", margin: "auto", marginTop: 10, width: 400 }}>
+      <Modal
+        open={addReviewModalOpen}
+        onClose={() => setAddReviewModalOpen(false)}
+      >
+        <Box
+          sx={{
+            padding: 4,
+            backgroundColor: "white",
+            margin: "auto",
+            marginTop: 10,
+            width: 400,
+          }}
+        >
           <Typography variant="h6" gutterBottom>
             Write a Review
           </Typography>
           <TextField
             fullWidth
             label="Nickname"
-            value={newNickname}  
+            value={newNickname}
             onChange={(e) => setNewNickname(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
@@ -241,18 +256,37 @@ function QuizReviewList() {
             onChange={(e) => setNewReview(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
-          <Button variant="contained" color="primary" onClick={handleSaveNewReview}>
+          <TextField
+            fullWidth
+            label="Written On"
+            value={newWrittenOn}
+            onChange={(e) => setNewWrittenOn(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveNewReview}
+          >
             Save Review
           </Button>
         </Box>
       </Modal>
 
       <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
-        <Box sx={{ padding: 4, backgroundColor: "white", margin: "auto", marginTop: 10, width: 400 }}>
+        <Box
+          sx={{
+            padding: 4,
+            backgroundColor: "white",
+            margin: "auto",
+            marginTop: 10,
+            width: 400,
+          }}
+        >
           <Typography variant="h6" gutterBottom>
             Edit Review
           </Typography>
-     
+
           <TextField
             fullWidth
             label="Rating"
@@ -270,6 +304,14 @@ function QuizReviewList() {
             onChange={(e) => setUpdatedReview(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
+          <TextField
+            fullWidth
+            label="Written On"
+            value={updatedWrittenOn}
+            onChange={(e) => setUpdatedWrittenOn(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
+
           <Button variant="contained" color="primary" onClick={handleSaveEdit}>
             Save
           </Button>
