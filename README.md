@@ -237,4 +237,3 @@ https://quizproject-qme0.onrender.com/
 
 ## License
 Quizzer is [MIT licensed](./LICENSE).
-https://quiz-project-3ido.onrender.com/
