@@ -16,7 +16,27 @@ The project architecture consists of three key components:
 
 The architecture ensures a clear separation of responsibilities and emphasizes distinct roles of each system component, with the frontend handling user interactions, the backend managing logic and data, and the database storing and retrieving information.
 
-### Architecture Diagram (TBA)
+### Architecture Diagram
+
+```mermaid
+flowchart TD
+    subgraph Frontend
+        A[ReactJS Application]
+    end
+
+    subgraph Backend
+        B[Spring Boot Application]
+    end
+
+    subgraph Database
+        C[H2 / PostgreSQL]
+    end
+
+    A -- REST API Calls --> B
+    B -- Query/Update --> C
+    C -- Response --> B
+    B -- JSON Data --> A
+```
 
 ## Data model
 
@@ -77,6 +97,19 @@ The data model is designed to support the management of quizzes, their associate
 
 ---
 
+#### Reviews
+
+- **Attributes:**
+  - `reviewId` (int, primary key)
+  - `nickname` (string)
+  - `rating` (int)
+  - `review` (string)
+  - `writtenOn` (string)
+  - `quizId` (int, foreign key)
+- **Purpose:** Represents user-submitted reviews for quizzes. Each review is linked to a specific quiz.
+
+---
+
 ### ERD
 
 ```mermaid
@@ -109,11 +142,20 @@ userAnswer {
 int userAnswerId PK
 int answerId FK
 }
+Reviews {
+int reviewId PK
+string nickname
+int rating
+string review
+string writtenOn
+int quizId FK
+}
 
-    Category ||--|{ Quiz : "has"
-    Quiz ||--|{ Question : "contains"
-    Question ||--|{ Answer : "has"
-    Answer ||--|{ userAnswer : "selected by"
+Category ||--|{ Quiz : "has"
+Quiz ||--|{ Question : "contains"
+Question ||--|{ Answer : "has"
+Answer ||--|{ userAnswer : "selected by"
+Quiz ||--|{ Reviews : "has"
 ```
 
 ## Developer guide
@@ -147,6 +189,11 @@ int answerId FK
 - Frameworks: Spring Boot, MVC (Model-View-Controller)
 - Major Libraries: Thymeleaf, Maven, Bootstrap, H2
 
+3. Running tests
+
+- Using a Command-line interface (CLI), navigate to the project's QuizzerBackEnd folder
+- Run the following command `./mvnw test`
+
 ### Database
 
 - Development Environment: H2 Database
@@ -166,7 +213,7 @@ int answerId FK
 
 ## REST API documentation URL
 
-http://localhost:8080/v3/api-docs
+http://localhost:8080/swagger-ui/index.html#/
 
 NOTE: You're required to run the application on your device before you can access the REST API documentation
 
@@ -184,4 +231,4 @@ https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 
 ## Web service URL
 
-https://quiz-project-3ido.onrender.com/
+

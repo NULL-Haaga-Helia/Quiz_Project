@@ -10,6 +10,8 @@ import QuizQuestions from "./Components/QuizQuestions.jsx";
 import QuizResults from "./Components/QuizResults.jsx";
 import Error from "./Components/Error.jsx";
 import QuizCategoryList from "./Components/QuizCategoryList.jsx";
+import QuizReviewList from "./Components/QuizReviewList.jsx"
+
 
 const router = createBrowserRouter([
 	{
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
 			},
 			{ path: "quizquestions", element: <QuizQuestions /> },
 			{ path: "quizresults", element: <QuizResults /> },
+			{ path: "quizreviewlist", element: <QuizReviewList />},
 		],
 	},
 ]);

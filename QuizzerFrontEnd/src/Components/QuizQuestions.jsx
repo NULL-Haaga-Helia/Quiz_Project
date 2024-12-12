@@ -29,6 +29,7 @@ function QuizQuestions() {
 	const { quizId } = location.state;
 	const [answers, setAnswers] = useState([]);
 	const [selectedAnswers, setSelectedAnswers] = useState({});
+	const [submittedQuestions, setSubmittedQuestions] = useState({});
 	const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
 	// Functions:
@@ -48,7 +49,10 @@ function QuizQuestions() {
 
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
-			.then((responseData) => setQuestions(responseData))
+			.then((responseData) => {
+				console.log("Quiz Questions:", responseData);
+				setQuestions(responseData);
+			})
 			.catch((err) => console.error("Failed to fetch questions:", err));
 	};
 
@@ -58,6 +62,7 @@ function QuizQuestions() {
 			.catch((err) => console.error("Failed to fetch answers:", err));
 	};
 
+	//Submitting Answers
 	const handleSubmit = async (questionId) => {
 		const selectedAnswerId = selectedAnswers[questionId];
 		if (!selectedAnswerId) {
@@ -66,17 +71,48 @@ function QuizQuestions() {
 		}
 
 		try {
+			const question = questions.find((q) => q.questionId === questionId);
+
+			if (!question) {
+				console.error(`Question with ID ${questionId} not found.`);
+				setSnackbar({
+					open: true,
+					message: "Question not found.",
+				});
+				return;
+			}
+
+			const correctAnswer = question.answers.find((answer) => answer.isCorrect);
+
+			if (!correctAnswer) {
+				console.error(
+					`Correct answer not found for question ID ${questionId}.`
+				);
+				setSnackbar({
+					open: true,
+					message: "Correct answer data missing.",
+				});
+				return;
+			}
+
+			const isCorrect = selectedAnswerId === correctAnswer.answerId;
+
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
 
 			setSnackbar({
 				open: true,
-				message: response.message || "Answer submitted successfully!",
+				message: isCorrect ? response.message || "Correct" : "Incorrect",
 			});
+
+			setSubmittedQuestions((prev) => ({
+				...prev,
+				[questionId]: true,
+			}));
 		} catch (error) {
 			console.error("Error submitting answer:", error);
 			setSnackbar({
 				open: true,
-				message: "Error submitting answer. Please try again.",
+				message: "Error submitting answer.",
 			});
 		}
 	};
@@ -90,6 +126,7 @@ function QuizQuestions() {
 
 	const handleCloseSnackbar = () => setSnackbar({ open: false, message: "" });
 
+	//Rendering:
 	if (!quizId) {
 		console.warn("Quiz ID is unavailable");
 		return (
@@ -186,30 +223,32 @@ function QuizQuestions() {
 												)
 											}
 										>
-											{answers
-												.filter(
-													(answer) =>
-														answer.question.questionId === question.questionId
-												)
-												.map((answer) => (
-													<FormControlLabel
-														key={answer.answerId}
-														value={answer.answerId}
-														control={<Radio />}
-														label={answer.text}
-													/>
-												))}
+											{question.answers.map((answer) => (
+												<FormControlLabel
+													key={answer.answerId}
+													value={answer.answerId}
+													control={<Radio />}
+													label={answer.text}
+												/>
+											))}
 										</RadioGroup>
 
 										<Button
 											onClick={() => handleSubmit(question.questionId)}
+											disabled={submittedQuestions[question.questionId]}
 											style={{
 												paddingTop: "10px",
 												border: "none",
-												background: "white",
-												color: "blue",
+												background: submittedQuestions[question.questionId]
+													? "gray"
+													: "white",
+												color: submittedQuestions[question.questionId]
+													? "darkgray"
+													: "blue",
 												fontSize: "13px",
-												cursor: "pointer",
+												cursor: submittedQuestions[question.questionId]
+													? "not-allowed"
+													: "pointer",
 											}}
 										>
 											SUBMIT YOUR ANSWER

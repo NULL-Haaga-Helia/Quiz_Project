@@ -41,6 +41,12 @@ function QuizList() {
 		navigate("/quizresults", { state: { quizId } });
 	};
 
+	const handleQuizReviewsClick = (quizId) => {
+		console.log("Navigating to QuizResults with quiz ID:", quizId);
+		navigate("/quizreviewlist", { state: { quizId } });
+	};
+	
+
 	//Rendering:
 	return (
 		<Box sx={{ width: "100%", marginTop: 8 }}>
@@ -96,6 +102,16 @@ function QuizList() {
 									align="left"
 								>
 									See results
+
+								</TableCell>
+								<TableCell
+									component="th"
+									scope="row"
+									style={{ cursor: "pointer", color: "#1976d2" }}
+									onClick={() => handleQuizReviewsClick(quiz.id)}
+									align="left"
+								>
+									See reviews
 								</TableCell>
 							</TableRow>
 						))}

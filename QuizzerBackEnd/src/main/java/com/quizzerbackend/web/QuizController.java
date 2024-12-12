@@ -3,26 +3,29 @@ package com.quizzerbackend.web;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.quizzerbackend.domain.Answer;
-import com.quizzerbackend.domain.AnswerDTO;
 import com.quizzerbackend.domain.AnswerRepository;
 import com.quizzerbackend.domain.Question;
 import com.quizzerbackend.domain.QuestionRepository;
 import com.quizzerbackend.domain.Quiz;
 import com.quizzerbackend.domain.QuizRepository;
+import com.quizzerbackend.domain.QuizReviewRepository;
+import com.quizzerbackend.domain.Reviews;
 import com.quizzerbackend.domain.QuizCategory;
 import com.quizzerbackend.domain.QuizCategoryRepository;
 
@@ -42,6 +45,9 @@ public class QuizController {
 
     @Autowired
     private QuizCategoryRepository quizCategoryRepository;
+
+      @Autowired
+    private QuizReviewRepository quizReviewRepository;
 
     // QUIZ METHODS//
     // List all quizzes
@@ -283,4 +289,47 @@ public class QuizController {
         return "redirect:/quizcategorylist";
     }
 
+    
+    //Review list
+    @GetMapping("/{quizId}/reviews")
+    public ResponseEntity<List<Reviews>> getReviewsByQuizId(@PathVariable("quizId") Long quizId) {
+        List<Reviews> reviews = quizReviewRepository.findByQuizId(quizId);
+        return ResponseEntity.ok(reviews);
+    }
+
+
+
+    //Add Review
+    @RequestMapping(value = "/addreview")
+    public String addQuizReview(Model model) {
+        model.addAttribute("quizReview", new Reviews());
+        return "addreview";
+    }
+
+    // Delete a quiz review
+    @RequestMapping(value = "/deletereview/{id}", method = RequestMethod.DELETE)
+public ResponseEntity<?> deleteQuizReview(@PathVariable("id") Long id) {
+    if (!quizReviewRepository.existsById(id)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found");
+    }
+    quizReviewRepository.deleteById(id);
+    return ResponseEntity.ok().body("Review deleted successfully");
+}
+   
+     // Edit a quiz review
+     @RequestMapping(value = "/editreview/{id}", method = RequestMethod.PUT)
+     public ResponseEntity<?> editQuizReview(@PathVariable("id") Long reviewId, @RequestBody Reviews updatedReview) {
+         Optional<Reviews> existingReview = quizReviewRepository.findById(reviewId);
+         if (!existingReview.isPresent()) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found");
+         }
+     
+         Reviews review = existingReview.get();
+         review.setRating(updatedReview.getRating());
+         review.setReview(updatedReview.getReview());
+         quizReviewRepository.save(review);
+     
+         return ResponseEntity.ok(review); // Return the updated review as JSON
+     }
+ 
 }
