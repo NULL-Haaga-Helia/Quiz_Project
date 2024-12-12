@@ -184,4 +184,4 @@ https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 
 ## Web service URL
 
-https://quiz-project-h7mc.onrender.com/
+https://quiz-project-3ido.onrender.com/
