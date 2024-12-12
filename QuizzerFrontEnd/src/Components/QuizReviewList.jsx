@@ -15,7 +15,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Box, Modal, TextField, Button } from "@mui/material";
+import { Box, Modal, TextField, Button, Link } from "@mui/material";
 
 function QuizReviewList() {
   const [quiz, setQuiz] = useState(null);
@@ -132,103 +132,91 @@ function QuizReviewList() {
         Results of {quiz?.name || "Quiz"}
       </Typography>
 
-      <TableCell
-        sx={{
-          cursor: "pointer",
-          color: "#1976d2",
-          fontWeight: "bold",
-        }}
-        onClick={handleWriteReviewClick}
-        align="left"
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        gutterBottom
+        sx={{ marginBottom: 4 }}
       >
-        Write your own review
-      </TableCell>
+        {reviewsList.length > 0
+          ? `${(
+              reviewsList.reduce((sum, review) => sum + parseFloat(review.rating), 0) /
+              reviewsList.length
+            ).toFixed(1)}/5 rating average based on ${reviewsList.length} reviews`
+          : "No reviews yet"}
+      </Typography>
+
+      <Link
+  onClick={handleWriteReviewClick}
+  sx={{
+    display: "inline-block",
+    fontWeight: "bold",  
+    cursor: "pointer",
+    marginBottom: "20px"
+  }}
+>
+  Write your own review
+</Link>
+
 
       {reviewsList && reviewsList.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Nickname
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Rating
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Review
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Written On
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Edit
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  Delete
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {reviewsList.map((review) => (
-                <TableRow
-                  key={review.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+        <Box>
+          {reviewsList.map((review) => (
+            <Box
+              key={review.id}
+              sx={{
+                border: "1px solid #e0e0e0",
+                padding: 2,
+                marginBottom: 2,
+                borderRadius: 2,
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                {review.nickname}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Rating: {review.rating}/5
+              </Typography>
+              <Typography variant="body1">{review.review}</Typography>
+              <Typography variant="body2" color="textSecondary">
+                Written On: {review.writtenOn}
+              </Typography>
+
+              <Box sx={{ marginTop: 2 }}>
+                <Typography
+                  component="span"
+                  sx={{
+                    cursor: "pointer",
+                    color: "#1976d2",
+                    marginRight: 2,
+                  }}
+                  onClick={() => handleReviewEdit(review)}
                 >
-                  <TableCell component="th" scope="row">
-                    {review.nickname}
-                  </TableCell>
-                  <TableCell align="left">{review.rating}</TableCell>
-                  <TableCell align="left">{review.review}</TableCell>
-                  <TableCell align="left"> {review.writtenOn}</TableCell>
-                  <TableCell align="left">
-                    <Typography
-                      component="span"
-                      style={{ cursor: "pointer", color: "#1976d2" }}
-                      onClick={() => handleReviewEdit(review)}
-                    >
-                      Edit
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography
-                      component="span"
-                      style={{
-                        cursor: "pointer",
-                        color: "#1976d2",
-                        marginRight: 8,
-                      }}
-                      onClick={() =>
-                        handleReviewDelete(review.reviewId)
-                      }
-                    >
-                      Delete
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  Edit
+                </Typography>
+                <Typography
+                  component="span"
+                  sx={{
+                    cursor: "pointer",
+                    color: "#1976d2",
+                  }}
+                  onClick={() => handleReviewDelete(review.reviewId)}
+                >
+                  Delete
+                </Typography>
+              </Box>
+            </Box>
+          ))}
+        </Box>
       ) : (
         <Typography variant="h6" sx={{ textAlign: "center" }}>
           No Reviews found
         </Typography>
       )}
 
-      <Modal
-        open={addReviewModalOpen}
-        onClose={() => setAddReviewModalOpen(false)}
-      >
-        <Box
-          sx={{
-            padding: 4,
-            backgroundColor: "white",
-            margin: "auto",
-            marginTop: 10,
-            width: 400,
-          }}
-        >
+      {/* Add Review Modal */}
+      <Modal open={addReviewModalOpen} onClose={() => setAddReviewModalOpen(false)}>
+        <Box sx={{ padding: 4, backgroundColor: "white", margin: "auto", marginTop: 10, width: 400 }}>
           <Typography variant="h6" gutterBottom>
             Write a Review
           </Typography>
@@ -263,30 +251,25 @@ function QuizReviewList() {
             onChange={(e) => setNewWrittenOn(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSaveNewReview}
-          >
+          <Button variant="contained" color="primary" onClick={handleSaveNewReview}>
             Save Review
           </Button>
         </Box>
       </Modal>
 
+      {/* Edit Review Modal */}
       <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
-        <Box
-          sx={{
-            padding: 4,
-            backgroundColor: "white",
-            margin: "auto",
-            marginTop: 10,
-            width: 400,
-          }}
-        >
+        <Box sx={{ padding: 4, backgroundColor: "white", margin: "auto", marginTop: 10, width: 400 }}>
           <Typography variant="h6" gutterBottom>
             Edit Review
           </Typography>
-
+          <TextField
+            fullWidth
+            label="Nickname"
+            value={updatedNickname}
+            onChange={(e) => setUpdatedNickname(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
           <TextField
             fullWidth
             label="Rating"
@@ -311,9 +294,8 @@ function QuizReviewList() {
             onChange={(e) => setUpdatedWrittenOn(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
-
           <Button variant="contained" color="primary" onClick={handleSaveEdit}>
-            Save
+            Save Changes
           </Button>
         </Box>
       </Modal>
