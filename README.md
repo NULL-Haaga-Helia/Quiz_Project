@@ -231,8 +231,4 @@ https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 
 ## Web service URL
 
-https://quiz-project-h7mc.onrender.com/
 
-## License
-
-Quizzer is [MIT licensed](./LICENSE).
