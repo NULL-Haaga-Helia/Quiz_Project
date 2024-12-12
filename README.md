@@ -229,8 +229,11 @@ NOTE: You're required to run the application on your device before you can acces
 
 https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 
-## Web service URL
+## Web service URL Backend
 https://quiz-project-3ido.onrender.com/
+
+## Web service URL Frontend
+https://quizproject-qme0.onrender.com/
 
 ## License
 Quizzer is [MIT licensed](./LICENSE).
