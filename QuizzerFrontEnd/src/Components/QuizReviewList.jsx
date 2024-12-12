@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   getQuizById,
   getAllQuizReviews,
@@ -7,17 +7,11 @@ import {
   editReview,
   addReview,
 } from "../services/api";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Box, Modal, TextField, Button, Link } from "@mui/material";
 
 function QuizReviewList() {
+  //States:
   const [quiz, setQuiz] = useState(null);
   const [reviewsList, setReviewsList] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -37,8 +31,9 @@ function QuizReviewList() {
 
   const location = useLocation();
   const { quizId } = location.state;
-  const navigate = useNavigate();
 
+
+  //Functions:
   useEffect(() => {
     if (quizId) {
       fetchQuiz();
@@ -64,6 +59,7 @@ function QuizReviewList() {
       .catch((err) => console.error("Error fetching reviews:", err));
   };
 
+  //Deleting reviews:
   const handleReviewDelete = (reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       console.log("reviewId:", reviewId);
@@ -75,6 +71,7 @@ function QuizReviewList() {
     }
   };
 
+  //Editing reviews
   const handleReviewEdit = (review) => {
     setCurrentReview(review);
     setUpdatedNickname(review.nickname);
@@ -101,6 +98,7 @@ function QuizReviewList() {
       .catch((err) => console.error("Error editing review:", err));
   };
 
+  //Adding new review
   const handleWriteReviewClick = () => {
     setAddReviewModalOpen(true);
   };
@@ -121,6 +119,7 @@ function QuizReviewList() {
       })
       .catch((err) => console.error("Error adding review:", err));
   };
+
 
   return (
     <Box sx={{ width: "100%", marginTop: 8 }}>
@@ -158,12 +157,12 @@ function QuizReviewList() {
   Write your own review
 </Link>
 
-
+      {/* Review List */}
       {reviewsList && reviewsList.length > 0 ? (
         <Box>
           {reviewsList.map((review) => (
             <Box
-              key={review.id}
+              key={review.reviewId}
               sx={{
                 border: "1px solid #e0e0e0",
                 padding: 2,
