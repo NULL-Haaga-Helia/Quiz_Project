@@ -16,7 +16,7 @@ The project architecture consists of three key components:
 
 The architecture ensures a clear separation of responsibilities and emphasizes distinct roles of each system component, with the frontend handling user interactions, the backend managing logic and data, and the database storing and retrieving information.
 
-### Architecture Diagram (TBA)
+### Architecture Diagram
 
 ```mermaid
 flowchart TD
@@ -190,6 +190,7 @@ Quiz ||--|{ Reviews : "has"
 - Major Libraries: Thymeleaf, Maven, Bootstrap, H2
 
 3. Running tests
+
 - Using a Command-line interface (CLI), navigate to the project's QuizzerBackEnd folder
 - Run the following command `./mvnw test`
 
@@ -231,3 +232,7 @@ https://github.com/orgs/NULL-Haaga-Helia/projects/1/views/1
 ## Web service URL
 
 https://quiz-project-h7mc.onrender.com/
+
+## License
+
+Quizzer is [MIT licensed](./LICENSE).
