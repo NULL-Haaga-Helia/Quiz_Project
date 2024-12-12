@@ -91,6 +91,8 @@ function QuizResults() {
 		return { totalAnswers, correctAnswers, wrongAnswers, correctPercentage };
 	};
 
+	const totalAnswersAcrossAllQuestions = results.length;
+
 	// Rendering:
 	return (
 		<Box sx={{ width: "100%", marginTop: 8 }}>
@@ -118,7 +120,8 @@ function QuizResults() {
 						gutterBottom
 						sx={{ textAlign: "left", marginBottom: 2 }}
 					>
-						Answers to questions
+						{totalAnswersAcrossAllQuestions} answers to {questions.length}{" "}
+						questions
 					</Typography>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
