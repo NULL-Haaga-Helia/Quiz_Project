@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { getAllQuizzes, getQuizById, getQuizQuestions, getUserResults } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { getQuizById, getQuizQuestions, getUserResults } from "../services/api";
+
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
@@ -13,15 +13,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 function QuizResults() {
+	//States:
 	const [quiz, setQuiz] = useState(null);
 	const location = useLocation();
 	const { quizId } = location.state;
 	const [questions, setQuestions] = useState([]);
 	const [results, setResults] = useState([]);
-	const [totalAnswers, setTotalAnswers] = useState();
-	const [correctAnswers, setCorrectAnswers] = useState();
-	const [wrongAnswers, setWrongAnswers] = useState();
 
+	//Functions:
 	useEffect(() => {
 		if (quizId) {
 			fetchQuiz();
@@ -38,19 +37,61 @@ function QuizResults() {
 				setQuiz(null);
 			});
 	};
+
 	const fetchQuizQuestions = () => {
 		getQuizQuestions(quizId)
-			.then((responseData) => setQuestions(responseData))
+			.then((responseData) => {
+				setQuestions(responseData);
+			})
 			.catch((err) => console.error("Failed to fetch questions:", err));
 	};
 
-	const fetchUserAnswers = () => {
-		getUserResults(quizId)
-			.then((responseData) => setResults(responseData))
-			.catch((err) => console.error("Failed to fetch user answers:", err));
-			console.log("results:", results)
+	const fetchUserAnswers = async () => {
+		try {
+			const responseData = await getUserResults(quizId);
+			setResults(responseData);
+			console.log("results:", responseData);
+		} catch (err) {
+			console.error("Failed to fetch user answers:", err);
+		}
 	};
 
+	const calculateAnswerStats = (questionId) => {
+		// Get question
+		const question = questions.find((q) => q.questionId === questionId);
+
+		if (!question) {
+			console.log("Question not found:", questionId);
+			return {
+				totalAnswers: 0,
+				correctAnswers: 0,
+				wrongAnswers: 0,
+				correctPercentage: 0,
+			};
+		}
+
+		// Get possible answers for the question
+		const possibleAnswers = question.answers;
+
+		// Filter to select user submitted answers that match current question's possible answers
+		const relevantAnswers = results.filter((result) => {
+			return possibleAnswers.some(
+				(answer) => answer.answerId === result.answer.answerId
+			);
+		});
+
+		const totalAnswers = relevantAnswers.length;
+		const correctAnswers = relevantAnswers.filter(
+			(result) => result.answer.isCorrect
+		).length;
+		const wrongAnswers = totalAnswers - correctAnswers;
+		const correctPercentage =
+			totalAnswers > 0 ? ((correctAnswers / totalAnswers) * 100).toFixed(2) : 0;
+
+		return { totalAnswers, correctAnswers, wrongAnswers, correctPercentage };
+	};
+
+	// Rendering:
 	return (
 		<Box sx={{ width: "100%", marginTop: 8 }}>
 			{!quiz ? (
@@ -68,7 +109,7 @@ function QuizResults() {
 						gutterBottom
 						sx={{ textAlign: "left", marginBottom: 2 }}
 					>
-						Results of "{quiz.name}"
+						Results of {quiz.name}
 					</Typography>
 
 					<Typography
@@ -77,7 +118,7 @@ function QuizResults() {
 						gutterBottom
 						sx={{ textAlign: "left", marginBottom: 2 }}
 					>
-						answers to questions
+						Answers to questions
 					</Typography>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -93,30 +134,37 @@ function QuizResults() {
 										Total Answers
 									</TableCell>
 									<TableCell sx={{ fontWeight: "bold" }} align="left">
-										Correct answer %
+										Correct Answer %
 									</TableCell>
 									<TableCell sx={{ fontWeight: "bold" }} align="left">
-										Correct answers
+										Correct Answers
 									</TableCell>
 									<TableCell sx={{ fontWeight: "bold" }} align="left">
-										Wrong answers
+										Wrong Answers
 									</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{questions.map((question) => (
-									<TableRow
-										key={question.id}
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-									>
-										<TableCell align="left">{question.questionText}</TableCell>
-										<TableCell align="left">{question.difficulty}</TableCell>
-										<TableCell align="left">total answers</TableCell>
-										<TableCell align="left">correct %</TableCell>
-										<TableCell align="left">correct</TableCell>
-										<TableCell align="left">wrong</TableCell>
-									</TableRow>
-								))}
+								{questions.map((question) => {
+									const stats = calculateAnswerStats(question.questionId);
+									return (
+										<TableRow
+											key={question.questionId}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell align="left">
+												{question.questionText}
+											</TableCell>
+											<TableCell align="left">{question.difficulty}</TableCell>
+											<TableCell align="left">{stats.totalAnswers}</TableCell>
+											<TableCell align="left">
+												{stats.correctPercentage}%
+											</TableCell>
+											<TableCell align="left">{stats.correctAnswers}</TableCell>
+											<TableCell align="left">{stats.wrongAnswers}</TableCell>
+										</TableRow>
+									);
+								})}
 							</TableBody>
 						</Table>
 					</TableContainer>

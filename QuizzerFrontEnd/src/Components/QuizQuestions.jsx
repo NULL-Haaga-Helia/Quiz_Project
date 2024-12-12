@@ -71,7 +71,6 @@ function QuizQuestions() {
 		}
 
 		try {
-
 			const question = questions.find((q) => q.questionId === questionId);
 
 			if (!question) {
@@ -83,11 +82,12 @@ function QuizQuestions() {
 				return;
 			}
 
-
 			const correctAnswer = question.answers.find((answer) => answer.isCorrect);
 
 			if (!correctAnswer) {
-				console.error(`Correct answer not found for question ID ${questionId}.`);
+				console.error(
+					`Correct answer not found for question ID ${questionId}.`
+				);
 				setSnackbar({
 					open: true,
 					message: "Correct answer data missing.",
@@ -95,18 +95,14 @@ function QuizQuestions() {
 				return;
 			}
 
-
 			const isCorrect = selectedAnswerId === correctAnswer.answerId;
 
-
 			const response = await submitAnswer(quizId, questionId, selectedAnswerId);
-
 
 			setSnackbar({
 				open: true,
 				message: isCorrect ? response.message || "Correct" : "Incorrect",
 			});
-
 
 			setSubmittedQuestions((prev) => ({
 				...prev,
@@ -120,7 +116,6 @@ function QuizQuestions() {
 			});
 		}
 	};
-
 
 	const handleAnswerChange = (questionId, answerId) => {
 		setSelectedAnswers((prev) => ({
@@ -222,7 +217,10 @@ function QuizQuestions() {
 										<RadioGroup
 											value={selectedAnswers[question.questionId] || ""}
 											onChange={(e) =>
-												handleAnswerChange(question.questionId, parseInt(e.target.value))
+												handleAnswerChange(
+													question.questionId,
+													parseInt(e.target.value)
+												)
 											}
 										>
 											{question.answers.map((answer) => (
@@ -235,17 +233,22 @@ function QuizQuestions() {
 											))}
 										</RadioGroup>
 
-
 										<Button
 											onClick={() => handleSubmit(question.questionId)}
 											disabled={submittedQuestions[question.questionId]}
 											style={{
 												paddingTop: "10px",
 												border: "none",
-												background: submittedQuestions[question.questionId] ? "gray" : "white",
-												color: submittedQuestions[question.questionId] ? "darkgray" : "blue",
+												background: submittedQuestions[question.questionId]
+													? "gray"
+													: "white",
+												color: submittedQuestions[question.questionId]
+													? "darkgray"
+													: "blue",
 												fontSize: "13px",
-												cursor: submittedQuestions[question.questionId] ? "not-allowed" : "pointer",
+												cursor: submittedQuestions[question.questionId]
+													? "not-allowed"
+													: "pointer",
 											}}
 										>
 											SUBMIT YOUR ANSWER
