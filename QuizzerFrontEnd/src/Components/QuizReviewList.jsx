@@ -137,7 +137,7 @@ function QuizReviewList() {
         gutterBottom
         sx={{ marginBottom: 4 }}
       >
-        {reviewsList.length > 0
+        {reviewsList 
           ? `${(
               reviewsList.reduce((sum, review) => sum + parseFloat(review.rating), 0) /
               reviewsList.length
