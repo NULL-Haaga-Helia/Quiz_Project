@@ -1,6 +1,9 @@
 package com.quizzerbackend.domain;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,14 +19,17 @@ public class Answer {
     @NotBlank(message = "Answer text cannot be empty")
     private String text;
 
-    
     @ManyToOne
-    @JoinColumn(name = "questionId")  
+    @JoinColumn(name = "questionId")
     @JsonBackReference
     private Question question;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "answer")
+    @JsonIgnore
+    private List<UserAnswer> UserAnswers;
 
-    public Answer() {}
+    public Answer() {
+    }
 
     public Answer(Question question) {
         super();
@@ -32,7 +38,7 @@ public class Answer {
 
     public Answer(boolean isCorrect, String text, Question question) {
         super();
-        this.isCorrect= isCorrect;
+        this.isCorrect = isCorrect;
         this.text = text;
         this.question = question;
     }
@@ -44,7 +50,6 @@ public class Answer {
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
     }
-
 
     public boolean getIsCorrect() {
         return isCorrect;
@@ -69,5 +74,13 @@ public class Answer {
     public void setText(String text) {
         this.text = text;
     }
-}
 
+    public List<UserAnswer> getUserAnswers() {
+        return UserAnswers;
+    }
+
+    public void setUserAnswers(List<UserAnswer> userAnswers) {
+        UserAnswers = userAnswers;
+    }
+
+}
